@@ -23,20 +23,6 @@
 
 #define INJ_XML_ERROR	(-1)
 
-#if (0)
-/* S.-b.-list, contains volabulary, which is s.b.-list, either */
-typedef struct _XmlAuxType
-{
-	/* Vocabulary of keywords relevant to this XML file */
-	struct _CompoundType * pVocabulary;	
-
-} XmlAuxType, *pXmlAuxType;
-
-
-/* Pointer to auxiliary data for current XML file */
-extern pXmlAuxType pAuxiliary;
-
-#endif /* (0) */
 
 	#define DCOMMON(format, ...) fprintf (stdout, format, __VA_ARGS__)
 

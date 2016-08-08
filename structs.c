@@ -34,13 +34,6 @@ pTgtStructType _CrTarget(pDtaStructType pDta, pTgtStructType pbNewTarget)
 		/* NULL identifies "failure on creation" error */
 		return  NULL;
 
-#if (0)
-	/* allocate a memory for name string */
-	pbNewTarget->pNextuchName = (unsigned char *) malloc (strlen("(start)"));	
-
-	/* assing this string a value */
-	strcpy(pbNewTarget->pNextuchName, "(start)");
-#else
 	if (NULL != pDta)
 	{
 		pbNewTarget->pDta = (pDtaStructType) malloc( sizeof (struct _DtaStructType) );
@@ -72,9 +65,10 @@ pTgtStructType _CrTarget(pDtaStructType pDta, pTgtStructType pbNewTarget)
 			printf("ERROR: can't allocate mem. while copying initialization data\n");
 
 	}
-	else printf("ERROR: bad initialization data\n");
+	else
+		printf("ERROR: bad initialization data\n");
 
-#endif /* (0) */
+
 
 	/* a lock-up  */
 	pbNewTarget->pNext = NULL;
@@ -151,7 +145,7 @@ pTgtStructType pbChild, pbTempTgtStructType;
 	
 }
 
-/* send information about all current Targets entries through serial line */
+/* deploy information about all current Targets */
 void _ProcessTargets(/*pHandle phThisHandle, */pTgtStructType pbThisTarget)
 {
 /* a storage for number under which the item is registerd in Target */
@@ -170,7 +164,7 @@ unsigned char _the_number;
 }
 
 
-/* erase an entire Target, useless but kept for symmetrisity with '_CrTarget()' */
+/* erase an entire Target */
 void _DeleteTarget(pTgtStructType pbThisTarget)
 {
 /* a tomparary variable of type 'pTgtStructType' */

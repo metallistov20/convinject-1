@@ -43,4 +43,13 @@ typedef struct _TgtStructType
 
 } TgtStructType, *pTgtStructType;
 
+
+pTgtStructType _CrTarget(pDtaStructType pDta, pTgtStructType pbNewTarget);
+
+void _AppendTarget(pTgtStructType pbThisTarget, pDtaStructType pDta);
+
+void _ProcessTargets(pTgtStructType pbThisTarget);
+
+void _DeleteTarget(pTgtStructType pbThisTarget);
+
 #endif /* _STRUCTS_H_ */
