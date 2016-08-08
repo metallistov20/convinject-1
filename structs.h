@@ -22,7 +22,7 @@
 #define _STRUCTS_H_
 
 /* S.-b.-list,  */
-typedef struct _TgtStructType
+typedef struct _DtaStructType
 {
 	char * pcType;
 	char * pcName;
@@ -31,6 +31,13 @@ typedef struct _TgtStructType
 	char * pcPasswd;
 	char * pcDatafile;
 	char * pcProto;
+
+} DtaStructType, *pDtaStructType;
+
+/* S.-b.-list,  */
+typedef struct _TgtStructType
+{
+	struct _DtaStructType * pDta;
 
 	struct _TgtStructType * pNext;
 

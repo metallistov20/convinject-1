@@ -17,12 +17,14 @@
  MA 02111-1307 USA
 */
 
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "structs.h"
 
 /* creates Target and initializes its initial element */
-pTgtStructType _CrTarget(unsigned long uloNewTargetAddress, pTgtStructType pbNewTarget)
+pTgtStructType _CrTarget(pDtaStructType pDta, pTgtStructType pbNewTarget)
 {
 	/* only one chain, for breginning */
 	pbNewTarget = (pTgtStructType) malloc ( sizeof (TgtStructType) );
@@ -39,7 +41,38 @@ pTgtStructType _CrTarget(unsigned long uloNewTargetAddress, pTgtStructType pbNew
 	/* assing this string a value */
 	strcpy(pbNewTarget->pNextuchName, "(start)");
 #else
-	// TODO. 
+	if (NULL != pDta)
+	{
+		pbNewTarget->pDta = (pDtaStructType) malloc( sizeof (struct _DtaStructType) );
+
+		if (NULL != pbNewTarget->pDta)
+		{
+			pbNewTarget->pDta->pcType = (char*) malloc (strlen (pDta->pcType) +1 );
+			strcpy(pbNewTarget->pDta->pcType, pDta->pcType);
+
+			pbNewTarget->pDta->pcName = (char*) malloc (strlen (pDta->pcName) +1 );
+			strcpy(pbNewTarget->pDta->pcName, pDta->pcName);
+
+			pbNewTarget->pDta->pcAddress = (char*) malloc (strlen (pDta->pcAddress) +1 );
+			strcpy(pbNewTarget->pDta->pcAddress, pDta->pcAddress);
+
+			pbNewTarget->pDta->pcLogin = (char*) malloc (strlen (pDta->pcLogin) +1 );
+			strcpy(pbNewTarget->pDta->pcLogin, pDta->pcLogin);
+
+			pbNewTarget->pDta->pcPasswd = (char*) malloc (strlen (pDta->pcPasswd) +1 );
+			strcpy(pbNewTarget->pDta->pcPasswd, pDta->pcPasswd);
+
+			pbNewTarget->pDta->pcDatafile = (char*) malloc (strlen (pDta->pcDatafile) +1 );
+			strcpy(pbNewTarget->pDta->pcDatafile, pDta->pcDatafile);
+
+			pbNewTarget->pDta->pcProto = (char*) malloc (strlen (pDta->pcProto) +1 );
+			strcpy(pbNewTarget->pDta->pcProto, pDta->pcProto);
+		}
+		else
+			printf("ERROR: can't allocate mem. while copying initialization data\n");
+
+	}
+	else printf("ERROR: bad initialization data\n");
 
 #endif /* (0) */
 
@@ -51,7 +84,7 @@ pTgtStructType _CrTarget(unsigned long uloNewTargetAddress, pTgtStructType pbNew
 }
 
 /* registers an ditem '_NameOfItem' underf address '_AddressOfItem' */
-void _AppendTarget(pTgtStructType pbThisTarget, unsigned char * _NameOfItem, unsigned long _AddressOfItem)
+void _AppendTarget(pTgtStructType pbThisTarget, pDtaStructType pDta)
 {
 /* introduce two temporary variables of type 'pTgtStructType' */
 pTgtStructType pbChild, pbTempTgtStructType;
@@ -71,15 +104,40 @@ pTgtStructType pbChild, pbTempTgtStructType;
 	/* if previous memory allocation was successful */
 	if(pbTempTgtStructType != NULL)
 	{
-#if (0)
-		/* allocate a space needed for item's name */
-		pbTempTgtStructType->pNextuchName = (unsigned char *) malloc (strlen(_NameOfItem));
-		
-		/* do copy item's name */
-		strcpy(pbTempTgtStructType->pNextuchName, _NameOfItem);
-#else
-		// TODO. enroll 'em all
-#endif /* (0) */
+		if (NULL != pDta)
+		{
+			pbTempTgtStructType->pDta = (pDtaStructType) malloc( sizeof (struct _DtaStructType) );
+
+			if (NULL != pbTempTgtStructType->pDta)
+			{
+				pbTempTgtStructType->pDta->pcType = (char*) malloc (strlen (pDta->pcType) +1 );
+				strcpy(pbTempTgtStructType->pDta->pcType, pDta->pcType);
+
+				pbTempTgtStructType->pDta->pcName = (char*) malloc (strlen (pDta->pcName) +1 );
+				strcpy(pbTempTgtStructType->pDta->pcName, pDta->pcName);
+
+				pbTempTgtStructType->pDta->pcAddress = (char*) malloc (strlen (pDta->pcAddress) +1 );
+				strcpy(pbTempTgtStructType->pDta->pcAddress, pDta->pcAddress);
+
+				pbTempTgtStructType->pDta->pcLogin = (char*) malloc (strlen (pDta->pcLogin) +1 );
+				strcpy(pbTempTgtStructType->pDta->pcLogin, pDta->pcLogin);
+
+				pbTempTgtStructType->pDta->pcPasswd = (char*) malloc (strlen (pDta->pcPasswd) +1 );
+				strcpy(pbTempTgtStructType->pDta->pcPasswd, pDta->pcPasswd);
+
+				pbTempTgtStructType->pDta->pcDatafile = (char*) malloc (strlen (pDta->pcDatafile) +1 );
+				strcpy(pbTempTgtStructType->pDta->pcDatafile, pDta->pcDatafile);
+
+				pbTempTgtStructType->pDta->pcProto = (char*) malloc (strlen (pDta->pcProto) +1 );
+				strcpy(pbTempTgtStructType->pDta->pcProto, pDta->pcProto);
+
+			}
+			else
+				printf("ERROR: can't allocate mem. while copying initialization data\n");
+
+		}
+		else
+			printf("ERROR: bad initialization data\n");
 		
 		/* set a look-up */
 		pbTempTgtStructType->pNext = NULL;		
@@ -121,14 +179,26 @@ pTgtStructType pbChild;
 	/* Walk through entire list and delete each chain */
 	while (NULL != pbThisTarget)
 	{
-#if (0)
-		/* if space to keep item's name is allocated */
-		if (pbThisTarget->pNextuchName)
-		
-		    /* then release this space */
-		    free(pbThisTarget->pNextuchName);
-#else
-#endif /* (0) */
+		if (NULL != pbThisTarget->pDta) 
+		{
+			free(pbThisTarget->pDta->pcType);
+
+			free(pbThisTarget->pDta->pcName);
+
+			free(pbThisTarget->pDta->pcAddress);
+
+			free(pbThisTarget->pDta->pcLogin);
+
+			free(pbThisTarget->pDta->pcPasswd);
+
+			free(pbThisTarget->pDta->pcDatafile);
+
+			free(pbThisTarget->pDta->pcProto);
+
+			free (pbThisTarget->pDta);
+		}
+		else
+			printf("ERROR: nothing to release\n");
 		    
 		/* preserve a pointer to next record */		    
 		pbChild = pbThisTarget->pNext;
