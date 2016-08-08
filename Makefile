@@ -25,42 +25,23 @@ MAJOR := 4
 MIDDLE := 4
 MINOR := 0
 
-NAME:= ssh
-NAME_A := ./access_srv
+NAME_C := ./convinject
 PWD=$(shell pwd)
 
-
-##CFLAGS=-I/home/mkn/_libssh/libssh/include -L./shared                   -g   -I/usr/include/libxml2 -L/usr/local/lib  -lxml2
-#CFLAGS=  -g   -I/usr/include/libxml2 -L/usr/local/lib  -L/usr/lib/i386-linux-gnu  -lxml2  
-#CFLAGS+= -D_DBG
 
 CFLAGS =  -c -g   -I/usr/include/libxml2  -D_DBG
 LDFLAGS = -L/usr/local/lib 
 LIBS =  	-lxml2
 
-#CFLAGS =  -c -g   -I/usr/include/libxml2
-#LDFLAGS = -L/usr/local/lib 
+all: $(NAME_C)
 
-#LIBS = -lcurl 	-lxml2
-
-VERSION := $(MAJOR).$(MIDDLE).$(MINOR)
-
-all: $(NAME_A)
-
-lib: ./shared/lib$(NAME).so.$(VERSION)                                    
-
-##$(NAME_A):	./shared/lib$(NAME).so
-#$(NAME_A):	./xmparser.c
-#		$(CC)   $(CFLAGS)  ./xmparser.c    -o $@   \
-
-#		 -Wl,--rpath-link $(PWD)/shared  -Wl,--rpath $(PWD)/shared
 
 .o: .c
 	$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)
 
-$(NAME_A): ./xmparser.o
-	$(CC)  -o $@ ./xmparser.o $(LDFLAGS) $(LIBS)
+$(NAME_C): ./xmparser.o ./structs.o
+	$(CC)  -o $@ ./xmparser.o  ./structs.o  $(LDFLAGS) $(LIBS)
 
 
 clean:
-	$(RM) $(NAME_A) *.o *.so* *~
+	$(RM) $(NAME_C) *.o *.so* *~
