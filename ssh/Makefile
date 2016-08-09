@@ -21,47 +21,34 @@ CFLAGS :=
 
 CC := gcc
 
-	OBJS	= ./main.o ./xmparser.o ./structs.o  
-	HTTP_OBJS	= 
 
-	CFLAGS = -c -g -I/usr/include/libxml2
-	LDFLAGS= -L/usr/local/lib 
-	LIBS   = -lxml2
+MAJOR := 4
+MIDDLE:= 4
+MINOR:= 0
 
-	CFLAGS += -I/home/mkn/_libssh/libssh/include -L./ssh/shared 
+OBJS	= ./authentication.o ./cmds.o ./connect_ssh.o ./knownhosts.o ./pipes.o 
 
-	VERSION := 4.4.0
+CFLAGS = -c -g -I/usr/include/libxml2
+LDFLAGS= -L/usr/local/lib 
+LIBS   = -lxml2
 
-	EXTRA=
+CFLAGS += -I/home/mkn/_libssh/libssh/include -L./ssh/shared 
 
-
-
-SSH_DIR=ssh
+VERSION := $(MAJOR).$(MIDDLE).$(MINOR)
 
 
-EXEC := ./convinject
 PWD=$(shell pwd)
 
 
 CFLAGS 	+=
 LDFLAGS +=
-LIBS 	+= ./ssh/shared/libssh.so.$(VERSION)
 
-all: $(EXEC)
 
-SSH_OBJS	= ./ssh/cmds.o ./ssh/authentication.o  ./ssh/connect_ssh.o  ./ssh/knownhosts.o  ./ssh/pipes.o
-
-ssh:	$(SSH_OBJS)
-	cd ./$(SSH_DIR) && $(MAKE) 
-	@echo "SSH created:" && ls ./ssh/*.o
-	$(MAKE) "SSH_OBJS_R=$(SSH_OBJS)" all 
+all: $(OBJS)
 
 .o: .c
 	$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)  
-
-$(EXEC): $(OBJS) $(SSH_OBJS_R) $(LIBS)
-	$(CC)  -o $@ $(OBJS) $(SSH_OBJS_R)  $(LIBS)   $(LDFLAGS)   -L./ssh/shared -Wl,--rpath-link $(PWD)/ssh/shared  -Wl,--rpath $(PWD)/ssh/shared
-
+#-L./ssh/shared -Wl,--rpath-link $(PWD)/ssh/shared  -Wl,--rpath $(PWD)/ssh/shared
 
 clean:
-	$(RM) $(EXEC) *.o *.so* *~ core ./ssh/*.o
+	$(RM)  *.o *.so* *~ core *.o
