@@ -17,12 +17,10 @@
 # MA 02111-1307 USA
 #
 
-CFLAGS :=
 
 CC := gcc
 
-	OBJS	= ./main.o ./xmparser.o ./structs.o  
-	HTTP_OBJS	= 
+	OBJS	= ./main.o ./xmparser.o ./structs.o 
 
 	CFLAGS = -c -g -I/usr/include/libxml2
 	LDFLAGS= -L/usr/local/lib 
@@ -33,8 +31,6 @@ CC := gcc
 	VERSION := 4.4.0
 
 	EXTRA=
-
-
 
 SSH_DIR=ssh
 
@@ -49,8 +45,10 @@ LIBS 	+= ./ssh/shared/libssh.so.$(VERSION)
 
 all: $(EXEC)
 
+#TODO: remork - don't enumerate them plainly
 SSH_OBJS	= ./ssh/cmds.o ./ssh/authentication.o  ./ssh/connect_ssh.o  ./ssh/knownhosts.o  ./ssh/pipes.o
 
+#TODO: remork - the second case - http - drops out from this contruction, which is surely not a purpose
 ssh:	$(SSH_OBJS)
 	cd ./$(SSH_DIR) && $(MAKE) 
 	@echo "SSH created:" && ls ./ssh/*.o
@@ -64,4 +62,5 @@ $(EXEC): $(OBJS) $(SSH_OBJS_R) $(LIBS)
 
 
 clean:
-	$(RM) $(EXEC) *.o *.so* *~ core ./ssh/*.o
+	$(RM) $(EXEC) *.o *.so* *~ core  *.c~
+	cd ./$(SSH_DIR) && $(MAKE)  clean

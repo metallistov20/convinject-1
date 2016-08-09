@@ -17,38 +17,18 @@
 # MA 02111-1307 USA
 #
 
-CFLAGS :=
-
 CC := gcc
-
-
-MAJOR := 4
-MIDDLE:= 4
-MINOR:= 0
 
 OBJS	= ./authentication.o ./cmds.o ./connect_ssh.o ./knownhosts.o ./pipes.o 
 
-CFLAGS = -c -g -I/usr/include/libxml2             -D_DBG
-LDFLAGS= -L/usr/local/lib 
-LIBS   = -lxml2
+CFLAGS = -c -D_DBG                                                                -g 
 
 CFLAGS += -I/home/mkn/_libssh/libssh/include -L./ssh/shared 
-
-VERSION := $(MAJOR).$(MIDDLE).$(MINOR)
-
-
-PWD=$(shell pwd)
-
-
-CFLAGS 	+=
-LDFLAGS +=
-
 
 all: $(OBJS)
 
 .o: .c
 	$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)  
-#-L./ssh/shared -Wl,--rpath-link $(PWD)/ssh/shared  -Wl,--rpath $(PWD)/ssh/shared
 
 clean:
-	$(RM)  *.o *.so* *~ core *.o *.c~
+	$(RM)  *.o *.so* *~ core  *.c~

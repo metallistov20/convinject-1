@@ -726,8 +726,11 @@ ssh_session session;
 
 	ssh_finalize();
 
-	free (user);//allocated in  <assign_host_file>
-	free (host);//allocated in  <assign_host_file>
+	/* allocated in  <assign_host_file> */
+	free (user);
+
+	/* allocated in  <assign_host_file> */
+	free (host);
 
 	/* Free memory occupied by dynamically stored raw data */
 	DeleteCmds(&pCmdChain);
