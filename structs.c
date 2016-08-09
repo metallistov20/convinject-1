@@ -35,7 +35,7 @@ void _AddTarget(pTgtStructType * ppbThisTarget, pDtaStructType pDta)
 		/* Check if successful */
 		if (NULL == *ppbThisTarget)
 		{
-			printf ( "ERROR: failure on creation \n" );
+			DSTRUCT ( "ERROR: failure on creation \n" );
 		}
 
 		if (NULL != pDta)
@@ -67,11 +67,11 @@ void _AddTarget(pTgtStructType * ppbThisTarget, pDtaStructType pDta)
 
 			}
 			else
-				printf("ERROR: can't allocate mem. while copying initialization data\n");
+				DSTRUCT("ERROR: can't allocate mem. while copying initialization data\n");
 
 		}
 		else
-			printf("ERROR: bad initialization data\n");
+			DSTRUCT("ERROR: bad initialization data\n");
 
 		/* Lock-up  */
 		(*ppbThisTarget)->pNext = NULL;
@@ -126,11 +126,11 @@ void _AddTarget(pTgtStructType * ppbThisTarget, pDtaStructType pDta)
 					strcpy(pbTempTgtStructType->pDta->pcProto, pDta->pcProto);
 				}
 				else
-					printf("ERROR: can't allocate mem. while copying initialization data\n");
+					DSTRUCT("ERROR: can't allocate mem. while copying initialization data\n");
 
 			}
 			else
-				printf("ERROR: bad initialization data\n");
+				DSTRUCT("ERROR: bad initialization data\n");
 		
 			/* set a look-up */
 			pbTempTgtStructType->pNext = NULL;		
@@ -191,7 +191,7 @@ pTgtStructType pbChild;
 			free (pbThisTarget->pDta);
 		}
 		else
-			printf("ERROR: nothing to release\n");
+			DSTRUCT("ERROR: nothing to release\n");
 		    
 		/* preserve a pointer to next record */		    
 		pbChild = pbThisTarget->pNext;

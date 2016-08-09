@@ -18,8 +18,17 @@
  MA 02111-1307 USA
 */
 
-#ifndef _XMPARSER_H_
-#define _XMPARSER_H_
+#ifndef _MAIN_H_
+#define _MAIN_H_
 
+	#define DGENERAL(format, ...) fprintf (stdout, format, __VA_ARGS__)
 
-#endif /* _XMPARSER_H_ */
+	#define DXML(format, ...) fprintf (stdout, format, __VA_ARGS__)
+
+	#define DSTRUCT(format, ...) fprintf (stdout, format, __VA_ARGS__)
+
+	#define DSSH(format, ...) fprintf (stdout, format, __VA_ARGS__)
+
+	#define DHTTP(format, ...) fprintf (stdout, format, __VA_ARGS__)
+
+#endif /* _MAIN_H_ */

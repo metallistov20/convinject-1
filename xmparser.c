@@ -27,23 +27,14 @@
 #include "xmparser.h"
 #include "structs.h"
 
-
-/* Ptr to XML data for in memory */
-xmlNode *root_element = NULL;
-
-/* Ptr to XML data document */
-xmlDoc *doc = NULL;
-
 /* List (SB) of parced XML entries */
-pTgtStructType Root;
-
-xmlNode *cur_node;
-
-struct _DtaStructType cur_data;
+extern pTgtStructType Root;
 
 void extract_xml_values(xmlNode * a_node)
 {
-		cur_node = a_node;
+xmlNode *cur_node = a_node;
+
+struct _DtaStructType cur_data;
 
 		if (XML_ELEMENT_NODE == cur_node->type)
 		{
@@ -55,15 +46,15 @@ void extract_xml_values(xmlNode * a_node)
 			{
 				xmlNode *_ch_cur_node = NULL;
 
-				printf("field <%s> found, ", cur_node->name);
+				DXML("field <%s> found, ", cur_node->name);
 
 				/* Go and parce it */
 				for (_ch_cur_node = cur_node->children; _ch_cur_node; _ch_cur_node = _ch_cur_node->next)
 				{
 					if ( XML_TEXT_NODE == _ch_cur_node->type)
 					{
-						printf("its content is <%s> [%d].\n", _ch_cur_node->content, strlen (_ch_cur_node->content) );
-#if (1)
+						DXML("its content is <%s> [%d].\n", _ch_cur_node->content, strlen (_ch_cur_node->content) );
+
 //TODO: here we use different pointers <cur_node> and <_ch_cur_node> as pair. It's wrong
 // and can't be relevant unless extra check is done. Nevertheless..
 
@@ -114,8 +105,6 @@ void extract_xml_values(xmlNode * a_node)
 						}
 
 
-
-#endif /* (1) */
 					} /* if ( XML_TEXT_NODE == _ch_cur_node->type) */
 
 					/* Get out form this <for> */
@@ -143,64 +132,17 @@ xmlNode *cur_node = NULL;
 			{
 				xmlNode *_ch_cur_node = NULL;
 
-				DXMLAUX("<%s> found \n", cur_node->name);
+				DXML("\n<%s> found \n", cur_node->name);
 
 				/* Go and parce it, store results of paring into URL&CMPND structures  */
 				for (_ch_cur_node = cur_node->children; _ch_cur_node; _ch_cur_node = _ch_cur_node->next)
 				{
-					//.DXMLAUX("<%s, %s> \n", _ch_cur_node->name , _ch_cur_node->content);
 
 					extract_xml_values(_ch_cur_node);
 
 				} /* for() */
-printf("\n");//TODO
 			}		
 		}
 		_parse_xml(cur_node->children, template);
 	}
 }
-
-char cXmlName[255];//TODO
-
-
-int main (int argc, char **argv)
-{
-	/* Assign datafile name*/
-	strcpy (cXmlName, argv[1]);
-
-printf("main: %s\n", cXmlName);
-
-	doc = xmlReadFile(cXmlName, NULL, 0);
-
-	if (NULL == doc)
-	{
-		DCOMMON("ERROR: could not parse file %s\n", cXmlName);
-
-		return INJ_XML_ERROR;
-	}
-
-	/* Get the root node of the XML data stored in the <doc> */
-	root_element = xmlDocGetRootElement(doc);
-
-
-	/* Put XML section <TL-SL5428E> into structure <pUrlChain> */
-	_parse_xml(root_element, "Target");
-
-#if 0
-	/* Glue particles of <pUrlChain> into full-blown URLs */
-	GlueUrl(pUrlChain);
-
-#if (DEBUG_URL)
-	DisplayUrl(pUrlChain);
-#endif /* (DEBUG_URL) */
-
-	/* Put URLs into wire */
-	return DeployUrlEx(pUrlChain, 1);
-#else
-
-	_DeleteTarget (Root);
-
-	return 0;
-#endif /* (0) */
-}
-

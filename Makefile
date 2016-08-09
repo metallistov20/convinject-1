@@ -39,9 +39,9 @@ all: $(NAME_C)
 .o: .c
 	$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)
 
-$(NAME_C): ./xmparser.o ./structs.o
-	$(CC)  -o $@ ./xmparser.o  ./structs.o  $(LDFLAGS) $(LIBS)
+$(NAME_C): ./main.o ./xmparser.o ./structs.o
+	$(CC)  -o $@ ./main.o ./xmparser.o  ./structs.o  $(LDFLAGS) $(LIBS)
 
 
 clean:
-	$(RM) $(NAME_C) *.o *.so* *~
+	$(RM) $(NAME_C) *.o *.so* *~ core
