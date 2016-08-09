@@ -23,107 +23,47 @@
 
 #include "structs.h"
 
-/* creates Target and initializes its initial element */
-pTgtStructType _CrTarget(pDtaStructType pDta, pTgtStructType pbNewTarget)
+/* Appends or creates, depending on existance */
+void _AddTarget(pTgtStructType * ppbThisTarget, pDtaStructType pDta)
 {
-	/* only one chain, for breginning */
-	pbNewTarget = (pTgtStructType) malloc ( sizeof (TgtStructType) );
-
-	/* check if successful */
-	if (!pbNewTarget)
-		/* NULL identifies "failure on creation" error */
-		return  NULL;
-
-	if (NULL != pDta)
+	if (NULL == *ppbThisTarget)
 	{
-		pbNewTarget->pDta = (pDtaStructType) malloc( sizeof (struct _DtaStructType) );
 
-		if (NULL != pbNewTarget->pDta)
+		/* Only one chain, for breginning */
+		*ppbThisTarget = (pTgtStructType) malloc ( sizeof (TgtStructType) );
+
+		/* Check if successful */
+		if (NULL == *ppbThisTarget)
 		{
-			pbNewTarget->pDta->pcType = (char*) malloc (strlen (pDta->pcType) +1 );
-			strcpy(pbNewTarget->pDta->pcType, pDta->pcType);
-
-			pbNewTarget->pDta->pcName = (char*) malloc (strlen (pDta->pcName) +1 );
-			strcpy(pbNewTarget->pDta->pcName, pDta->pcName);
-
-			pbNewTarget->pDta->pcAddress = (char*) malloc (strlen (pDta->pcAddress) +1 );
-			strcpy(pbNewTarget->pDta->pcAddress, pDta->pcAddress);
-
-			pbNewTarget->pDta->pcLogin = (char*) malloc (strlen (pDta->pcLogin) +1 );
-			strcpy(pbNewTarget->pDta->pcLogin, pDta->pcLogin);
-
-			pbNewTarget->pDta->pcPasswd = (char*) malloc (strlen (pDta->pcPasswd) +1 );
-			strcpy(pbNewTarget->pDta->pcPasswd, pDta->pcPasswd);
-
-			pbNewTarget->pDta->pcDatafile = (char*) malloc (strlen (pDta->pcDatafile) +1 );
-			strcpy(pbNewTarget->pDta->pcDatafile, pDta->pcDatafile);
-
-			pbNewTarget->pDta->pcProto = (char*) malloc (strlen (pDta->pcProto) +1 );
-			strcpy(pbNewTarget->pDta->pcProto, pDta->pcProto);
+			printf ( "ERROR: failure on creation \n" );
 		}
-		else
-			printf("ERROR: can't allocate mem. while copying initialization data\n");
 
-	}
-	else
-		printf("ERROR: bad initialization data\n");
-
-
-
-	/* a lock-up  */
-	pbNewTarget->pNext = NULL;
-	
-	/* NULL identifies "failure on creation" error */
-	return pbNewTarget;
-}
-
-/* registers an ditem '_NameOfItem' underf address '_AddressOfItem' */
-void _AppendTarget(pTgtStructType pbThisTarget, pDtaStructType pDta)
-{
-/* introduce two temporary variables of type 'pTgtStructType' */
-pTgtStructType pbChild, pbTempTgtStructType;
-
-	/* point with first temporary element to head of Target */
-	pbChild = pbThisTarget;
-
-	/* allocate a space for new record in Behorde */
-	pbTempTgtStructType = (pTgtStructType) malloc ( sizeof (TgtStructType));
-
-	/* Skip everything */
-	while (NULL != pbChild->pNext )
-
-		/* til the tail */
-		pbChild = pbChild->pNext;
-		
-	/* if previous memory allocation was successful */
-	if(pbTempTgtStructType != NULL)
-	{
 		if (NULL != pDta)
 		{
-			pbTempTgtStructType->pDta = (pDtaStructType) malloc( sizeof (struct _DtaStructType) );
+			(*ppbThisTarget)->pDta = (pDtaStructType) malloc( sizeof (struct _DtaStructType) );
 
-			if (NULL != pbTempTgtStructType->pDta)
+			if (NULL != (*ppbThisTarget)->pDta)
 			{
-				pbTempTgtStructType->pDta->pcType = (char*) malloc (strlen (pDta->pcType) +1 );
-				strcpy(pbTempTgtStructType->pDta->pcType, pDta->pcType);
+				(*ppbThisTarget)->pDta->pcType = (char*) malloc (strlen (pDta->pcType) +1 );
+				strcpy((*ppbThisTarget)->pDta->pcType, pDta->pcType);
 
-				pbTempTgtStructType->pDta->pcName = (char*) malloc (strlen (pDta->pcName) +1 );
-				strcpy(pbTempTgtStructType->pDta->pcName, pDta->pcName);
+				(*ppbThisTarget)->pDta->pcName = (char*) malloc (strlen (pDta->pcName) +1 );
+				strcpy((*ppbThisTarget)->pDta->pcName, pDta->pcName);
 
-				pbTempTgtStructType->pDta->pcAddress = (char*) malloc (strlen (pDta->pcAddress) +1 );
-				strcpy(pbTempTgtStructType->pDta->pcAddress, pDta->pcAddress);
+				((*ppbThisTarget)->pDta)->pcAddress = (char*) malloc (strlen (pDta->pcAddress) +1 );
+				strcpy((*ppbThisTarget)->pDta->pcAddress, pDta->pcAddress);
 
-				pbTempTgtStructType->pDta->pcLogin = (char*) malloc (strlen (pDta->pcLogin) +1 );
-				strcpy(pbTempTgtStructType->pDta->pcLogin, pDta->pcLogin);
+				(*ppbThisTarget)->pDta->pcLogin = (char*) malloc (strlen (pDta->pcLogin) +1 );
+				strcpy((*ppbThisTarget)->pDta->pcLogin, pDta->pcLogin);
 
-				pbTempTgtStructType->pDta->pcPasswd = (char*) malloc (strlen (pDta->pcPasswd) +1 );
-				strcpy(pbTempTgtStructType->pDta->pcPasswd, pDta->pcPasswd);
+				(*ppbThisTarget)->pDta->pcPasswd = (char*) malloc (strlen (pDta->pcPasswd) +1 );
+				strcpy((*ppbThisTarget)->pDta->pcPasswd, pDta->pcPasswd);
 
-				pbTempTgtStructType->pDta->pcDatafile = (char*) malloc (strlen (pDta->pcDatafile) +1 );
-				strcpy(pbTempTgtStructType->pDta->pcDatafile, pDta->pcDatafile);
+				(*ppbThisTarget)->pDta->pcDatafile = (char*) malloc (strlen (pDta->pcDatafile) +1 );
+				strcpy((*ppbThisTarget)->pDta->pcDatafile, pDta->pcDatafile);
 
-				pbTempTgtStructType->pDta->pcProto = (char*) malloc (strlen (pDta->pcProto) +1 );
-				strcpy(pbTempTgtStructType->pDta->pcProto, pDta->pcProto);
+				(*ppbThisTarget)->pDta->pcProto = (char*) malloc (strlen (pDta->pcProto) +1 );
+				strcpy((*ppbThisTarget)->pDta->pcProto, pDta->pcProto);
 
 			}
 			else
@@ -132,17 +72,76 @@ pTgtStructType pbChild, pbTempTgtStructType;
 		}
 		else
 			printf("ERROR: bad initialization data\n");
-		
-		/* set a look-up */
-		pbTempTgtStructType->pNext = NULL;		
 
-		/* append a new Target entry to the end of existing Target */
-		pbChild->pNext = pbTempTgtStructType;
+		/* Lock-up  */
+		(*ppbThisTarget)->pNext = NULL;
+	
 	}
 	else
-		/* memory for new recored hasn't been allocated */
-		return; 
-	
+	{
+	/* introduce two temporary variables of type 'pTgtStructType' */
+	pTgtStructType pbChild, pbTempTgtStructType;
+
+		/* point with first temporary element to head of Target */
+		pbChild = *ppbThisTarget;
+
+		/* allocate a space for new record in Behorde */
+		pbTempTgtStructType = (pTgtStructType) malloc ( sizeof (TgtStructType));
+
+		/* Skip everything */
+		while (NULL != pbChild->pNext )
+
+			/* til the tail */
+			pbChild = pbChild->pNext;
+		
+		/* if previous memory allocation was successful */
+		if(pbTempTgtStructType != NULL)
+		{
+			if (NULL != pDta)
+			{
+				pbTempTgtStructType->pDta = (pDtaStructType) malloc( sizeof (struct _DtaStructType) );
+
+				if (NULL != pbTempTgtStructType->pDta)
+				{
+
+					pbTempTgtStructType->pDta->pcType = (char*) malloc (strlen (pDta->pcType) +1 );
+					strcpy(pbTempTgtStructType->pDta->pcType, pDta->pcType);
+
+					pbTempTgtStructType->pDta->pcName = (char*) malloc (strlen (pDta->pcName) +1 );
+					strcpy(pbTempTgtStructType->pDta->pcName, pDta->pcName);
+
+					pbTempTgtStructType->pDta->pcAddress = (char*) malloc (strlen (pDta->pcAddress) +1 );
+					strcpy(pbTempTgtStructType->pDta->pcAddress, pDta->pcAddress);
+
+					pbTempTgtStructType->pDta->pcLogin = (char*) malloc (strlen (pDta->pcLogin) +1 );
+					strcpy(pbTempTgtStructType->pDta->pcLogin, pDta->pcLogin);
+
+					pbTempTgtStructType->pDta->pcPasswd = (char*) malloc (strlen (pDta->pcPasswd) +1 );
+					strcpy(pbTempTgtStructType->pDta->pcPasswd, pDta->pcPasswd);
+
+					pbTempTgtStructType->pDta->pcDatafile = (char*) malloc (strlen (pDta->pcDatafile) +1 );
+					strcpy(pbTempTgtStructType->pDta->pcDatafile, pDta->pcDatafile);
+
+					pbTempTgtStructType->pDta->pcProto = (char*) malloc (strlen (pDta->pcProto) +1 );
+					strcpy(pbTempTgtStructType->pDta->pcProto, pDta->pcProto);
+				}
+				else
+					printf("ERROR: can't allocate mem. while copying initialization data\n");
+
+			}
+			else
+				printf("ERROR: bad initialization data\n");
+		
+			/* set a look-up */
+			pbTempTgtStructType->pNext = NULL;		
+
+			/* append a new Target entry to the end of existing Target */
+			pbChild->pNext = pbTempTgtStructType;
+		}
+		else
+			/* memory for new recored hasn't been allocated */
+			return; 
+	}
 }
 
 /* deploy information about all current Targets */

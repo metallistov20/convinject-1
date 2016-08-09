@@ -44,9 +44,7 @@ typedef struct _TgtStructType
 } TgtStructType, *pTgtStructType;
 
 
-pTgtStructType _CrTarget(pDtaStructType pDta, pTgtStructType pbNewTarget);
-
-void _AppendTarget(pTgtStructType pbThisTarget, pDtaStructType pDta);
+void _AddTarget(pTgtStructType * ppbThisTarget, pDtaStructType pDta);
 
 void _ProcessTargets(pTgtStructType pbThisTarget);
 

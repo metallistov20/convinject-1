@@ -37,14 +37,14 @@ xmlDoc *doc = NULL;
 /* List (SB) of parced XML entries */
 pTgtStructType Root;
 
+xmlNode *cur_node;
+
+struct _DtaStructType cur_data;
+
 void extract_xml_values(xmlNode * a_node)
 {
-xmlNode *cur_node = a_node;
+		cur_node = a_node;
 
-struct _DtaStructType * cur_data = (struct _DtaStructType *) malloc (sizeof (struct _DtaStructType) );
-
-	if (NULL != cur_data) 
-	{
 		if (XML_ELEMENT_NODE == cur_node->type)
 		{
 			/* Element has been found by template?  */
@@ -62,62 +62,59 @@ struct _DtaStructType * cur_data = (struct _DtaStructType *) malloc (sizeof (str
 				{
 					if ( XML_TEXT_NODE == _ch_cur_node->type)
 					{
-						printf("its content is <%s>.\n", _ch_cur_node->content);
+						printf("its content is <%s> [%d].\n", _ch_cur_node->content, strlen (_ch_cur_node->content) );
 #if (1)
 //TODO: here we use different pointers <cur_node> and <_ch_cur_node> as pair. It's wrong
 // and can't be relevant unless extra check is done. Nevertheless..
 
 						if ( 0 == strcmp ("Type", cur_node->name) )
 						{
-							cur_data->pcType = malloc( strlen (_ch_cur_node->content) + 1 );
-							strcpy (cur_data->pcType, _ch_cur_node->content);
+							cur_data.pcType = malloc (strlen (_ch_cur_node->content) + 1 ) ;
+							strcpy (cur_data.pcType, _ch_cur_node->content);
 						}
 
 						if ( 0 == strcmp ("Name", cur_node->name) )
 						{
-							cur_data->pcName = malloc( strlen (_ch_cur_node->content) + 1 );
-							strcpy (cur_data->pcName, _ch_cur_node->content);
+							cur_data.pcName = malloc (strlen (_ch_cur_node->content) + 1 ) ;
+							strcpy (cur_data.pcName, _ch_cur_node->content);
 						}
+
 
 						if ( 0 == strcmp ("Address", cur_node->name) )
 						{
-							cur_data->pcAddress = malloc( strlen (_ch_cur_node->content) + 1 );
-							strcpy (cur_data->pcAddress, _ch_cur_node->content);
+							cur_data.pcAddress = malloc (strlen (_ch_cur_node->content) + 1 ) ;
+							strcpy (cur_data.pcAddress, _ch_cur_node->content);
 						}
+
 
 						if ( 0 == strcmp ("Login", cur_node->name) )
 						{
-							cur_data->pcLogin = malloc( strlen (_ch_cur_node->content) + 1 );
-							strcpy (cur_data->pcLogin, _ch_cur_node->content);
+							cur_data.pcLogin = malloc (strlen (_ch_cur_node->content) + 1 ) ;
+							strcpy (cur_data.pcLogin, _ch_cur_node->content);
 						}
 
 						if ( 0 == strcmp ("Passwd", cur_node->name) )
 						{
-							cur_data->pcPasswd = malloc( strlen (_ch_cur_node->content) + 1 );
-							strcpy (cur_data->pcPasswd, _ch_cur_node->content);
+							cur_data.pcPasswd = malloc (strlen (_ch_cur_node->content) + 1 ) ;
+							strcpy (cur_data.pcPasswd, _ch_cur_node->content);
 						}
 
 						if ( 0 == strcmp ("Datafile", cur_node->name) )
 						{
-							cur_data->pcDatafile = malloc( strlen (_ch_cur_node->content) + 1 );
-							strcpy (cur_data->pcDatafile, _ch_cur_node->content);
+							cur_data.pcDatafile = malloc (strlen (_ch_cur_node->content) + 1 ) ;
+							strcpy (cur_data.pcDatafile, _ch_cur_node->content);
 						}
 
 						if ( 0 == strcmp ("Proto", cur_node->name) )
 						{
-							cur_data->pcProto = malloc( strlen (_ch_cur_node->content) + 1 );
-							strcpy (cur_data->pcProto, _ch_cur_node->content);
+							cur_data.pcProto = malloc (strlen (_ch_cur_node->content) + 1 ) ;
+							strcpy (cur_data.pcProto, _ch_cur_node->content);
 
-							if (NULL == Root)
-							{
-								Root = (pTgtStructType) malloc (sizeof (TgtStructType) );
-
-								_CrTarget(cur_data, Root);
-							}
-							else
-								_AppendTarget(Root, cur_data);
-								
+							_AddTarget(&Root, &cur_data);
 						}
+
+
+
 #endif /* (1) */
 					} /* if ( XML_TEXT_NODE == _ch_cur_node->type) */
 
@@ -129,7 +126,7 @@ struct _DtaStructType * cur_data = (struct _DtaStructType *) malloc (sizeof (str
 
 		}/* if (XML_ELEMENT_NODE == cur_node->type)*/
 
-	} /* if (NULL != cur_data)  */
+
 }
 
 /* Parse XML structure */
