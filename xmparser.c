@@ -27,8 +27,12 @@
 #include "xmparser.h"
 #include "structs.h"
 
+/* DXML() definition  */
+#include "main.h"
+
 /* List (SB) of parced XML entries */
 extern pTgtStructType Root;
+
 
 void extract_xml_values(xmlNode * a_node)
 {
@@ -46,14 +50,14 @@ struct _DtaStructType cur_data;
 			{
 				xmlNode *_ch_cur_node = NULL;
 
-				DXML("field <%s> found, ", cur_node->name);
+//.				DXML("field <%s> found, ", cur_node->name);
 
 				/* Go and parce it */
 				for (_ch_cur_node = cur_node->children; _ch_cur_node; _ch_cur_node = _ch_cur_node->next)
 				{
 					if ( XML_TEXT_NODE == _ch_cur_node->type)
 					{
-						DXML("its content is <%s> [%d].\n", _ch_cur_node->content, strlen (_ch_cur_node->content) );
+//.						DXML("its content is <%s> [%d].\n", _ch_cur_node->content, strlen (_ch_cur_node->content) );
 
 //TODO: here we use different pointers <cur_node> and <_ch_cur_node> as pair. It's wrong
 // and can't be relevant unless extra check is done. Nevertheless..
@@ -132,7 +136,7 @@ xmlNode *cur_node = NULL;
 			{
 				xmlNode *_ch_cur_node = NULL;
 
-				DXML("\n<%s> found \n", cur_node->name);
+//.				DXML("\n<%s> found \n", cur_node->name);
 
 				/* Go and parce it, store results of paring into URL&CMPND structures  */
 				for (_ch_cur_node = cur_node->children; _ch_cur_node; _ch_cur_node = _ch_cur_node->next)

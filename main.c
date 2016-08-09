@@ -46,6 +46,7 @@ char cXmlName[PATH_MAX];
 /* List (SB) of parced XML entries */
 pTgtStructType Root;
 
+
 int main (int argc, char **argv)
 {
 	/* Assign datafile name*/
@@ -55,7 +56,7 @@ int main (int argc, char **argv)
 
 	if (NULL == doc)
 	{
-		DGENERAL("ERROR: could not parse file %s\n", cXmlName);
+//.		DGENERAL("ERROR: could not parse file %s\n", cXmlName);
 
 		return (-2);
 	}
