@@ -28,7 +28,7 @@ MINOR:= 0
 
 OBJS	= ./authentication.o ./cmds.o ./connect_ssh.o ./knownhosts.o ./pipes.o 
 
-CFLAGS = -c -g -I/usr/include/libxml2
+CFLAGS = -c -g -I/usr/include/libxml2             -D_DBG
 LDFLAGS= -L/usr/local/lib 
 LIBS   = -lxml2
 
@@ -51,4 +51,4 @@ all: $(OBJS)
 #-L./ssh/shared -Wl,--rpath-link $(PWD)/ssh/shared  -Wl,--rpath $(PWD)/ssh/shared
 
 clean:
-	$(RM)  *.o *.so* *~ core *.o
+	$(RM)  *.o *.so* *~ core *.o *.c~

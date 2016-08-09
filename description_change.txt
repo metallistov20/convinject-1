@@ -1,0 +1,6 @@
+enable
+configure
+system-descript sysname SMB_TEST3
+system-descript location UKRAINE_KYIV
+system-descript contact-info "TP-Link UA LTD MET 20 Build 2"
+

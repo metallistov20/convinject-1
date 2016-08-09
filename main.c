@@ -68,21 +68,14 @@ int main (int argc, char **argv)
 	/* Put all XML sections <Target> into list pointed <Root> */
 	_parse_xml(root_element, "Target");
 
-#if 0
-	/* Glue particles of <pUrlChain> into full-blown URLs */
-	GlueUrl(pUrlChain);
 
-#if (DEBUG_URL)
-	DisplayUrl(pUrlChain);
-#endif /* (DEBUG_URL) */
+	/* Put XML data on air */
+	_ProcessTargets(Root);
 
-	/* Put URLs into wire */
-	return DeployUrlEx(pUrlChain, 1);
-#else
 
 	_DeleteTarget (Root);
 
 	return 0;
-#endif /* (0) */
+
 }
 

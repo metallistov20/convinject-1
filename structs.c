@@ -156,8 +156,25 @@ unsigned char _the_number;
     /* process each Target's entry */
     while (pbThisTarget != NULL )
     {
+//char * ABBGMG[4] = {"dummy", "192.168.1.1", "-l", "admin"};
 
-	// TODO do effective processing here 	
+	printf(" pcType<%s> pcName<%s> pcAddress<%s> pcLogin<%s> pcPasswd<%s> pcDatafile<%s> pcProto<%s>\n",
+ 	pbThisTarget->pDta->pcType,
+	pbThisTarget->pDta->pcName,
+	pbThisTarget->pDta->pcAddress,
+	pbThisTarget->pDta->pcLogin,
+	pbThisTarget->pDta->pcPasswd,
+	pbThisTarget->pDta->pcDatafile,
+	pbThisTarget->pDta->pcProto    );
+
+//	process_target(4, ABBGMG);
+
+	if ( 0 == strcmp ("ssh", pbThisTarget->pDta->pcProto) )
+		process_ssh_target(
+			pbThisTarget->pDta->pcAddress,
+			pbThisTarget->pDta->pcLogin, 
+			pbThisTarget->pDta->pcPasswd,
+			pbThisTarget->pDta->pcDatafile);
 	
 	/* Go to next record of Target */
 	pbThisTarget =  pbThisTarget->pNext;

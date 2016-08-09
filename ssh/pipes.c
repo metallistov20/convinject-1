@@ -291,6 +291,7 @@ static void usage()
 	exit(0);
 }
 
+//TODO: remove this obsoilete stuff 
 static int opts(int argc, char **argv)
 {
 FILE* fp = NULL;
@@ -305,6 +306,72 @@ FILE* fp = NULL;
 
 	/* Try to open file with commands  */
 	if ( NULL == (fp = fopen (DATA_FNAME, "r") ) )
+	{
+		printf("[%s] %s: can't open file <%s> \n", __FILE__, __func__ , DATA_FNAME);
+
+		return FO_ERROR;
+	}
+
+
+	/* For each string of Raw Data file */
+	while ( ! (feof (fp) ) ) 
+	{
+		/* Scan whole string into temp. buffer */
+		if (NULL == fgets (cCmdDataBuf, SINGLE_CMD_MAXLENGHT, fp) )
+		{
+			/* no string read from data file */
+		}
+		else
+		{
+			printf("[%s] %s: scanned:%s", __FILE__, __func__, cCmdDataBuf);
+
+			/* Attach just scanned data */
+			EnrollCmd(&pCmdChain, cCmdDataBuf);
+		}
+	}
+
+
+	/* Close file, and dispose pointer to Raw Data file */
+	fclose(fp);
+
+	return 0;
+}
+
+static int user_host_file(char * pcLogin, char * pcHost, char * pcFilename)
+{
+FILE* fp = NULL;
+
+	if(NULL == pcLogin)
+	{
+		printf("ERROR: assign_host_file - empty username\n");
+		return (-8);//TODO;
+	}
+
+	if(NULL == pcHost)
+	{
+		printf("ERROR: assign_host_file - empty hostname\n");
+		return (-8);//TODO;
+	}
+
+	if(NULL == pcHost)
+	{
+		printf("ERROR: assign_host_file - empty filename\n");
+		return (-8);//TODO;
+	}
+
+	user = malloc (strlen (pcLogin) + 1);
+	strcpy ( user, pcLogin ) ;
+
+	host = malloc (strlen (pcHost) + 1);
+	strcpy ( host, pcHost ) ;
+
+
+	if(host==NULL)
+
+		usage();
+
+	/* Try to open file with commands  */
+	if ( NULL == (fp = fopen (pcFilename, "r") ) )
 	{
 		printf("[%s] %s: can't open file <%s> \n", __FILE__, __func__ , DATA_FNAME);
 
@@ -495,6 +562,58 @@ int interactive=isatty(0);
 		do_cleanup(0);
 }
 
+static int client_ssh(ssh_session session, char * pcPasswd)
+{
+int auth=0;
+int state;
+
+	if (user)
+
+		if (ssh_options_set(session, SSH_OPTIONS_USER, user) < 0)
+
+			return -1;
+
+	if (ssh_options_set(session, SSH_OPTIONS_HOST ,host) < 0)
+
+		return -1;
+
+	if (proxycommand != NULL)
+	{
+		if(ssh_options_set(session, SSH_OPTIONS_PROXYCOMMAND, proxycommand))
+
+		return -1;
+	}
+
+	ssh_options_parse_config(session, NULL);
+
+	if(ssh_connect(session))
+	{
+		fprintf(stderr,"Connection failed : %s\n",ssh_get_error(session));
+
+		return -1;
+	}
+
+	state=verify_knownhost(session);
+
+	if (state != 0)
+
+		return -1;
+
+	ssh_userauth_none(session, NULL);
+
+	auth=authenticate_ssh_console(session, pcPasswd);
+
+	if(auth != SSH_AUTH_SUCCESS)
+	{
+		return -1;
+	}
+
+	shell(session);
+
+	return 0;
+}
+
+// TODO: remove this obsolete 
 static int client(ssh_session session)
 {
 int auth=0;
@@ -546,9 +665,83 @@ int state;
 	return 0;
 }
 
-int _08_08_main(int argc, char **argv)
+int process_ssh_target(char * pcAddress, char * pcLogin, char * pcPasswd,char * pcDatafile)
 {
 ssh_session session;
+
+	if ( ( NULL == pcAddress) || ( NULL == pcLogin) || ( NULL == pcPasswd) || ( NULL == pcDatafile)  )
+	{
+		printf("ERROR: Incorrect data; somewhere empty string.\n");//TODO
+		return -8;//TODO
+	}
+
+	session = ssh_new();
+
+	ssh_callbacks_init(&cb);
+
+	ssh_set_callbacks(session,&cb);
+
+#if (0) // 09.08.2016
+// TODO: going away from <argc/argv> usage.
+	if(ssh_options_getopt(session, &argc, argv))
+	{
+		fprintf(stderr, "error parsing command line :%s\n", ssh_get_error(session) );
+
+		usage();
+	}
+#endif /* (0) */
+
+#if (0) // 09.08.2016
+	opts(argc,argv);
+#else
+	user_host_file(pcLogin, pcAddress, pcDatafile);
+#endif /* (0) */
+
+	signal(SIGTERM, do_exit);
+
+	/* Create input pipe between two endpoints */
+	pipe(input_pipe);
+
+#if defined(OUT_PIPE)
+	/* Create output pipe between two endpoints */
+	pipe(output_pipe);
+#endif /* OUT_PIPE */
+
+	/* Launch Successor to push commands into tray */
+	iInput_Start("none", 25);
+
+#if defined(OUT_PIPE)
+//	iOutput_Start("", 25);
+#endif /* OUT_PIPE */
+
+#if (0)
+	client(session);
+#else
+	client_ssh(session, pcPasswd);
+#endif /* () */
+
+	ssh_disconnect(session);
+
+	ssh_free(session);
+
+	ssh_finalize();
+
+	free (user);//allocated in  <assign_host_file>
+	free (host);//allocated in  <assign_host_file>
+
+	/* Free memory occupied by dynamically stored raw data */
+	DeleteCmds(&pCmdChain);
+
+	return 0;
+
+}
+
+int process_target(int argc, char **argv)
+{
+ssh_session session;
+
+printf("process [%d]   0:%s 1:%s 2:%s 3:%s   \n", argc, argv[0], argv[1], argv[2], argv[3] );
+return 0;//+++
 
 	session = ssh_new();
 

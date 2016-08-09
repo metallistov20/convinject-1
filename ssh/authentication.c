@@ -138,6 +138,119 @@ static void error(ssh_session session)
 	fprintf(stderr,"Authentication failed: %s\n",ssh_get_error(session));
 }
 
+
+int authenticate_ssh_console(ssh_session session, char * pcPasswd)
+{
+int rc;
+int method;
+char password[128] = {0};
+char *banner;
+
+	/* Try to authenticate */
+	rc = ssh_userauth_none(session, NULL);
+
+	if (rc == SSH_AUTH_ERROR)
+	{
+		error(session);
+
+		return rc;
+	}
+
+	method = ssh_userauth_list(session, NULL);
+
+	while (SSH_AUTH_SUCCESS != rc)
+	{
+		if (method & SSH_AUTH_METHOD_GSSAPI_MIC)
+		{
+			rc = ssh_userauth_gssapi(session);
+
+			if(SSH_AUTH_ERROR == rc)
+			{
+				error(session);
+				return rc;
+			}
+			else if (rc == SSH_AUTH_SUCCESS)
+			{
+				break;
+			}
+		}
+
+		/* Try to authenticate with public key first */
+		if (method & SSH_AUTH_METHOD_PUBLICKEY)
+		{
+			rc = ssh_userauth_publickey_auto(session, NULL, NULL);
+
+			if(SSH_AUTH_ERROR == rc)
+			{
+				error(session);
+				return rc;
+			}
+			else if (SSH_AUTH_SUCCESS == rc)
+			{
+				break;
+			}
+		}
+
+		/*Try to authenticate with keyboard interactive" */
+		if (method & SSH_AUTH_METHOD_INTERACTIVE)
+		{
+			rc = authenticate_kbdint(session, NULL);
+
+			if (SSH_AUTH_ERROR == rc)
+			{
+				error(session);
+				return rc;
+			}
+			else if (SSH_AUTH_SUCCESS == rc)
+			{
+				break;
+			}
+		}
+
+#if defined(OBSOLETE_AUTH)
+		if (ssh_getpass("Password: ", password, sizeof(password), 0, 0) < 0)
+		{
+			return SSH_AUTH_ERROR;
+		}
+#else
+
+		/* Notmally we shoud interact with SSH/CLI as less as we can */
+		memcpy(password, pcPasswd, strlen(pcPasswd) + 1 );
+#endif
+		/* Try to authenticate with password */
+		if (method & SSH_AUTH_METHOD_PASSWORD)
+		{
+			rc = ssh_userauth_password(session, NULL, password);
+
+			if (SSH_AUTH_ERROR == rc)
+			{
+				error(session);
+
+				return rc;
+			}
+			else
+				if (SSH_AUTH_SUCCESS == rc)
+				{
+					break;
+				}
+		}
+
+		memset(password, 0, sizeof(password));
+	}
+
+	banner = ssh_get_issue_banner(session);
+
+	if (banner)
+	{
+		printf("%s\n",banner);
+
+		ssh_string_free_char(banner);
+	}
+
+	return rc;
+}
+
+//TODO: remove this obsolete
 int authenticate_console(ssh_session session)
 {
 int rc;
