@@ -34,6 +34,9 @@
 /* pTgtStructType type definition */
 #include "structs.h"
 
+/* DGENERAL() */
+#include "main.h"
+
 /* Ptr to XML data for in memory */
 xmlNode *root_element = NULL;
 
@@ -56,7 +59,7 @@ int main (int argc, char **argv)
 
 	if (NULL == doc)
 	{
-//.		DGENERAL("ERROR: could not parse file %s\n", cXmlName);
+		DGENERAL("[%s] %s:   ERROR: could not parse file %s\n", __FILE__, __func__, cXmlName);
 
 		return (-2);
 	}

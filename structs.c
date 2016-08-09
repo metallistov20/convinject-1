@@ -38,7 +38,7 @@ void _AddTarget(pTgtStructType * ppbThisTarget, pDtaStructType pDta)
 		/* Check if successful */
 		if (NULL == *ppbThisTarget)
 		{
-//.			DSTRUCT ( "ERROR: failure on creation \n" );
+			DSTRUCT("[%s] %s: ERROR: failure on creation \n", __FILE__, __func__);
 		}
 
 		if (NULL != pDta)
@@ -70,11 +70,11 @@ void _AddTarget(pTgtStructType * ppbThisTarget, pDtaStructType pDta)
 
 			}
 			else
-				printf("ERROR: can't allocate mem. while copying initialization data\n");
+				DSTRUCT("[%s] %s: ERROR: can't allocate mem. while copying initialization data\n", __FILE__, __func__);
 
 		}
 		else
-			printf("ERROR: bad initialization data\n");
+			DSTRUCT("[%s] %s: ERROR: bad initialization data\n", __FILE__, __func__);
 
 		/* Lock-up  */
 		(*ppbThisTarget)->pNext = NULL;
@@ -129,11 +129,12 @@ void _AddTarget(pTgtStructType * ppbThisTarget, pDtaStructType pDta)
 					strcpy(pbTempTgtStructType->pDta->pcProto, pDta->pcProto);
 				}
 				else
-					printf("ERROR: can't allocate mem. while copying initialization data\n");
+					DSTRUCT("[%s] %s: ERROR: can't allocate mem. while copying initialization data\n",
+					 __FILE__, __func__);
 
 			}
 			else
-				printf("ERROR: bad initialization data\n");
+				DSTRUCT("[%s] %s: ERROR: bad initialization data\n", 	__FILE__, __func__);
 		
 			/* set a look-up */
 			pbTempTgtStructType->pNext = NULL;		
@@ -147,18 +148,22 @@ void _AddTarget(pTgtStructType * ppbThisTarget, pDtaStructType pDta)
 	}
 }
 
+extern int process_ssh_target(char * pcAddress, char * pcLogin, char * pcPasswd,char * pcDatafile);
+extern int process_http_target(char * pcAddress, char * pcLogin, char * pcPasswd,char * pcDatafile);
+
 /* deploy information about all current Targets */
 void _ProcessTargets(/*pHandle phThisHandle, */pTgtStructType pbThisTarget)
 {
 /* a storage for number under which the item is registerd in Target */
 unsigned char _the_number;
+
+int (* process_target_func) (char *, char *, char *, char *);
     
     /* process each Target's entry */
     while (pbThisTarget != NULL )
     {
-//char * ABBGMG[4] = {"dummy", "192.168.1.1", "-l", "admin"};
-
-	printf(" pcType<%s> pcName<%s> pcAddress<%s> pcLogin<%s> pcPasswd<%s> pcDatafile<%s> pcProto<%s>\n",
+	DSTRUCT("[%s] %s:  pcType<%s> pcName<%s> pcAddress<%s> pcLogin<%s> pcPasswd<%s> pcDatafile<%s> pcProto<%s>\n", 
+	__FILE__, __func__,
  	pbThisTarget->pDta->pcType,
 	pbThisTarget->pDta->pcName,
 	pbThisTarget->pDta->pcAddress,
@@ -167,15 +172,20 @@ unsigned char _the_number;
 	pbThisTarget->pDta->pcDatafile,
 	pbThisTarget->pDta->pcProto    );
 
-//	process_target(4, ABBGMG);
 
 	if ( 0 == strcmp ("ssh", pbThisTarget->pDta->pcProto) )
-		process_ssh_target(
+		process_target_func = process_ssh_target;
+	else
+		if ( 0 == strcmp ("http", pbThisTarget->pDta->pcProto) )
+			process_target_func = process_http_target;
+
+	/* Call desired function */
+	(*process_target_func)(
 			pbThisTarget->pDta->pcAddress,
 			pbThisTarget->pDta->pcLogin, 
 			pbThisTarget->pDta->pcPasswd,
 			pbThisTarget->pDta->pcDatafile);
-	
+
 	/* Go to next record of Target */
 	pbThisTarget =  pbThisTarget->pNext;
     };	
@@ -211,7 +221,7 @@ pTgtStructType pbChild;
 			free (pbThisTarget->pDta);
 		}
 		else
-			printf("ERROR: nothing to release\n");
+			DSTRUCT("[%s] %s: ERROR: nothing to release\n", __FILE__, __func__);
 		    
 		/* preserve a pointer to next record */		    
 		pbChild = pbThisTarget->pNext;

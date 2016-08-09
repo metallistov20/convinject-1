@@ -22,17 +22,15 @@
 #define _MAIN_H_
 
 
-/*
-	#define DGENERAL(format, ...) fprintf (stdout, format, __VA_ARGS__)
+#define DGENERAL(format, ...) fprintf (stdout, format, __VA_ARGS__)
 
-	#define DXML(format, ...) fprintf (stdout, format, __VA_ARGS__)
+#define DXML(format, ...) fprintf (stdout, format, __VA_ARGS__)
 
-	#define DSTRUCT(format, ...) fprintf (stdout, format, __VA_ARGS__)
+#define DSTRUCT(format, ...) fprintf (stdout, format, __VA_ARGS__)
 
-	#define DSSH(format, ...) fprintf (stdout, format, __VA_ARGS__)
+#define DSSH(format, ...) fprintf (stdout, format, __VA_ARGS__)
 
-	#define DHTTP(format, ...) fprintf (stdout, format, __VA_ARGS__)
-*/
+#define DHTTP(format, ...) fprintf (stdout, format, __VA_ARGS__)
 
 
 #endif /* _MAIN_H_ */
