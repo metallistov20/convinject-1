@@ -33,34 +33,44 @@ CC := gcc
 	EXTRA=
 
 SSH_DIR=ssh
-
+HTTP_DIR=http
 
 EXEC := ./convinject
 PWD=$(shell pwd)
 
-
-CFLAGS 	+=
+CFLAGS 	+= -Dname=process_ssh_target -Dname1=process_http_target
 LDFLAGS +=
 LIBS 	+= ./ssh/shared/libssh.so.$(VERSION)
 
 all: $(EXEC)
 
-#TODO: remork - don't enumerate them plainly
-SSH_OBJS	= ./ssh/cmds.o ./ssh/authentication.o  ./ssh/connect_ssh.o  ./ssh/knownhosts.o  ./ssh/pipes.o
+SSH_OBJS	= ./$(SSH_DIR)/cmds.o ./$(SSH_DIR)/authentication.o ./$(SSH_DIR)/connect_ssh.o ./$(SSH_DIR)/knownhosts.o ./$(SSH_DIR)/pipes.o
+HTTP_OBJS	= ./$(HTTP_DIR)/auxiliary.o   ./$(HTTP_DIR)/dummy.o  ./$(HTTP_DIR)/funcs.o  ./$(HTTP_DIR)/inject.o  ./$(HTTP_DIR)/lists.o  ./$(HTTP_DIR)/xmls.o
+SSH_OBJS_R	=$(SSH_OBJS)
+HTTP_OBJS_R	=$(HTTP_OBJS)
 
-#TODO: remork - the second case - http - drops out from this contruction, which is surely not a purpose
-ssh:	$(SSH_OBJS)
+
+ssh:	$(SSH_OBJS) 
 	cd ./$(SSH_DIR) && $(MAKE) 
 	@echo "SSH created:" && ls ./ssh/*.o
-	$(MAKE) "SSH_OBJS_R=$(SSH_OBJS)" all 
+#TODO: obsolete	$(MAKE) "SSH_OBJS_R=$(SSH_OBJS)" all
+
+HTTP_OBJS_R=$(HTTP_OBJS)
+
+#http
+$(HTTP_OBJS_R):	./$(HTTP_DIR)/Makefile 
+	cd ./$(HTTP_DIR) && $(MAKE) build
+	@echo "HTTP created:" && ls ./http/*.o
+
 
 .o: .c
 	$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)  
 
-$(EXEC): $(OBJS) $(SSH_OBJS_R) $(LIBS)
-	$(CC)  -o $@ $(OBJS) $(SSH_OBJS_R)  $(LIBS)   $(LDFLAGS)   -L./ssh/shared -Wl,--rpath-link $(PWD)/ssh/shared  -Wl,--rpath $(PWD)/ssh/shared
+$(EXEC): $(SSH_OBJS_R) $(HTTP_OBJS_R)       $(OBJS) $(LIBS)	
+	$(CC)  -o $@ $(OBJS)  $(SSH_OBJS_R) $(HTTP_OBJS_R)   $(LIBS)  $(LDFLAGS)   -L./ssh/shared -Wl,--rpath-link $(PWD)/ssh/shared  -Wl,--rpath $(PWD)/ssh/shared
 
 
 clean:
 	$(RM) $(EXEC) *.o *.so* *~ core  *.c~
 	cd ./$(SSH_DIR) && $(MAKE)  clean
+	cd ./$(HTTP_DIR) && $(MAKE)  clean

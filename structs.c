@@ -174,10 +174,10 @@ int (* process_target_func) (char *, char *, char *, char *);
 
 
 	if ( 0 == strcmp ("ssh", pbThisTarget->pDta->pcProto) )
-		process_target_func = process_ssh_target;
+		process_target_func = name;//process_ssh_target;
 	else
 		if ( 0 == strcmp ("http", pbThisTarget->pDta->pcProto) )
-			process_target_func = process_http_target;
+			process_target_func = name1;//process_http_target;
 
 	/* Call desired function */
 	(*process_target_func)(
