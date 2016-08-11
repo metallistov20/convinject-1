@@ -38,10 +38,10 @@
 #include "main.h"
 
 /* Ptr to XML data for in memory */
-xmlNode *root_element = NULL;
+xmlNode *xmlRootElement = NULL;
 
 /* Ptr to XML data document */
-xmlDoc *doc = NULL;
+xmlDoc *xmlDocument = NULL;
 
 /* Once upon a life we can afford 4096 characters long array */
 char cXmlName[PATH_MAX];
@@ -55,9 +55,9 @@ int main (int argc, char **argv)
 	/* Assign datafile name*/
 	strcpy (cXmlName, argv[1]);
 
-	doc = xmlReadFile(cXmlName, NULL, 0);
+	xmlDocument = xmlReadFile(cXmlName, NULL, 0);
 
-	if (NULL == doc)
+	if (NULL == xmlDocument)
 	{
 		DGENERAL("[%s] %s:   ERROR: could not parse file %s\n", __FILE__, __func__, cXmlName);
 
@@ -65,11 +65,11 @@ int main (int argc, char **argv)
 	}
 
 	/* Get the root node of the XML data stored in the <doc> */
-	root_element = xmlDocGetRootElement(doc);
+	xmlRootElement = xmlDocGetRootElement(xmlDocument);
 
 
 	/* Put all XML sections <Target> into list pointed <Root> */
-	_parse_xml(root_element, "Target");
+	_parse_xml(xmlRootElement, "Target");
 
 
 	/* Put XML data on air */
