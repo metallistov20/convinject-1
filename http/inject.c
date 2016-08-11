@@ -42,11 +42,19 @@ int iOperation;
 CURL *curl;
 
 
+#if (0)
 /* Payload of POST method during user authenticate */
 const char *cPostMethodString="username=admin&password=admin&logon=Login";
 
 /* Extra payload of POST method during user  authenticate */
 const char *cPostMethodString2="user=admin&level=1&userID=0";
+#else
+/* Payload of POST method during user authenticate. Initializaed in <process_http_target>. */
+char * cPostMethodString;
+
+/* Extra payload of POST method during user authenticate. Initializaed in <process_http_target>. */
+char * cPostMethodString2;
+#endif /* (0) */
 
 char cArg0[MAX_URL_SIZE];
 
@@ -124,13 +132,38 @@ FILE* fp = NULL;
 
 
 /* Not implemented by now */
-int process_http_target(char * pcAddress, char * pcLogin, char * pcPasswd,char * pcDatafile)
+int process_http_target(char * pcAddress, char * pcLogin, char * pcPasswd, char * pcDatafile)
 {
 	printf("ERROR: not implemented");return -1;
 
+	/* Payload of POST method during user authenticate. */
+	cPostMethodString = (char *) malloc (MAX_URL_SIZE);
+
+	/* Extra payload of POST method during user authenticate. */
+	cPostMethodString2 = (char *) malloc (MAX_URL_SIZE);
+
+
+	sprintf(cPostMethodString, "username=%s&password=%s&logon=Login", pcLogin, pcPasswd);
+
+	sprintf(cPostMethodString2,"user=%s&level=1&userID=0", pcLogin);
+
+
+	/* TODO: Maybe to use <cPostMethodString, ..> in lists.c::_DeployUrlEx directly ? */
+	pcPtr2Extra1 = (char**)&cPostMethodString;
+	pcPtr2Extra2 = (char**)&cPostMethodString2;
+
+
 	process_datafile(pcDatafile);
 
-	//open (pcAddress, pcLogin, pcPasswd); && catch <session key>
+
+	// open (pcAddress, pcLogin, pcPasswd); && catch <session key>
+
+	// deploy 
+
+
+	free(cPostMethodString);
+
+	free(cPostMethodString2);
 }
 
 int m_dmg__ain (int argc, char **argv)

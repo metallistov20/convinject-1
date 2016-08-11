@@ -55,6 +55,13 @@ int main (int argc, char **argv)
 	/* Assign datafile name*/
 	strcpy (cXmlName, argv[1]);
 
+#if (0)
+//TODO: can we skip it?
+	/* Check potential ABI mismatches between the version it was compiled for and the actual shared library used */
+	LIBXML_TEST_VERSION
+#endif /* (0) */
+
+
 	xmlDocument = xmlReadFile(cXmlName, NULL, 0);
 
 	if (NULL == xmlDocument)
