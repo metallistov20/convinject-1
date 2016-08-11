@@ -46,7 +46,7 @@ xmlDoc *xmlDocument = NULL;
 /* Once upon a life we can afford 4096 characters long array */
 char cXmlName[PATH_MAX];
 
-/* List (SB) of parced XML entries */
+/* S.B.-List of parced XML entries */
 pTgtStructType Root;
 
 
@@ -75,8 +75,19 @@ int main (int argc, char **argv)
 	/* Put XML data on air */
 	_ProcessTargets(Root);
 
-
+	/* Free dynamic memory occupied S.B.-List <Roor> */
 	_DeleteTarget (Root);
+
+
+
+	/* Free the document */
+	xmlFreeDoc(xmlDocument);
+
+	/* Free the global variables that may have been allocated by the parser */
+	xmlCleanupParser();
+
+ 	exit (0);
+
 
 	return 0;
 

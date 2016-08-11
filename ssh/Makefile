@@ -31,4 +31,4 @@ all: $(OBJS)
 	$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)  
 
 clean:
-	$(RM)  *.o *.so* *~ core  *.c~
+	$(RM) -fv  *.o *.so* *~ core  *.c~

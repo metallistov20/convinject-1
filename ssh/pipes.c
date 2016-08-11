@@ -84,6 +84,7 @@ pCmdType pCmdChain;
 
 
 
+
 /* Initiate forked process with marker 'cpMrk' to run not longer than 'iTMO' seconds */
 int iInput_Start(char * cpMrk, int iTMO);
 
@@ -353,7 +354,7 @@ FILE* fp = NULL;
 		return (-8);//TODO;
 	}
 
-	if(NULL == pcHost)
+	if(NULL == pcFilename)
 	{
 		printf("ERROR: assign_host_file - empty filename\n");
 		return (-8);//TODO;
@@ -373,7 +374,7 @@ FILE* fp = NULL;
 	/* Try to open file with commands  */
 	if ( NULL == (fp = fopen (pcFilename, "r") ) )
 	{
-		printf("[%s] %s: can't open file <%s> \n", __FILE__, __func__ , DATA_FNAME);
+		printf("[%s] %s: can't open file <%s> \n", __FILE__, __func__ , pcFilename);
 
 		return FO_ERROR;
 	}

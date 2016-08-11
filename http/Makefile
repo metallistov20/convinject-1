@@ -20,7 +20,7 @@
 CC := gcc
 
 #gen_vocabulary.o  gen_voHabulary.o  
-OBJS	= auxiliary.o   dummy.o  funcs.o    inject.o  lists.o  xmls.o
+OBJS	= auxiliary.o   funcs.o    inject.o  lists.o  xmls.o  
 
 CFLAGS = -c       -I/usr/include/libxml2                                                         -g 
 
@@ -35,7 +35,8 @@ LIBS = -lcurl 	-lxml2
 
 all: build
 
-build:	compute_tabs gen_vocabulary gen_voHabulary voc.c voc.h voc.obj    $(OBJS)
+#TODO: not sure that <../ssh/cmds.o> should be deployed this way, but for now we need it anyway
+build:	compute_tabs gen_vocabulary gen_voHabulary voc.c voc.h voc.obj    ../ssh/cmds.o   $(OBJS)
 
 
 gen_vocabulary: gen_vocabulary.c
@@ -57,8 +58,8 @@ compute_tabs: compute_tabs.c
 	$(CC) compute_tabs.c -o compute_tabs
 
 inject: inject.o funcs.o lists.o xmls.o auxiliary.o voc.obj 
-	$(CC)  -o inject inject.o funcs.o lists.o xmls.o auxiliary.o voc.obj $(LDFLAGS) $(LIBS)
-
+	$(CC)  -o inject inject.o funcs.o lists.o xmls.o auxiliary.o voc.obj  ../ssh/cmds.o $(LDFLAGS) $(LIBS)
+#TODO: not sure that <../ssh/cmds.o> should be deployed this way, but for now we need it anyway
 
 
 

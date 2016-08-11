@@ -24,7 +24,7 @@
 
 
 /* Allow general-purpose printf output */
-#define DEBUG_COMMON	1 
+#define DEBUG_HTTP_COMMON	1 
 
 /* Show URLs for verification */
 #define DEBUG_URL	1
@@ -47,11 +47,11 @@
 
 
 /* Display common debug info */
-#if (DEBUG_COMMON)
-	#define DCOMMON(format, ...) fprintf (stdout, format, __VA_ARGS__)
+#if (DEBUG_HTTP_COMMON)
+	#define HCOMMON(format, ...) fprintf (stdout, format, __VA_ARGS__)
 #else
-	#define DCOMMON(format, ...)
-#endif /* (DEBUG_COMMON) */
+	#define HCOMMON(format, ...)
+#endif /* (DEBUG_HTTP_COMMON) */
 
 
 /* Display debug URL */

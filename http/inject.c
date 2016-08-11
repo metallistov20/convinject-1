@@ -34,6 +34,7 @@
 #include "auxiliary.h"
 
 
+
 /* Index of desired operation (can be 'create', 'save', 'ACL', 'firmware' )*/
 int iOperation;
 
@@ -62,8 +63,75 @@ xmlNode *root_element = NULL;
 /* Ptr to XML data document */
 xmlDoc *doc = NULL;
 
+#define M_PATH	260
+/* Single command buffer */
+char cCmdDataBuf[M_PATH];// TODO: 2 DEL
+
+/* Data structure type definition */
+#include "../ssh/cmds.h"
 
 
+
+
+
+/* Pointer to a dynamic structure to store command tray */
+pCmdType pHttpCmdChain;
+
+
+
+static int process_datafile(char * pcFilename)
+{
+FILE* fp = NULL;
+
+	if(NULL == pcFilename)
+	{
+		printf("ERROR: assign_host_file - empty filename\n");
+		return (-8);//TODO;
+	}
+
+	/* Try to open file with commands  */
+	if ( NULL == (fp = fopen (pcFilename, "r") ) )
+	{
+		printf("[%s] %s: can't open file <%s> \n", __FILE__, __func__ , pcFilename);
+
+		return (-9);//TODO;
+	}
+
+	/* For each string of Raw Data file */
+	while ( ! (feof (fp) ) ) 
+	{
+		/* Scan whole string into temp. buffer */
+		if (NULL == fgets (cCmdDataBuf, M_PATH, fp) )
+		{
+			/* no string read from data file */
+		}
+		else
+		{
+			printf("[%s] %s: scanned:%s", __FILE__, __func__, cCmdDataBuf);
+
+			/* Attach just scanned data */
+			EnrollCmd(&pHttpCmdChain, cCmdDataBuf);
+		}
+	}
+
+
+	/* Close file, and dispose pointer to Raw Data file */
+	fclose(fp);
+
+	return 0;
+}
+
+
+
+/* Not implemented by now */
+int process_http_target(char * pcAddress, char * pcLogin, char * pcPasswd,char * pcDatafile)
+{
+	printf("ERROR: not implemented");return -1;
+
+	process_datafile(pcDatafile);
+
+	//open (pcAddress, pcLogin, pcPasswd); && catch <session key>
+}
 
 int m_dmg__ain (int argc, char **argv)
 {
@@ -148,111 +216,111 @@ int iOption;
 
 			/* Single: open site */
 			case 'o':
-				DCOMMON("%s: option -%c\n", cArg0, iOption);
+				HCOMMON("%s: option -%c\n", cArg0, iOption);
 				iOperation = DO_OPEN_OP;
 				break;
 
 			/* Single: close site */
 			case 'x':
-				DCOMMON("%s: option -%c\n", cArg0, iOption);
+				HCOMMON("%s: option -%c\n", cArg0, iOption);
 				iOperation = DO_CLOSE_OP;
 				break;
 
 			/* Single: create SNMP group */
 			case 'c':
-				DCOMMON("%s: option -%c\n", cArg0, iOption);
+				HCOMMON("%s: option -%c\n", cArg0, iOption);
 				iOperation = DO_CREATE_OP;
 				break;
 
 			/* Single: save changes on site  */
 			case 's':
-				DCOMMON("%s: option -%c\n", cArg0, iOption);
+				HCOMMON("%s: option -%c\n", cArg0, iOption);
 				iOperation = DO_SAVE_OP;
 				break;
 
 			/* Single: perform ACL setting */
 			case 'a':
-				DCOMMON("%s: option -%c\n", cArg0, iOption);
+				HCOMMON("%s: option -%c\n", cArg0, iOption);
 				iOperation = DO_ACL_OP;
 				break;
 
 			/* Single: firmware upload and upgrade */
 			case 'r':
-				DCOMMON("%s: option -%c\n", cArg0, iOption);
+				HCOMMON("%s: option -%c\n", cArg0, iOption);
 				iOperation = DO_FIRMWARE_OP;
 				break;
 
 			/* Single: switch reboot */
 			case 'b':
-				DCOMMON("%s: option -%c\n", cArg0, iOption);
+				HCOMMON("%s: option -%c\n", cArg0, iOption);
 				iOperation = DO_REBOOT_OP;
 				break;
 
 			/* Single: ipset */
 			case 'g':
-				DCOMMON("%s: option -%c\n", cArg0, iOption);
+				HCOMMON("%s: option -%c\n", cArg0, iOption);
 				iOperation = DO_IPSET_OP;
 				break;
 
 
 			/* Single: ip v6 set */
 			case 'e':
-				DCOMMON("%s: option -%c\n", cArg0, iOption);
+				HCOMMON("%s: option -%c\n", cArg0, iOption);
 				iOperation = DO_IPV6SET_OP;
 				break;
 			/* Single: access */
 			case 'k':
-				DCOMMON("%s: option -%c\n", cArg0, iOption);
+				HCOMMON("%s: option -%c\n", cArg0, iOption);
 				iOperation = DO_ACNTL_OP;
 				break;
 			/* Single: port security */
 			case 'h':
-				DCOMMON("%s: option -%c\n", cArg0, iOption);
+				HCOMMON("%s: option -%c\n", cArg0, iOption);
 				iOperation = DO_PSEC_OP;
 				break;
 			/* Single: port mirroring */
 			case 'j':
-				DCOMMON("%s: option -%c\n", cArg0, iOption);
+				HCOMMON("%s: option -%c\n", cArg0, iOption);
 				iOperation = DO_PMIR_OP;
 				break;
 			/* Single: vlan conf. create */
 			case 'm':
-				DCOMMON("%s: option -%c\n", cArg0, iOption);
+				HCOMMON("%s: option -%c\n", cArg0, iOption);
 				iOperation = DO_VLANCR_OP;
 				break;
 			/* Single: vlan configure */
 			case 'n':
-				DCOMMON("%s: option -%c\n", cArg0, iOption);
+				HCOMMON("%s: option -%c\n", cArg0, iOption);
 				iOperation = DO_VLANC_OP;
 				break;
 			/* Single: ip range */
 			case 'q':
-				DCOMMON("%s: option -%c\n", cArg0, iOption);
+				HCOMMON("%s: option -%c\n", cArg0, iOption);
 				iOperation = DO_IPRAN_OP;
 				break;
 			/* Single: port filter */
 			case 'p':
-				DCOMMON("%s: option -%c\n", cArg0, iOption);
+				HCOMMON("%s: option -%c\n", cArg0, iOption);
 				iOperation = DO_PFILT_OP;
 				break;
 			/* Single: ping */
 			case 'y':
-				DCOMMON("%s: option -%c\n", cArg0, iOption);
+				HCOMMON("%s: option -%c\n", cArg0, iOption);
 				iOperation = DO_PING_OP;
 				break;
 			/* Single: tracert */
 			case 'z':
-				DCOMMON("%s: option -%c\n", cArg0, iOption);
+				HCOMMON("%s: option -%c\n", cArg0, iOption);
 				iOperation = DO_TRACERT_OP;
 				break;
 			/* Single: cable test */
 			case 'v':
-				DCOMMON("%s: option -%c\n", cArg0, iOption);
+				HCOMMON("%s: option -%c\n", cArg0, iOption);
 				iOperation = DO_CABLE_OP;
 				break;
 			/* Single: loopback */
 			case 'w':
-				DCOMMON("%s: option -%c\n", cArg0, iOption);
+				HCOMMON("%s: option -%c\n", cArg0, iOption);
 				iOperation = DO_LOOPBK_OP;
 				break;
 
@@ -260,90 +328,90 @@ int iOption;
 
 			/* Couple: IP addr of target switch */
 			case 't':
-				DCOMMON("%s: option -%c with value `%s'\n", cArg0, iOption, optarg);
+				HCOMMON("%s: option -%c with value `%s'\n", cArg0, iOption, optarg);
 				strcpy(cIpAddr, optarg);
 				break;
 
 			/* Couple: tID of the session */
 			case 'i':
-				DCOMMON("%s: option -%c with value `%s'\n", cArg0, iOption, optarg);
+				HCOMMON("%s: option -%c with value `%s'\n", cArg0, iOption, optarg);
 				strcpy(_tid_, optarg);
 				break;
 
 			/* Couple: SNMP community name to be created on target switch*/
 			case 'u':
-				DCOMMON("%s: option -%c with value `%s'\n", cArg0, iOption, optarg);
+				HCOMMON("%s: option -%c with value `%s'\n", cArg0, iOption, optarg);
 				strcpy(txt_comname, optarg);
 				break;
 
 			/* Couple: Firmware name to be uploaded and upgraded on switch*/
 			case 'f':
-				DCOMMON("%s: option -%c with value `%s'\n", cArg0, iOption, optarg);
+				HCOMMON("%s: option -%c with value `%s'\n", cArg0, iOption, optarg);
 				strcpy(cFwName, optarg);
 				break;
 
 			/* Couple: Filename of XML file with data */
 			case 'd':
-				DCOMMON("%s: option -%c with value `%s'\n", cArg0, iOption, optarg);
+				HCOMMON("%s: option -%c with value `%s'\n", cArg0, iOption, optarg);
 				strcpy(cXmlName, optarg);
 				break;
 
 			/* Couple: Assign ACL setings */
 			case 'l':
-				DCOMMON("%s: option -%c (--acl-data) with value `%s'\n", cArg0, iOption, optarg);
+				HCOMMON("%s: option -%c (--acl-data) with value `%s'\n", cArg0, iOption, optarg);
 				strcpy(aclId, optarg);
 				break;
 
 			/* Couple: ip address */
 			case '0':
-				DCOMMON("%s: option -%c (--ip-addr) with value `%s'\n", cArg0, iOption, optarg);
+				HCOMMON("%s: option -%c (--ip-addr) with value `%s'\n", cArg0, iOption, optarg);
 				strcpy(ip_address, optarg);
 				break;
 
 			/* Couple: ip network mask */
 			case '1':
-				DCOMMON("%s: option -%c (--ip-mask) with value `%s'\n", cArg0, iOption, optarg);
+				HCOMMON("%s: option -%c (--ip-mask) with value `%s'\n", cArg0, iOption, optarg);
 				strcpy(ip_mask, optarg);
 				break;
 
 			/* Couple:  */
 			case '2':
-				DCOMMON("%s: option -%c (...) with value `%s'\n", cArg0, iOption, optarg);
+				HCOMMON("%s: option -%c (...) with value `%s'\n", cArg0, iOption, optarg);
 				strcpy(t_mode, optarg);
 				break;
 			/* Couple:  */
 			case '3':
-				DCOMMON("%s: option -%c (...) with value `%s'\n", cArg0, iOption, optarg);
+				HCOMMON("%s: option -%c (...) with value `%s'\n", cArg0, iOption, optarg);
 				strcpy(t_key, optarg);
 				break;
 			/* Couple:  */
 			case '4':
-				DCOMMON("%s: option -%c (...) with value `%s'\n", cArg0, iOption, optarg);
+				HCOMMON("%s: option -%c (...) with value `%s'\n", cArg0, iOption, optarg);
 				strcpy(t_stat, optarg);
 				break;
 			/* Couple:  */
 			case '5':
-				DCOMMON("%s: option -%c (...) with value `%s'\n", cArg0, iOption, optarg);
+				HCOMMON("%s: option -%c (...) with value `%s'\n", cArg0, iOption, optarg);
 				strcpy(chk_, optarg);
 				break;
 			/* Couple:  */
 			case '6':
-				DCOMMON("%s: option -%c (...) with value `%s'\n", cArg0, iOption, optarg);
+				HCOMMON("%s: option -%c (...) with value `%s'\n", cArg0, iOption, optarg);
 				strcpy(cb_, optarg);
 				break;
 			/* Couple:  */
 			case '7':
-				DCOMMON("%s: option -%c (...) with value `%s'\n", cArg0, iOption, optarg);
+				HCOMMON("%s: option -%c (...) with value `%s'\n", cArg0, iOption, optarg);
 				strcpy(list_, optarg);
 				break;
 			/* Couple:  */
 			case '8':
-				DCOMMON("%s: option -%c (...) with value `%s'\n", cArg0, iOption, optarg);
+				HCOMMON("%s: option -%c (...) with value `%s'\n", cArg0, iOption, optarg);
 				strcpy(member_, optarg);
 				break;
 			/* Couple:  */
 			case '9':
-				DCOMMON("%s: option -%c (...) with value `%s'\n", cArg0, iOption, optarg);
+				HCOMMON("%s: option -%c (...) with value `%s'\n", cArg0, iOption, optarg);
 				strcpy(proof, optarg);
 				break;
 
@@ -353,7 +421,7 @@ int iOption;
 				break;
 
 			default:
-				DCOMMON("%s: bad usage, exiting", cArg0);
+				HCOMMON("%s: bad usage, exiting", cArg0);
 				abort ();
 		}
 	} /* Command line arguments were parsed */
@@ -361,7 +429,7 @@ int iOption;
 	/* Ensure that file <cast.XXXXX.txt.xml>. Generated by <make_xml.sh> */
 	if ( NULL == cXmlName )
 	{
-		DCOMMON("%s: ERROR: name of XML file to parse should be passed on command line\n", cArg0);
+		HCOMMON("%s: ERROR: name of XML file to parse should be passed on command line\n", cArg0);
 
 		return INJ_PAR_ERROR;
 	}
@@ -369,7 +437,7 @@ int iOption;
 	/* To this moment <voc.c> and <voc.h> are nearby, otherwise <autogen.cmd+make> was failed */
 	if (INJ_SUCCESS != XmlAuxCreateEx() ) 
 	{
-		DCOMMON("%s: ERROR: no rules to handle (%s) learned\n", cArg0, cXmlName);
+		HCOMMON("%s: ERROR: no rules to handle (%s) learned\n", cArg0, cXmlName);
 
 		return INJ_NOAUX_ERROR;
 	}
@@ -382,7 +450,7 @@ int iOption;
 
 	if (NULL == doc)
 	{
-		DCOMMON("%s: ERROR: could not parse file %s\n", cArg0, cXmlName);
+		HCOMMON("%s: ERROR: could not parse file %s\n", cArg0, cXmlName);
 
 		return INJ_XML_ERROR;
 	}
@@ -449,7 +517,7 @@ int iOption;
 
 			case DO_NO_OP:
 			default:
-				DCOMMON("%s: there's no operation with OPCODE=%d, exiting\n", cArg0, iOperation);
+				HCOMMON("%s: there's no operation with OPCODE=%d, exiting\n", cArg0, iOperation);
 				break;
 			
 		}
@@ -462,7 +530,7 @@ int iOption;
 	}
 	else
 	{
-		DCOMMON("%s: Can't initialize lib cURL, so can't proceed \n", cArg0);
+		HCOMMON("%s: Can't initialize lib cURL, so can't proceed \n", cArg0);
 	}
 
 	/* Delete vocabuilary, et al*/
@@ -477,5 +545,5 @@ int iOption;
  	exit (0);
 
 	/* Basically is not seen; but is kept here for accuracy */
-	DCOMMON("%s: this line is not seen\n", cArg0, iOperation);
+	HCOMMON("%s: this line is not seen\n", cArg0);
 }

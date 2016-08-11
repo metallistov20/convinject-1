@@ -40,7 +40,7 @@ int _AppendXmlAux(const char * caller, pXmlAuxType * ppXmlAux)
 		/* check if successful */
 		if (NULL == *ppXmlAux)
 		{
-			DCOMMON("%s: ERROR: can't allocate memory for aux. XML data\n", caller);
+			HCOMMON("%s: ERROR: can't allocate memory for aux. XML data\n", caller);
 
 			return INJ_MEM_ERROR;
 		}
@@ -111,7 +111,7 @@ pUrlChainType pChild, pTempUrlChain;
 		/* check if successful */
 		if (NULL == *ppThisUrlChain)
 		{
-			DCOMMON("%s: ERROR: can't allocate memory for first chain, URL(%s)\n", caller, pcData);
+			HCOMMON("%s: ERROR: can't allocate memory for first chain, URL(%s)\n", caller, pcData);
 
 			return INJ_MEM_ERROR;
 		}
@@ -125,7 +125,7 @@ pUrlChainType pChild, pTempUrlChain;
 
 		if (NULL == pTempUrlChain)
 		{
-			DCOMMON("%s: ERROR: can't allocate memory for next chain, URL(%s)\n", caller, pcData);
+			HCOMMON("%s: ERROR: can't allocate memory for next chain, URL(%s)\n", caller, pcData);
 
 			return INJ_MEM_ERROR;
 		}
@@ -158,7 +158,7 @@ pCompoundType pChild, pTempCompound;
 		/* check if successful */
 		if (NULL == *ppThisCompound)
 		{
-			DCOMMON("%s: ERROR: can't allocate memory for first compound, URL(%s)\n", caller, pcData);
+			HCOMMON("%s: ERROR: can't allocate memory for first compound, URL(%s)\n", caller, pcData);
 
 			return INJ_MEM_ERROR;
 		}
@@ -182,7 +182,7 @@ pCompoundType pChild, pTempCompound;
 		if (NULL == pTempCompound)
 		{
 
-			DCOMMON("%s: ERROR: can't allocate memory for next compound, URL(%s)\n", caller, pcData);
+			HCOMMON("%s: ERROR: can't allocate memory for next compound, URL(%s)\n", caller, pcData);
 
 			return INJ_MEM_ERROR;
 		}
@@ -597,7 +597,7 @@ void * pVoid;
 	}
 	else
 	{
-		DCOMMON("%s: ERROR: auxilary data structure was not created\n", caller);
+		HCOMMON("%s: ERROR: auxilary data structure was not created\n", caller);
 
 		return INJ_MEM_ERROR;
 	}

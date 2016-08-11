@@ -46,7 +46,7 @@ LIBS 	+= ./ssh/shared/libssh.so.$(VERSION)
 all: $(EXEC)
 
 SSH_OBJS	= ./$(SSH_DIR)/cmds.o ./$(SSH_DIR)/authentication.o ./$(SSH_DIR)/connect_ssh.o ./$(SSH_DIR)/knownhosts.o ./$(SSH_DIR)/pipes.o
-HTTP_OBJS	= ./$(HTTP_DIR)/auxiliary.o   ./$(HTTP_DIR)/dummy.o  ./$(HTTP_DIR)/funcs.o  ./$(HTTP_DIR)/inject.o  ./$(HTTP_DIR)/lists.o  ./$(HTTP_DIR)/xmls.o  $(HTTP_DIR)/voc.obj
+HTTP_OBJS	= ./$(HTTP_DIR)/auxiliary.o   ./$(HTTP_DIR)/funcs.o  ./$(HTTP_DIR)/inject.o  ./$(HTTP_DIR)/lists.o  ./$(HTTP_DIR)/xmls.o  $(HTTP_DIR)/voc.obj 
 SSH_OBJS_R	=$(SSH_OBJS)
 HTTP_OBJS_R	=$(HTTP_OBJS)
 
@@ -72,6 +72,6 @@ $(EXEC): $(SSH_OBJS_R) $(HTTP_OBJS_R)       $(OBJS) $(LIBS)
 
 
 clean:
-	$(RM) $(EXEC) *.o *.so* *~ core  *.c~
+	$(RM) -fv $(EXEC) *.o *.so* *~ core  *.c~
 	cd ./$(SSH_DIR) && $(MAKE)  clean
 	cd ./$(HTTP_DIR) && $(MAKE)  clean
