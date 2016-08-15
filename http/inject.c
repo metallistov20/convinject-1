@@ -129,11 +129,120 @@ FILE* fp = NULL;
 	return 0;
 }
 
+int _local_iOpenSite()
+{
+	/* Put XML section <TL-SL5428E> into structure <pUrlChain> */
+	parse_xml_cast(root_element, "TL-SL5428E");
+
+	/* Glue particles of <pUrlChain> into full-blown URLs */
+	GlueUrl(pUrlChain);
+
+#if (DEBUG_URL)
+	DisplayUrl(pUrlChain);
+#endif /* (DEBUG_URL) */
+
+	/* Put URLs into wire */
+	return DeployUrlEx(pUrlChain, 1);
+}
+
+
+int m_Tocken;
+
+static int m_TockenFound;
+
+static void dump(const char *text, FILE *stream, unsigned char *ptr, size_t size)
+{
+size_t i;
+size_t c;
+unsigned int width=0x10;
+int iTocken=0;
+char cBuf[512];
+char * cpAjaxPtr;
+char * cp1, * cp2;
+
+	fprintf(stream, "%s, %10.10ld bytes (0x%8.8lx)\n", text, (long)size, (long)size);
+
+	if ( NULL != ( cpAjaxPtr = strstr(ptr, "var STR_AJAX_VALUE") ) )
+	{
+		cp1 = strtok(cpAjaxPtr, "\"");
+		cp2 = strtok(NULL, "\"");
+		m_TockenFound = 1;
+		m_Tocken = atoi (cp2);
+
+		printf("[%s] iTocken = <%s> m_Tocken = <%d>. SUCCESS. TERMINATING. <m_TockenFound=%d>\n", cpAjaxPtr, cp2, m_Tocken,
+		m_TockenFound);
+	}
+
+	for(i=0; i<size; i+= width)
+	{
+		fprintf(stream, "%4.4lx: ", (long)i);
+		/* show hex to the left */
+
+		for(c = 0; c < width; c++)
+		{
+			if(i+c < size)
+				fprintf(stream, "%02x ", ptr[i+c]);
+			else
+				fputs(" ", stream);
+		}
+
+		/* show data on the right */
+		for(c = 0; (c < width) && (i+c < size); c++)
+			fputc((ptr[i+c]>=0x20) && (ptr[i+c]<0x80)?ptr[i+c]:'.', stream);
+
+		fputc('\n', stream); /* newline */
+	}
+}
+
+
+static int m_trace(CURL *handle, curl_infotype type, char *data, size_t size, void *userp)
+{
+const char *text;
+(void)handle;
+
+	switch (type)
+	{
+		case CURLINFO_TEXT:
+		//fprintf(stderr, "== Info: %s", data);
+		fprintf(stdout, "== Info: %s", data);
+		default: /* in case a new one is introduced to shock us */
+		return 0;
+
+		case CURLINFO_HEADER_OUT:
+		text = "=> Send header";
+		break;
+
+		case CURLINFO_DATA_OUT:
+		text = "=> Send data";
+		break;
+
+		case CURLINFO_SSL_DATA_OUT:
+		text = "=> Send SSL data";
+		break;
+
+		case CURLINFO_HEADER_IN:
+		text = "<= Recv header";
+		break;
+
+		case CURLINFO_DATA_IN:
+		text = "<= Recv data";
+		break;
+
+		case CURLINFO_SSL_DATA_IN:
+		text = "<= Recv SSL data";
+		break;
+	}
+
+	dump(text, stdout, (unsigned char *)data, size);
+	return 0;
+} /* int my_trace */
 
 
 /* Not implemented by now */
 int process_http_target(char * pcAddress, char * pcLogin, char * pcPasswd, char * pcDatafile)
 {
+int iRes;
+
 	printf("ERROR: not implemented");return -1;
 
 	/* Payload of POST method during user authenticate. */
@@ -156,9 +265,14 @@ int process_http_target(char * pcAddress, char * pcLogin, char * pcPasswd, char 
 	process_datafile(pcDatafile);
 
 
-	// open (pcAddress, pcLogin, pcPasswd); && catch <session key>
+	curl = curl_easy_init();
 
-	// deploy 
+	if(curl)
+	{
+		iRes = curl_easy_setopt(curl, CURLOPT_DEBUGFUNCTION, m_trace);
+	}
+
+
 
 
 	free(cPostMethodString);
