@@ -129,22 +129,6 @@ FILE* fp = NULL;
 	return 0;
 }
 
-int _local_iOpenSite()
-{
-	/* Put XML section <TL-SL5428E> into structure <pUrlChain> */
-	parse_xml_cast(root_element, "TL-SL5428E");
-
-	/* Glue particles of <pUrlChain> into full-blown URLs */
-	GlueUrl(pUrlChain);
-
-#if (DEBUG_URL)
-	DisplayUrl(pUrlChain);
-#endif /* (DEBUG_URL) */
-
-	/* Put URLs into wire */
-	return DeployUrlEx(pUrlChain, 1);
-}
-
 
 int m_Tocken;
 
@@ -239,9 +223,9 @@ const char *text;
 
 
 /* POST'ing a XML payload over here we put the PIN code into a modem */
-const char * OPEN_PAGE = "http://192.168.1.1/api/pin/operate";
+//const char * OPEN_PAGE = "http://192.168.1.1/api/pin/operate";
 /* On thie page we reconnect reconnect */
-const char * DIAL_PAGE = "http://192.168.1.1/api/dialup/dial";
+//const char * DIAL_PAGE = "http://192.168.1.1/api/dialup/dial";
 typedef struct _RespStruct
 {
 	char * cpResponce;
@@ -268,12 +252,11 @@ size_t realsize = size * nmemb;
 
 /* Not implemented by now */
 int process_http_target(char * pcAddress, char * pcLogin, char * pcPasswd, char * pcDatafile)
-//int main(char * pcAddress, char * pcLogin, char * pcPasswd, char * pcDatafile)
 {
 int iRes;
 RespStruct RespStr;
 
-printf("process_http_target: 0\n");//TODO: rem.
+
 	/* Payload of POST method during user authenticate. */
 	cPostMethodString = (char *) malloc (MAX_URL_SIZE);
 
@@ -292,7 +275,7 @@ printf("process_http_target: 0\n");//TODO: rem.
 	pcPtr2Extra1 = (char**)&cPostMethodString;
 	pcPtr2Extra2 = (char**)&cPostMethodString2;
 
-printf("process_http_target: 1\n");//TODO: rem.
+
 	process_datafile(pcDatafile);
 
 
@@ -316,9 +299,10 @@ printf("process_http_target: 1\n");//TODO: rem.
 
 	/* Check potential ABI mismatches between the version it was compiled for and the actual shared library used */
 	LIBXML_TEST_VERSION
+	// TODO: may we skip it ?
 
 	/* Get the contents of <cast.XXXXX.txt.xml> into <doc> */
-	doc = xmlReadFile(pcDatafile, NULL, 0);
+	doc = xmlReadFile(pcDatafile, NULL, 0);//TODO: put if-else construction here
 
 	if (NULL == doc)
 	{
@@ -328,24 +312,18 @@ printf("process_http_target: 1\n");//TODO: rem.
 	}
 
 	/* Get the root node of the XML data stored in the <doc> */
-	root_element = xmlDocGetRootElement(doc);
+	root_element = xmlDocGetRootElement(doc);//TODO: put if-else construction here
 
-//++++++++++++++++++++++++++
-
-
-printf("process_http_target: 2\n");//TODO: rem.
 
 	if(NULL == ( curl = curl_easy_init() ) )
 	{
-		printf("can't initialize lib c-url \nERROR\n");// TODO: repl.
+		printf("Can't initialize lib c-url \nERROR\n");// TODO: repl.
+
 		return (-8);// TODO: repl.
 	}
 
-printf("process_http_target: 3\n");//TODO: rem.
-
 	if(curl)
 	{
-printf("process_http_target: 4\n");//TODO: rem.
 		iRes = curl_easy_setopt(curl, CURLOPT_DEBUGFUNCTION, m_trace);
 
 		/* the DEBUGFUNCTION has no effect until we enable VERBOSE */
@@ -355,6 +333,7 @@ printf("process_http_target: 4\n");//TODO: rem.
 		iRes = curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 
 		curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "gzip, deflate");
+
 		curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 		//-10..curl_easy_setopt(curl, CURLOPT_COOKIEFILE, "");
 
@@ -364,17 +343,6 @@ printf("process_http_target: 4\n");//TODO: rem.
 
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)&RespStr);
 		//-10..curl_easy_setopt(curl, CURLOPT_USERAGENT, "libcurl-agent/1.0");
-
-
-/*		// Buffer to compose a XML payload 
-		char cAutoPostString[1024];
-
-sprintf (cAutoPostString, "<?xml version='1.0' encoding='UTF-8'?><request><OperateType>0</OperateType><CurrentPin>1234</CurrentPin><NewPin></NewPin><PukCode></PukCode><token>%d</token></request>",	iTocken);
-
-		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, cAutoPostString);
-		curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, (long)strlen(cAutoPostString));
-*/
-		curl_easy_setopt(curl, CURLOPT_URL, OPEN_PAGE);
 
 		/* Clean the buffer before receiving a responce into it */
 		memset (&RespStr, sizeof (struct _RespStruct) , 0);
@@ -386,11 +354,6 @@ sprintf (cAutoPostString, "<?xml version='1.0' encoding='UTF-8'?><request><Opera
 		curl_easy_cleanup(curl);
 
 	}
-
-	free(cPostMethodString);
-
-	free(cPostMethodString2);
-printf("process_http_target: 5 ");//TODO: rem.
 
 
 	/* Delete entire list with URLs along with its compounds */
@@ -405,422 +368,13 @@ printf("process_http_target: 5 ");//TODO: rem.
 	/* Free the global variables that may have been allocated by the parser */
 	xmlCleanupParser();
 
- 	exit (0);
+
+	free(cPostMethodString);
+
+	free(cPostMethodString2);
 
 
+ 	return 0;//TODO: repl.
 }
 
-int m_dmg__ain (int argc, char **argv)
-{
-int iOption;
 
-	/* Avoid dafault 0 value */
-	iOperation=DO_NO_OP;
-
-	/* Assign program name, requirted for output*/
-	strcpy (cArg0, argv[0]);
-
-	iExtra = 0;
-
-	/* TODO: find better place for this init */
-	pcPtr2Extra1 = (char**)&cPostMethodString;
-	pcPtr2Extra2 = (char**)&cPostMethodString2;
-
-	/* Parsing command line arguments */
-	while (1)
-	{
-	static struct option long_options[] =
-	{
-		/* Singletons: operation names */
-		{"open",no_argument, 		0,'o'},// <SYSTEMNAME>
-		{"close",  no_argument, 	0,'x'},// Logout
-
-		{"create",no_argument, 		0,'c'},// SNMP_Group
-		{"save", no_argument, 		0,'s'},// Save_Config
-		{"ACL",	no_argument, 		0,'a'},// ACL_Create
-		{"upgrade", no_argument, 	0,'r'},// Firmware_Upgrade, Firmware_Upgrade_backdraft
-		{"reboot", no_argument, 	0,'b'},// System_Reboot
-		{"ipassign", no_argument, 	0,'g'},// System_IP, System_IP_backdraft
-
-		{"ipV6assign", no_argument, 	0,'e'},// System_IPv6
-		{"acontrol", no_argument, 	0,'k'},// Access_Control
-		{"psecure", no_argument, 	0,'h'},// Port_Security
-		{"pmirror", no_argument, 	0,'j'},// Port_Mirro
-		{"vlancrt", no_argument, 	0,'m'},// VLAN_Config_Create
-		{"vlanco", no_argument, 	0,'n'},// VLAN_Config
-		{"iprange", no_argument, 	0,'p'},// IP_Range
-		{"pfilter", no_argument, 	0,'q'},// Port_Filter
-		{"ping", no_argument, 		0,'y'},// Ping
-		{"tracert", no_argument, 	0,'z'},// Tracert
-		{"cable", no_argument, 		0,'v'},// Cable_Test
-		{"looback", no_argument, 	0,'w'},// Loopback
-
-		/* Couples: names of variables and their values */
-		{"target", required_argument,	0,'t'},// e.g. --target=192.168.0.1
-		{"id", required_argument,	0,'i'},// e.g. --id=4b7e2773bc9deeab
-		{"community", required_argument,0,'u'},// e.g. --community=NEW_SNMP_CMTY_X
-		{"filename", required_argument,	0,'f'},// e.g. --filename=./TL-SL5428Ev3_en_up.bin
-		{"acl-data", required_argument,	0,'l'},// e.g. --acl-data=NEW_ACL_GRP_X
-		{"ip-addr", required_argument,	0,'0'},// e.g. --ip-addr=192.168.0.199
-		{"ip-mask", required_argument,	0,'1'},// e.g. --ip-mask=255.255.255.0
-		{"xml-data", required_argument,	0,'d'},// e.g. --xml-data=cast.2218.txt.xml
-
-		{"t_mode", required_argument,	0,'2'},// e.g. --t_mode=0
-		{"t_key", required_argument,	0,'3'},// e.g. --t_key=-1
-		{"t_stat", required_argument,	0,'4'},// e.g. --t_stat=0
-		{"chk_", required_argument,	0,'5'},// e.g. --chk_9=1
-		{"cb_", required_argument,	0,'6'},// e.g. --cb_9=on
-		{"list_", required_argument,	0,'7'},// e.g. --list_port=0
-		{"member_", required_argument,	0,'8'},// e.g. --member_time=60
-		{"proof", required_argument,	0,'9'},// e.g. --proof=www.speedtest.net/ru/
-
-		/* End of array */
-		{0, 0, 0, 0}
-	};
-
-	/* Index of the option */
-	int option_index = 0;
-
-		/* Get each paramter */
-		iOption = getopt_long (argc, argv, "oxcsarbgefhjmnpqyzvw:t:i:u:f:l:0:1:d:2:3:4:5:6:7:8:9:", long_options, &option_index);
-
-		/* Break cycle at the end of the options */
-		if (-1 == iOption) break;
-
-		/* Parce each parameter */
-		switch (iOption)
-		{
-
-			/* Single: open site */
-			case 'o':
-				HCOMMON("%s: option -%c\n", cArg0, iOption);
-				iOperation = DO_OPEN_OP;
-				break;
-
-			/* Single: close site */
-			case 'x':
-				HCOMMON("%s: option -%c\n", cArg0, iOption);
-				iOperation = DO_CLOSE_OP;
-				break;
-
-			/* Single: create SNMP group */
-			case 'c':
-				HCOMMON("%s: option -%c\n", cArg0, iOption);
-				iOperation = DO_CREATE_OP;
-				break;
-
-			/* Single: save changes on site  */
-			case 's':
-				HCOMMON("%s: option -%c\n", cArg0, iOption);
-				iOperation = DO_SAVE_OP;
-				break;
-
-			/* Single: perform ACL setting */
-			case 'a':
-				HCOMMON("%s: option -%c\n", cArg0, iOption);
-				iOperation = DO_ACL_OP;
-				break;
-
-			/* Single: firmware upload and upgrade */
-			case 'r':
-				HCOMMON("%s: option -%c\n", cArg0, iOption);
-				iOperation = DO_FIRMWARE_OP;
-				break;
-
-			/* Single: switch reboot */
-			case 'b':
-				HCOMMON("%s: option -%c\n", cArg0, iOption);
-				iOperation = DO_REBOOT_OP;
-				break;
-
-			/* Single: ipset */
-			case 'g':
-				HCOMMON("%s: option -%c\n", cArg0, iOption);
-				iOperation = DO_IPSET_OP;
-				break;
-
-
-			/* Single: ip v6 set */
-			case 'e':
-				HCOMMON("%s: option -%c\n", cArg0, iOption);
-				iOperation = DO_IPV6SET_OP;
-				break;
-			/* Single: access */
-			case 'k':
-				HCOMMON("%s: option -%c\n", cArg0, iOption);
-				iOperation = DO_ACNTL_OP;
-				break;
-			/* Single: port security */
-			case 'h':
-				HCOMMON("%s: option -%c\n", cArg0, iOption);
-				iOperation = DO_PSEC_OP;
-				break;
-			/* Single: port mirroring */
-			case 'j':
-				HCOMMON("%s: option -%c\n", cArg0, iOption);
-				iOperation = DO_PMIR_OP;
-				break;
-			/* Single: vlan conf. create */
-			case 'm':
-				HCOMMON("%s: option -%c\n", cArg0, iOption);
-				iOperation = DO_VLANCR_OP;
-				break;
-			/* Single: vlan configure */
-			case 'n':
-				HCOMMON("%s: option -%c\n", cArg0, iOption);
-				iOperation = DO_VLANC_OP;
-				break;
-			/* Single: ip range */
-			case 'q':
-				HCOMMON("%s: option -%c\n", cArg0, iOption);
-				iOperation = DO_IPRAN_OP;
-				break;
-			/* Single: port filter */
-			case 'p':
-				HCOMMON("%s: option -%c\n", cArg0, iOption);
-				iOperation = DO_PFILT_OP;
-				break;
-			/* Single: ping */
-			case 'y':
-				HCOMMON("%s: option -%c\n", cArg0, iOption);
-				iOperation = DO_PING_OP;
-				break;
-			/* Single: tracert */
-			case 'z':
-				HCOMMON("%s: option -%c\n", cArg0, iOption);
-				iOperation = DO_TRACERT_OP;
-				break;
-			/* Single: cable test */
-			case 'v':
-				HCOMMON("%s: option -%c\n", cArg0, iOption);
-				iOperation = DO_CABLE_OP;
-				break;
-			/* Single: loopback */
-			case 'w':
-				HCOMMON("%s: option -%c\n", cArg0, iOption);
-				iOperation = DO_LOOPBK_OP;
-				break;
-
-
-
-			/* Couple: IP addr of target switch */
-			case 't':
-				HCOMMON("%s: option -%c with value `%s'\n", cArg0, iOption, optarg);
-				strcpy(cIpAddr, optarg);
-				break;
-
-			/* Couple: tID of the session */
-			case 'i':
-				HCOMMON("%s: option -%c with value `%s'\n", cArg0, iOption, optarg);
-				strcpy(_tid_, optarg);
-				break;
-
-			/* Couple: SNMP community name to be created on target switch*/
-			case 'u':
-				HCOMMON("%s: option -%c with value `%s'\n", cArg0, iOption, optarg);
-				strcpy(txt_comname, optarg);
-				break;
-
-			/* Couple: Firmware name to be uploaded and upgraded on switch*/
-			case 'f':
-				HCOMMON("%s: option -%c with value `%s'\n", cArg0, iOption, optarg);
-				strcpy(cFwName, optarg);
-				break;
-
-			/* Couple: Filename of XML file with data */
-			case 'd':
-				HCOMMON("%s: option -%c with value `%s'\n", cArg0, iOption, optarg);
-				strcpy(cXmlName, optarg);
-				break;
-
-			/* Couple: Assign ACL setings */
-			case 'l':
-				HCOMMON("%s: option -%c (--acl-data) with value `%s'\n", cArg0, iOption, optarg);
-				strcpy(aclId, optarg);
-				break;
-
-			/* Couple: ip address */
-			case '0':
-				HCOMMON("%s: option -%c (--ip-addr) with value `%s'\n", cArg0, iOption, optarg);
-				strcpy(ip_address, optarg);
-				break;
-
-			/* Couple: ip network mask */
-			case '1':
-				HCOMMON("%s: option -%c (--ip-mask) with value `%s'\n", cArg0, iOption, optarg);
-				strcpy(ip_mask, optarg);
-				break;
-
-			/* Couple:  */
-			case '2':
-				HCOMMON("%s: option -%c (...) with value `%s'\n", cArg0, iOption, optarg);
-				strcpy(t_mode, optarg);
-				break;
-			/* Couple:  */
-			case '3':
-				HCOMMON("%s: option -%c (...) with value `%s'\n", cArg0, iOption, optarg);
-				strcpy(t_key, optarg);
-				break;
-			/* Couple:  */
-			case '4':
-				HCOMMON("%s: option -%c (...) with value `%s'\n", cArg0, iOption, optarg);
-				strcpy(t_stat, optarg);
-				break;
-			/* Couple:  */
-			case '5':
-				HCOMMON("%s: option -%c (...) with value `%s'\n", cArg0, iOption, optarg);
-				strcpy(chk_, optarg);
-				break;
-			/* Couple:  */
-			case '6':
-				HCOMMON("%s: option -%c (...) with value `%s'\n", cArg0, iOption, optarg);
-				strcpy(cb_, optarg);
-				break;
-			/* Couple:  */
-			case '7':
-				HCOMMON("%s: option -%c (...) with value `%s'\n", cArg0, iOption, optarg);
-				strcpy(list_, optarg);
-				break;
-			/* Couple:  */
-			case '8':
-				HCOMMON("%s: option -%c (...) with value `%s'\n", cArg0, iOption, optarg);
-				strcpy(member_, optarg);
-				break;
-			/* Couple:  */
-			case '9':
-				HCOMMON("%s: option -%c (...) with value `%s'\n", cArg0, iOption, optarg);
-				strcpy(proof, optarg);
-				break;
-
-
-			case '?':
-				/* getopt_long prints an error message, so we don't */
-				break;
-
-			default:
-				HCOMMON("%s: bad usage, exiting", cArg0);
-				abort ();
-		}
-	} /* Command line arguments were parsed */
-
-	/* Ensure that file <cast.XXXXX.txt.xml>. Generated by <make_xml.sh> */
-	if ( NULL == cXmlName )
-	{
-		HCOMMON("%s: ERROR: name of XML file to parse should be passed on command line\n", cArg0);
-
-		return INJ_PAR_ERROR;
-	}
-
-	/* To this moment <voc.c> and <voc.h> are nearby, otherwise <autogen.cmd+make> was failed */
-	if (INJ_SUCCESS != XmlAuxCreateEx() ) 
-	{
-		HCOMMON("%s: ERROR: no rules to handle (%s) learned\n", cArg0, cXmlName);
-
-		return INJ_NOAUX_ERROR;
-	}
-
-	/* Check potential ABI mismatches between the version it was compiled for and the actual shared library used */
-	LIBXML_TEST_VERSION
-
-	/* Get the contents of <cast.XXXXX.txt.xml> into <doc> */
-	doc = xmlReadFile(cXmlName, NULL, 0);
-
-	if (NULL == doc)
-	{
-		HCOMMON("%s: ERROR: could not parse file %s\n", cArg0, cXmlName);
-
-		return INJ_XML_ERROR;
-	}
-
-	/* Get the root node of the XML data stored in the <doc> */
-	root_element = xmlDocGetRootElement(doc);
-
-	if(NULL != ( curl = curl_easy_init() ) )
-	{
-		/* At this time point we assume all parameters parsed OK, so let's call inj. primitives */
-		switch (iOperation)
-		{
-			case DO_OPEN_OP:
-				VERBOSE_STATUS(iOpenSite)
-				break;
-
-			case DO_CLOSE_OP:
-				VERBOSE_STATUS(iCloseSite)
-				break;
-
-			case DO_CREATE_OP:
-				VERBOSE_STATUS(iCreateSnmp)
-				break;
-
-			case DO_SAVE_OP:
-				VERBOSE_STATUS(iSaveSite)
-				break;
-
-			case DO_ACL_OP:
-				VERBOSE_STATUS(iAclGroup)
-				break;
-
-			case DO_FIRMWARE_OP:
-				VERBOSE_STATUS(iUpgradeFirmware)
-				break;
-
-			case DO_REBOOT_OP:
-				VERBOSE_STATUS(iRebootSwitch)
-				break;
-
-			case DO_IPSET_OP:
-				VERBOSE_STATUS(iAssignIp)
-				break;
-
-			/* TODO: this is a stub only; no real implementation */
-			case DO_IPV6SET_OP:
-				VERBOSE_STATUS2(iMeta2, "idle1", "idle2")
-				break;
-
-			/* TODO: these are stubs only; no real implementation */
-			case DO_ACNTL_OP:
-			case DO_PSEC_OP:
-			case DO_PMIR_OP:
-			case DO_VLANCR_OP:
-			case DO_VLANC_OP:
-			case DO_IPRAN_OP:
-			case DO_PFILT_OP:
-			case DO_PING_OP:
-			case DO_TRACERT_OP:
-			case DO_CABLE_OP:
-			case DO_LOOPBK_OP:
-				VERBOSE_STATUS1(iMeta1, "idle")
-				break;
-
-			case DO_NO_OP:
-			default:
-				HCOMMON("%s: there's no operation with OPCODE=%d, exiting\n", cArg0, iOperation);
-				break;
-			
-		}
-
-		/* Close URL lib */
-		curl_easy_cleanup(curl);
-
-		/* Delete entire list with URLs along with its compounds */
-		DeleteUrlEx(&pUrlChain);
-	}
-	else
-	{
-		HCOMMON("%s: Can't initialize lib cURL, so can't proceed \n", cArg0);
-	}
-
-	/* Delete vocabuilary, et al*/
-	DeleteXmlAuxEx(&pAuxiliary);
-
-	/* Free the document */
-	xmlFreeDoc(doc);
-
-	/* Free the global variables that may have been allocated by the parser */
-	xmlCleanupParser();
-
- 	exit (0);
-
-	/* Basically is not seen; but is kept here for accuracy */
-	HCOMMON("%s: this line is not seen\n", cArg0);
-}
