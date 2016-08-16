@@ -36,7 +36,7 @@ LIBS = -lcurl 	-lxml2
 all: build
 
 #TODO: not sure that <../ssh/cmds.o> should be deployed this way, but for now we need it anyway
-build:	compute_tabs gen_vocabulary gen_voHabulary voc.c voc.h voc.obj    ../ssh/cmds.o   $(OBJS)
+build:	compute_tabs gen_vocabulary gen_voHabulary voc.c voc.h voc.obj    ../ssh/cmds.o   $(OBJS) 
 
 
 gen_vocabulary: gen_vocabulary.c

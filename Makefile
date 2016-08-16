@@ -23,9 +23,9 @@ CC := gcc
 	OBJS	= ./main.o ./xmparser.o ./structs.o 
 
 	CFLAGS = -c -g -I/usr/include/libxml2
-	LDFLAGS= -L/usr/local/lib 
+	LDFLAGS= -L/usr/local/lib  
 	LIBS   = -lxml2   
-	LIBS += -lcurl
+	LIBS  += -lcurl
 
 	CFLAGS += -I/home/mkn/_libssh/libssh/include -L./ssh/shared 
 
@@ -68,7 +68,13 @@ $(HTTP_OBJS_R):	./$(HTTP_DIR)/Makefile
 	$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)  
 
 $(EXEC): $(SSH_OBJS_R) $(HTTP_OBJS_R)       $(OBJS) $(LIBS)	
-	$(CC)  -o $@ $(OBJS)  $(SSH_OBJS_R) $(HTTP_OBJS_R)   $(LIBS)  $(LDFLAGS)   -L./ssh/shared -Wl,--rpath-link $(PWD)/ssh/shared  -Wl,--rpath $(PWD)/ssh/shared
+	$(CC)  -o $@ $(OBJS)  $(SSH_OBJS_R) $(HTTP_OBJS_R)   $(LIBS)  $(LDFLAGS)    -L/usr/local/lib  \
+	    -Wl,--rpath /usr/lib/i386-linux-gnu   -Wl,--rpath $(PWD)/ssh/shared
+
+#-Wl,--rpath-link $(PWD)/ssh/shared
+#  -L./ssh/shared
+# -Wl,--rpath $(PWD)/ssh/shared
+# -Wl,--rpath $(PWD)/ssh/shared
 
 
 clean:

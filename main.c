@@ -52,15 +52,21 @@ pTgtStructType Root;
 
 int main (int argc, char **argv)
 {
-	/* Assign datafile name*/
-	strcpy (cXmlName, argv[1]);
+	if (NULL != argv[1])
+		/* Assign datafile name*/
+		strcpy (cXmlName, argv[1]);
 
+	else
+	{
+		printf("Put XML file name on command line, e.g. <%s targets.xml>. \nERROR\n", argv[0]);// TODO: repl.
+		return (-8);// TODO: repl.
+
+	}
 #if (0)
 //TODO: can we skip it?
 	/* Check potential ABI mismatches between the version it was compiled for and the actual shared library used */
 	LIBXML_TEST_VERSION
 #endif /* (0) */
-
 
 	xmlDocument = xmlReadFile(cXmlName, NULL, 0);
 

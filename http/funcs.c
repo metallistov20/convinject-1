@@ -70,16 +70,17 @@ static const char *cAny="ArbitraryString";
 */
 int iOpenSite()
 {
+printf(">>> iOpenSite >>> 0 \n");
 	/* Put XML section <TL-SL5428E> into structure <pUrlChain> */
 	parse_xml_cast(root_element, "TL-SL5428E");
-
+printf(">>> iOpenSite >>> 1 \n");
 	/* Glue particles of <pUrlChain> into full-blown URLs */
 	GlueUrl(pUrlChain);
-
-#if (DEBUG_URL)
+printf(">>> iOpenSite >>> 2 d/u/\n");
+//+++#if (DEBUG_URL)
 	DisplayUrl(pUrlChain);
-#endif /* (DEBUG_URL) */
-
+//+++#endif /* (DEBUG_URL) */
+printf(">>> iOpenSite >>> 3 d/u/\n");
 	/* Put URLs into wire */
 	return DeployUrlEx(pUrlChain, 1);
 }
