@@ -3,10 +3,10 @@
 	<Target>
 		<Type>Network Switch</Type>
 		<Name>TL-SL5428E</Name>
-		<Address>192.168.1.1</Address>
+		<Address>192.168.0.1</Address>
 		<Login>admin</Login>
 		<Passwd>admin</Passwd>
-		<Datafile>./cast.5428E.xml</Datafile>
+		<Datafile>./http_commands.txt</Datafile>
 		<Proto>http</Proto>
 	</Target>
 </Devices>

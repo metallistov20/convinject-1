@@ -75,7 +75,7 @@ static char *pcap_file=NULL;
 
 static char *proxycommand;
 
-#define DATA_FNAME "local_data.txt"
+#define DATA_FNAME "local_data.txt"//TODO: remove
 
 #include "cmds.h"
 
@@ -292,51 +292,6 @@ static void usage()
 	exit(0);
 }
 
-//TODO: remove this obsoilete stuff 
-static int opts(int argc, char **argv)
-{
-FILE* fp = NULL;
-
-	if(optind < argc)
-
-		host=argv[optind++];
-
-	if(host==NULL)
-
-		usage();
-
-	/* Try to open file with commands  */
-	if ( NULL == (fp = fopen (DATA_FNAME, "r") ) )
-	{
-		printf("[%s] %s: can't open file <%s> \n", __FILE__, __func__ , DATA_FNAME);
-
-		return FO_ERROR;
-	}
-
-
-	/* For each string of Raw Data file */
-	while ( ! (feof (fp) ) ) 
-	{
-		/* Scan whole string into temp. buffer */
-		if (NULL == fgets (cCmdDataBuf, SINGLE_CMD_MAXLENGHT, fp) )
-		{
-			/* no string read from data file */
-		}
-		else
-		{
-			printf("[%s] %s: scanned:%s", __FILE__, __func__, cCmdDataBuf);
-
-			/* Attach just scanned data */
-			EnrollCmd(&pCmdChain, cCmdDataBuf);
-		}
-	}
-
-
-	/* Close file, and dispose pointer to Raw Data file */
-	fclose(fp);
-
-	return 0;
-}
 
 static int user_host_file(char * pcLogin, char * pcHost, char * pcFilename)
 {
@@ -682,21 +637,8 @@ ssh_session session;
 
 	ssh_set_callbacks(session,&cb);
 
-#if (0) // 09.08.2016
-// TODO: going away from <argc/argv> usage.
-	if(ssh_options_getopt(session, &argc, argv))
-	{
-		fprintf(stderr, "error parsing command line :%s\n", ssh_get_error(session) );
 
-		usage();
-	}
-#endif /* (0) */
-
-#if (0) // 09.08.2016
-	opts(argc,argv);
-#else
 	user_host_file(pcLogin, pcAddress, pcDatafile);
-#endif /* (0) */
 
 	signal(SIGTERM, do_exit);
 
@@ -715,11 +657,10 @@ ssh_session session;
 //	iOutput_Start("", 25);
 #endif /* OUT_PIPE */
 
-#if (0)
-	client(session);
-#else
+
 	client_ssh(session, pcPasswd);
-#endif /* () */
+
+
 
 	ssh_disconnect(session);
 
@@ -740,6 +681,7 @@ ssh_session session;
 
 }
 
+#if (0)
 int process_target(int argc, char **argv)
 {
 ssh_session session;
@@ -792,3 +734,4 @@ return 0;//+++
 
 	return 0;
 }
+#endif /* (0) */
