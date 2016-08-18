@@ -400,11 +400,6 @@ pUrlChainType pThisUrlChain = pThisUrlChainPar;
 	if ( NULL != cIpAddr ) 
 	{
 		strcat (pThisUrlChain->pcSumm, cIpAddr);
-printf(">>>>>>>>>>>>>>>>> assigning IP ADDR %s", pThisUrlChain->pcSumm);
-	}
-	else
-	{
-printf(">>>>>>>>>>>>>>>>> NOT    assigning IP ADDR ");
 	}
 
 	if (NULL != pThisUrlChain->pCompound)
@@ -486,12 +481,9 @@ int iRes;
 /* Index of 'extras' to be processed */
 int iExtras = 0;
 
-printf(">>> _DeployUrlEx >>> 0 \n");
     /* process each  entry of chain */
     while (NULL != pThisUrlChain)
     {
-printf(">>> _DeployUrlEx >>> i \n");
-
 	if ( NULL == pThisUrlChain->pcSumm ) 
 	{
 		DXML("\t[%s]: can't allocate %d bytes for URL data:\n", caller, MAX_URL_SIZE );
