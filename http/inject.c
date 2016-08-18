@@ -86,43 +86,44 @@ typedef struct _tf {
 tf tfOpTable[] =
 {
 	/* Singletons: operation names */
-	{"open\n", DO_OPEN_OP, 1, NULL},
-	{"close\n", DO_CLOSE_OP, 1, NULL},
-	{"ACL\n", DO_ACL_OP, 1, NULL},
-	{"upgrade\n", DO_FIRMWARE_OP, 1, NULL},
-	{"reboot\n", DO_REBOOT_OP, 1, NULL},
-	{"ipassign\n", DO_IPSET_OP, 1, NULL},
+	{"open\n",	DO_OPEN_OP,	1, NULL},
+	{"close\n",	DO_CLOSE_OP,	1, NULL},
+	{"ACL\n",	DO_ACL_OP,	1, NULL},
+	{"upgrade\n",	DO_FIRMWARE_OP,	1, NULL},
+	{"reboot\n",	DO_REBOOT_OP,	1, NULL},
+	{"ipassign\n",	DO_IPSET_OP,	1, NULL},
 
-	{"ipV6assign\n", DO_IPV6SET_OP, 1, NULL},
-	{"acontrol\n", DO_ACNTL_OP, 1, NULL},
-	{"psecure\n", DO_PSEC_OP, 1, NULL},
-	{"pmirror\n", DO_PMIR_OP, 1, NULL},
-	{"vlancrt\n", DO_VLANCR_OP, 1, NULL},
-	{"iprange\n", DO_IPRAN_OP, 1, NULL},
-	{"pfilter\n", DO_PFILT_OP, 1, NULL},
-	{"ping\n", DO_PING_OP, 1, NULL},
-	{"tracert\n", DO_TRACERT_OP, 1, NULL},
-	{"cable\n", DO_CABLE_OP, 1, NULL},
-	{"looback\n", DO_LOOPBK_OP, 1, NULL},
+	{"ipV6assign\n",DO_IPV6SET_OP,	1, NULL},
+	{"acontrol\n",	DO_ACNTL_OP,	1, NULL},
+	{"psecure\n",	DO_PSEC_OP,	1, NULL},
+	{"pmirror\n",	DO_PMIR_OP,	1, NULL},
+	{"vlancrt\n",	DO_VLANCR_OP,	1, NULL},
+	{"iprange\n",	DO_IPRAN_OP,	1, NULL},
+	{"pfilter\n",	DO_PFILT_OP,	1, NULL},
+	{"ping\n",	DO_PING_OP,	1, NULL},
+	{"tracert\n",	DO_TRACERT_OP,	1, NULL},
+	{"cable\n",	DO_CABLE_OP,	1, NULL},
+	{"looback\n",	DO_LOOPBK_OP,	1, NULL},
 
 	/* Couples: names of variables and their values */
-	{"target", DO_NO_OP,	2, cIpAddr},
-	{"id", DO_NO_OP,	2, _tid_},
-	{"community", DO_NO_OP, 2, txt_comname},
-	{"filename", DO_NO_OP,	3, cFwName},
-	{"acl-data", DO_NO_OP,	2, aclId},
-	{"ip-addr", DO_NO_OP,	2, ip_address},
-	{"ip-mask", DO_NO_OP,	2, ip_mask},
-	{"xml-data", DO_NO_OP,	2, cXmlName},
+	{"target", 	DO_NO_OP,	2, cIpAddr},
+	{"id", 		DO_NO_OP,	2, _tid_},
+	{"community", 	DO_NO_OP,	2, txt_comname},
+	{"filename",	DO_NO_OP,	3, cFwName},
+	{"acl-data",	DO_NO_OP,	2, aclId},
+	{"ip-addr",	DO_NO_OP,	2, ip_address},
+	{"ip-mask",	DO_NO_OP,	2, ip_mask},
+	{"xml-data",	DO_NO_OP,	2, cXmlName},
 
-	{"t_mode", DO_NO_OP,	2, t_mode},
-	{"t_key", DO_NO_OP,	2, t_key},
-	{"t_stat", DO_NO_OP,	2, t_stat},
-	{"chk_", DO_NO_OP,	2, chk_},
-	{"cb_", DO_NO_OP,	2, cb_},
-	{"list_", DO_NO_OP,	2, list_},
-	{"member_", DO_NO_OP,	2, member_},
-	{"proof", DO_NO_OP,	2, proof},
+	{"t_mode", 	DO_NO_OP,	2, t_mode},
+	{"t_key", 	DO_NO_OP,	2, t_key},
+	{"t_stat", 	DO_NO_OP,	2, t_stat},
+	{"chk_", 	DO_NO_OP,	2, chk_},
+	{"cb_", 	DO_NO_OP,	2, cb_},
+	{"list_", 	DO_NO_OP,	2, list_},
+	{"member_", 	DO_NO_OP,	2, member_},
+	{"proof", 	DO_NO_OP,	2, proof},
+
 	{NULL, 0, 0, NULL}
 };
 
@@ -133,6 +134,7 @@ pCmdType pHttpCmdChain;
 
 
 char Arg0[260];//TODO: ..
+
 int iParseCmdArgs(char ** argv, int argc)
 {
 int iOption;
@@ -173,7 +175,7 @@ int iOption;
 
 		iOptIndex++;
 
-	} /* while () */
+	} /* while(..) */
 	
 
 
@@ -214,8 +216,6 @@ int iOption;
 
 	/* Get the root node of the XML data stored in the <doc> */
 	root_element = xmlDocGetRootElement(doc);//TODO: put if-else construction here
-
-
 
 
 #if (1)

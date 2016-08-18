@@ -192,7 +192,7 @@ pCmdType pPointChain = pPointChainPar;
 
 		/* Realtime and relative-time values */
 		ProcessSingleHttpCmd(pPointChain);
-///++++printf ("PRINT OUT<pPointChainPar=%p>:%s\n", pPointChain, pPointChain->pcCmd);//+++
+
 		/* Go to next record of chain */
 		pPointChain = pPointChain->pNext;
 	}
