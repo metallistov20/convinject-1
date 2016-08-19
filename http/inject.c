@@ -76,55 +76,64 @@ char cCmdDataBuf[M_PATH];// TODO: 2 DEL
 #include "../ssh/cmds.h"
 
 
+int i5428E = 1;//TODO: REMOVE (ONLY DEBUG TIME!) 
+
+
+
 typedef struct _tf {
-	char * pcName;
-	int iOp;
-	int iAmt;
-	char * pcVar;
+	char * 	pcName;
+	int 	iOp;
+	int 	iAmt;
+
+	char * pcVar1Name;
+	char * pcVar1;
+	char * pcVar2Name;
+	char * pcVar2;
 } tf;
 
 tf tfOpTable[] =
 {
-	/* Singletons: operation names */
-	{"open\n",	DO_OPEN_OP,	1, NULL},
-	{"close\n",	DO_CLOSE_OP,	1, NULL},
-	{"ACL\n",	DO_ACL_OP,	1, NULL},
-	{"upgrade\n",	DO_FIRMWARE_OP,	1, NULL},
-	{"reboot\n",	DO_REBOOT_OP,	1, NULL},
-	{"ipassign\n",	DO_IPSET_OP,	1, NULL},
+	{"id", 		DO_NO_OP,	2, _tid_, NULL, NULL, NULL},
+//	{"target", 	DO_NO_OP,	2, cIpAddr, NULL, NULL, NULL},
 
-	{"ipV6assign\n",DO_IPV6SET_OP,	1, NULL},
-	{"acontrol\n",	DO_ACNTL_OP,	1, NULL},
-	{"psecure\n",	DO_PSEC_OP,	1, NULL},
-	{"pmirror\n",	DO_PMIR_OP,	1, NULL},
-	{"vlancrt\n",	DO_VLANCR_OP,	1, NULL},
-	{"iprange\n",	DO_IPRAN_OP,	1, NULL},
-	{"pfilter\n",	DO_PFILT_OP,	1, NULL},
-	{"ping\n",	DO_PING_OP,	1, NULL},
-	{"tracert\n",	DO_TRACERT_OP,	1, NULL},
-	{"cable\n",	DO_CABLE_OP,	1, NULL},
-	{"looback\n",	DO_LOOPBK_OP,	1, NULL},
+	/* Singletons: operation names */
+	{"open\n",	DO_OPEN_OP,	1, NULL, NULL, NULL, NULL},
+	{"close\n",	DO_CLOSE_OP,	1, NULL, NULL, NULL, NULL},
+
+	{"create",	DO_CREATE_OP,	2, "community", txt_comname, NULL, NULL},
+	{"save", 	DO_SAVE_OP,	1, NULL, NULL, NULL, NULL},
+
+	{"ACL\n",	DO_ACL_OP,	2, "acl-data", aclId, NULL, NULL},
+	{"upgrade\n",	DO_FIRMWARE_OP,	1, NULL, NULL, NULL, NULL},
+	{"reboot\n",	DO_REBOOT_OP,	1, NULL, NULL, NULL, NULL},
+	{"ipassign\n",	DO_IPSET_OP,	3, "ip-addr", ip_address, "ip-mask", ip_mask },
+
+	{"ipV6assign\n",DO_IPV6SET_OP,	1, NULL, NULL, NULL, NULL},
+	{"acontrol\n",	DO_ACNTL_OP,	1, NULL, NULL, NULL, NULL},
+	{"psecure\n",	DO_PSEC_OP,	1, NULL, NULL, NULL, NULL},
+	{"pmirror\n",	DO_PMIR_OP,	1, NULL, NULL, NULL, NULL},
+	{"vlancrt\n",	DO_VLANCR_OP,	1, NULL, NULL, NULL, NULL},
+	{"iprange\n",	DO_IPRAN_OP,	1, NULL, NULL, NULL, NULL},
+	{"pfilter\n",	DO_PFILT_OP,	1, NULL, NULL, NULL, NULL},
+	{"ping\n",	DO_PING_OP,	1, NULL, NULL, NULL, NULL},
+	{"tracert\n",	DO_TRACERT_OP,	1, NULL, NULL, NULL, NULL},
+	{"cable\n",	DO_CABLE_OP,	1, NULL, NULL, NULL, NULL},
+	{"looback\n",	DO_LOOPBK_OP,	1, NULL, NULL, NULL, NULL},
 
 	/* Couples: names of variables and their values */
-	{"target", 	DO_NO_OP,	2, cIpAddr},
-	{"id", 		DO_NO_OP,	2, _tid_},
-	{"community", 	DO_NO_OP,	2, txt_comname},
-	{"filename",	DO_NO_OP,	3, cFwName},
-	{"acl-data",	DO_NO_OP,	2, aclId},
-	{"ip-addr",	DO_NO_OP,	2, ip_address},
-	{"ip-mask",	DO_NO_OP,	2, ip_mask},
-	{"xml-data",	DO_NO_OP,	2, cXmlName},
+	{"filename",	DO_NO_OP,	3, cFwName, NULL, NULL, NULL},
+	{"xml-data",	DO_NO_OP,	2, cXmlName, NULL, NULL, NULL},
 
-	{"t_mode", 	DO_NO_OP,	2, t_mode},
-	{"t_key", 	DO_NO_OP,	2, t_key},
-	{"t_stat", 	DO_NO_OP,	2, t_stat},
-	{"chk_", 	DO_NO_OP,	2, chk_},
-	{"cb_", 	DO_NO_OP,	2, cb_},
-	{"list_", 	DO_NO_OP,	2, list_},
-	{"member_", 	DO_NO_OP,	2, member_},
-	{"proof", 	DO_NO_OP,	2, proof},
+	{"t_mode", 	DO_NO_OP,	2, t_mode, NULL, NULL, NULL},
+	{"t_key", 	DO_NO_OP,	2, t_key, NULL, NULL, NULL},
+	{"t_stat", 	DO_NO_OP,	2, t_stat, NULL, NULL, NULL},
+	{"chk_", 	DO_NO_OP,	2, chk_, NULL, NULL, NULL},
+	{"cb_", 	DO_NO_OP,	2, cb_, NULL, NULL, NULL},
+	{"list_", 	DO_NO_OP,	2, list_, NULL, NULL, NULL},
+	{"member_", 	DO_NO_OP,	2, member_, NULL, NULL, NULL},
+	{"proof", 	DO_NO_OP,	2, proof, NULL, NULL, NULL},
 
-	{NULL, 0, 0, NULL}
+	{NULL, 0, 0, 			NULL, NULL, NULL, NULL }
 };
 
 
@@ -145,6 +154,9 @@ int iOption;
 	/* Index of the option */
 	int iOptIndex = 0;
 
+	/* Must have each time we start a new URL */
+	_CleanQuine("CleanQuine");//TODO: call better way
+
 	/* Assuming <tfOpTable [iOptIndex]> is not null. We can assume it. */
 	while ( NULL != tfOpTable [iOptIndex].pcName )
 	{
@@ -155,28 +167,71 @@ int iOption;
 		{
 			if ( 0 == strcmp(tfOpTable[iOptIndex].pcName, argv[0]) )
 			{
-				printf("<%s> found. BREAK.\n", tfOpTable[iOptIndex].pcName);
+//TODO:rem!			printf("<%s> found. BREAK.\n", tfOpTable[iOptIndex].pcName);
+
 				iOperation= tfOpTable[iOptIndex].iOp;
+
 				break;
 			}
 
 		}
-		/* Couples */
+		/* Trinities, usw */
 		else
-			if (2 == tfOpTable [iOptIndex].iAmt)
+			if (3 == tfOpTable [iOptIndex].iAmt)
 			{
-				if ( 0 == strcmp(tfOpTable[iOptIndex].pcVar, argv[0]) )
+			char Ctmp[260*2];
+
+//TODO:rem!			printf("Defaulting this instance of TRINITY\n");
+
+//TOD:: maybe it's better than _CleanQuine("CleanQuine");?	*(char**)(tfOpTable[iOptIndex].pcVar1) = *(char**)(tfOpTable[iOptIndex].pcVar2) = NULL;
+				
+				sprintf((char * __restrict__)&Ctmp, "%s %s=%%s %s=%%s", tfOpTable[iOptIndex].pcName, 
+					tfOpTable[iOptIndex].pcVar1Name, 
+						tfOpTable[iOptIndex].pcVar2Name );
+
+				if ( 2 == sscanf (argv[0], Ctmp, tfOpTable[iOptIndex].pcVar1, tfOpTable[iOptIndex].pcVar2 )  )
 				{
-					printf("<%s> found. BREAK.\n", tfOpTable[iOptIndex].pcVar);
-					strcpy(tfOpTable[iOptIndex].pcVar, optarg);
+//TODO:rem!				printf(">>>>>>>>>>>>>>>>>>>>>TRINITY <%s> found. BREAK.\n", tfOpTable[iOptIndex].pcName);
+
+					iOperation= tfOpTable[iOptIndex].iOp;
+
 					break;
 				}
+				else
+				{
+					printf("habe leider keine TRINITY gefunden\n");
+				}
 			}
+			else
+				/* Compules */
+				if (2 == tfOpTable [iOptIndex].iAmt)
+				{
+				char Ctmp[260];
+
+//TODO:rem!				printf("Defaulting this instance of DOUBLE\n");
+
+//TOD:: maybe it's better than _CleanQuine("CleanQuine");?	*(char**)(tfOpTable[iOptIndex].pcVar1) = NULL;
+
+					sprintf((char * __restrict__)&Ctmp, "%s %s=%%s", tfOpTable[iOptIndex].pcName, 
+						tfOpTable[iOptIndex].pcVar1Name);
+
+					if ( 1 == sscanf (argv[0], Ctmp, tfOpTable[iOptIndex].pcVar1 )  )
+					{
+//TODO:rem!					printf("COUPLE <%s> found. BREAK.\n", tfOpTable[iOptIndex].pcName);
+
+						iOperation= tfOpTable[iOptIndex].iOp;
+
+						break;
+					}
+					else
+					{
+						printf("habe leider keine COUPLE gefunden\n");
+					}
+				}
 
 		iOptIndex++;
 
-	} /* while(..) */
-	
+	} /* while(..) */	
 
 
 
@@ -216,6 +271,16 @@ int iOption;
 
 	/* Get the root node of the XML data stored in the <doc> */
 	root_element = xmlDocGetRootElement(doc);//TODO: put if-else construction here
+
+//+++++++++++++++++++++
+		if (i5428E)	
+		{
+			/* Fulfill <_tid_> */
+			VERBOSE_STATUS(iOpenSite)
+
+			printf("got such <_tid_=%s>\n", _tid_);
+		}
+//++++++++++++++++++++++++
 
 
 #if (1)
@@ -369,8 +434,11 @@ char cBuf[512];
 char * cpTockenPtr;
 char * cp1, * cp2;
 
-//printf(ptr);
+printf(ptr);
 //return 0;
+
+	/* We already have <_tid_> */
+	if (m_TockenFound) return;
 
 	fprintf(stream, "%s, %10.10ld bytes (0x%8.8lx)\n", text, (long)size, (long)size);
 
@@ -378,13 +446,19 @@ char * cp1, * cp2;
 	{
 		cp1 = strtok(cpTockenPtr, "\'");
 		cp2 = strtok(NULL, "\'");
+		
+
 		m_TockenFound = 1;
 
-		printf("[%s] iTocken = <%s> SUCCESS. TERMINATING. <m_TockenFound=%d>\n", cpTockenPtr, cp2, m_TockenFound);
+		printf("[%s] iTocken = <%s> SUCCESS. TERMINATING. <m_TockenFound=%d>\n", cpTockenPtr, /* _tid_ */cp2, m_TockenFound);
+
+/*		strcpy(&_tid_, cp2);
+
+		printf("  _tid_ = <%s> \n", &_tid_);*/
+
 	}
 
 
-return;
 
 	for(i=0; i<size; i+= width)
 	{
@@ -463,6 +537,8 @@ typedef struct _RespStruct
 /* Suppose 32K is enough to include _any HTML responce frmo _this LTE-modem */
 char cBuffer[0x400*32];
 
+
+
 /* Callback to execute on arrival of HTML responce */
 static size_t RecvClbk(void *contents, size_t size, size_t nmemb, void *userp)
 {
@@ -508,11 +584,9 @@ char pcCastFile[M_PATH];
 	pcPtr2Extra1 = (char**)&cPostMethodString;
 	pcPtr2Extra2 = (char**)&cPostMethodString2;
 
-printf(">>>> check here result of parsing <%s> \n", pcDataFile);
+
 	/* Fulfill records in <pHttpCmdChain> list */
 	process_datafile(pcDataFile);//TODO: put if-else construction here
-printf(">>>> end of check of parsing <%s> \n", pcDataFile);
-
 
 
 
@@ -549,12 +623,11 @@ printf(">>>> end of check of parsing <%s> \n", pcDataFile);
 		memset (&RespStr, sizeof (struct _RespStruct) , 0);
 		
 
-		//. nah . VERBOSE_STATUS(iOpenSite)
-//+++++++++++++++
-printf(">>>> now we deploy it \n");
-	_ProcessHttpCmds("caller is <process_http_target>", pHttpCmdChain);
-printf(">>>> deployed \n");
-//+++++++++++++++
+
+		m_TockenFound = 0;//TODO: wtf?
+
+
+		_ProcessHttpCmds("caller is <process_http_target>", pHttpCmdChain);
 
 		/* Close URL lib */
 		curl_easy_cleanup(curl);

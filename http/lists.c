@@ -571,6 +571,24 @@ int iExtras = 0;
     }
 }
 
+
+void _CleanQuine(const char * caller)
+{
+int i;
+
+	for (i = 0; NULL != QuineArray[i].vpQuineVar; i++)
+	{
+		DVOC("%s: before clean: keyword vpQuineVar<%s>   pcQuineVarValue<%s> \n", caller, 
+			QuineArray[i].vpQuineVar, QuineArray[i].pcQuineVarValue);
+
+		/* Delete string stored at address <QuineArray[i].vpQuineVar> */
+		* (char**)( QuineArray[i].vpQuineVar) = NULL;
+
+		DVOC("%s: after clean: here's the keyword vpQuineVar<%s>   pcQuineVarValue<%s>\n", caller, 
+			QuineArray[i].vpQuineVar, QuineArray[i].pcQuineVarValue);
+	}
+}
+
 int _XmlAuxCreateEx(const char * caller)
 {
 char cStr[MAX_URL_SIZE], cGarb[MAX_URL_SIZE];

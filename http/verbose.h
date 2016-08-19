@@ -39,7 +39,7 @@
 #define DEBUG_XML_AUX	1
 
 /* Show vocabulary generation and usage */
-#define DEBUG_VOC	1
+#define DEBUG_VOC	0
 
 /* Show workflow of function methods */
 #define DEBUG_FUNC	1
