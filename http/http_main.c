@@ -226,8 +226,11 @@ int iOption;
 
 	char pcCastFile[HTTP_MAX_PATH];
 
+	
+	sprintf(pcCastFile, "./cast.%s.xml", "5428E");
+
 	/* Get the contents of <cast.XXXXX.txt.xml> into <doc> */
-	strcpy(pcCastFile, "./cast.5428E.xml");//TODO: remove hardcoded stuff
+	//strcpy(pcCastFile, "./cast.5428E.xml");//TODO: remove hardcoded stuff
 
 	doc = xmlReadFile(pcCastFile, NULL, 0);
 
@@ -458,7 +461,6 @@ const char *text;
 	switch (type)
 	{
 		case CURLINFO_TEXT:
-		//fprintf(stderr, "== Info: %s", data);
 		fprintf(stdout, "== Info: %s", data);
 		default: /* in case a new one is introduced to shock us */
 		return 0;

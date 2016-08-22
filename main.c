@@ -65,7 +65,7 @@ int main (int argc, char **argv)
 
 	else
 	{
-		HCOMMON("Put XML file name on command line, e.g. <%s targets.xml>. \nERROR\n", __FILE__, __func__, argv[0]);
+		HCOMMON("[%s] %s:   Put XML file name on command line, e.g. <%s targets.xml>. \nERROR\n", __FILE__, __func__, argv[0]);
 
 		return HTTP_WRONG_NAME;
 
@@ -110,7 +110,7 @@ int main (int argc, char **argv)
 	/* Free the global variables that may have been allocated by the parser */
 	xmlCleanupParser();
 
+	/* In <main> has same effect as <return> */
  	exit (0);
-
 }
 

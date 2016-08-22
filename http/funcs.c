@@ -232,9 +232,7 @@ int iUpgradeFirmware()
 	return HTTP_SUCCESS;
 }
 
-/* 
-Performs an ACL settings (group creation). Tested on switches: TL-SL2428 (TODO: to be tested on TL-SL2218, TL-SL5428E). TODO: 10-2015
-*/
+/*  Performs ACL-setting 'group creation'. Tested on switches: TL-SL2428 (not tested on TL-SL2218, TL-SL5428E). */
 int iAclGroup()
 {
 	/* Put XML section <ACL_Create> into structure <pUrlChain> */
@@ -327,9 +325,7 @@ int iAssignIp()
 	return res;
 }
 
-/* 
-Not tested. TODO: test on 2218, 2428, 5428E. TODO: is it possible <MAC_Address&Static_Address_CRST> without <MAC_Address&Address_Table>? TODO: 10-2015; 
-*/
+/* Not tested. To be tested on 2218, 2428, 5428E. */
 int iBindMacIp()
 {
 	/* Put XML section  into structure <pUrlChain> */
@@ -346,12 +342,10 @@ int iBindMacIp()
 	return DeployUrl(pUrlChain);
 }
 
-/* 
-Not tested. TODO: test on 2218, 2428, 5428E. TODO: 10-2015
-*/
+/* To be tested on 2218, 2428, 5428E */
 int iEnablePort()
 {
-	/* Put XML section <Port_Config> into structure <pUrlChain>.  TODO: which one : MAC_VLAN? Protocol_VLAN? VLAN_VPN? * TODO: 10-2015 */	
+	/* Put XML section <Port_Config> into structure <pUrlChain>.  Which MAC_VLAN? Protocol_VLAN? VLAN_VPN? */	
 	parse_xml_cast(root_element, "Port_Config");
 
 	/* Glue particles of <pUrlChain> into full-blown URLs */
@@ -365,9 +359,7 @@ int iEnablePort()
 	return DeployUrl(pUrlChain);
 }
 
-/* 
-Simple operation. No backdraft, no special handling.
-*/
+/* Simple operation. No backdraft, no special handling */
 int iMeta1(char * pcXmlEltName)
 {
 	/* Empty string ised instead of XML-node-name? */
@@ -392,9 +384,7 @@ int iMeta1(char * pcXmlEltName)
 	return DeployUrl(pUrlChain);
 }
 
-/* 
-Complex operation type #1. With backdraft.
-*/
+/*  Complex operation type #1. With backdraft */
 int iMeta2(char * pcXmlEltName1, char * pcXmlEltName2)
 {
 	/* Empty string ised instead some of XML-node-names? */
