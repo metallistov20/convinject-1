@@ -19,7 +19,7 @@
 
 CC := gcc
 
-OBJS	= ./authentication.o ./cmds.o ./connect_ssh.o ./knownhosts.o ./pipes.o 
+OBJS	= ./authentication.o ./cmds.o ./connect_ssh.o ./knownhosts.o ./ssh_main.o 
 
 CFLAGS = -c -D_DBG                                                                -g 
 

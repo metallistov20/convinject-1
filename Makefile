@@ -45,20 +45,20 @@ LIBS 	+= ./ssh/shared/libssh.so.$(VERSION)
 
 all: $(EXEC)
 
-SSH_OBJS	= ./$(SSH_DIR)/cmds.o ./$(SSH_DIR)/authentication.o ./$(SSH_DIR)/connect_ssh.o ./$(SSH_DIR)/knownhosts.o ./$(SSH_DIR)/pipes.o
-HTTP_OBJS	= ./$(HTTP_DIR)/auxiliary.o   ./$(HTTP_DIR)/funcs.o  ./$(HTTP_DIR)/inject.o  ./$(HTTP_DIR)/lists.o  ./$(HTTP_DIR)/xmls.o  $(HTTP_DIR)/voc.obj 
+SSH_OBJS	= ./$(SSH_DIR)/cmds.o ./$(SSH_DIR)/authentication.o ./$(SSH_DIR)/connect_ssh.o ./$(SSH_DIR)/knownhosts.o ./$(SSH_DIR)/ssh_main.o
+HTTP_OBJS	= ./$(HTTP_DIR)/auxiliary.o   ./$(HTTP_DIR)/funcs.o  ./$(HTTP_DIR)/http_main.o  ./$(HTTP_DIR)/lists.o  ./$(HTTP_DIR)/xmls.o  $(HTTP_DIR)/voc.obj 
+
 SSH_OBJS_R	=$(SSH_OBJS)
 HTTP_OBJS_R	=$(HTTP_OBJS)
 
 
-ssh:	$(SSH_OBJS) 
+
+$(SSH_OBJS_R):	./$(SSH_DIR)/Makefile 
 	cd ./$(SSH_DIR) && $(MAKE) 
 	@echo "SSH created:" && ls ./ssh/*.o
-#TODO: obsolete	$(MAKE) "SSH_OBJS_R=$(SSH_OBJS)" all
 
-HTTP_OBJS_R=$(HTTP_OBJS)
 
-#http
+
 $(HTTP_OBJS_R):	./$(HTTP_DIR)/Makefile 
 	cd ./$(HTTP_DIR) && $(MAKE) build
 	@echo "HTTP created:" && ls ./http/*.o
@@ -67,14 +67,9 @@ $(HTTP_OBJS_R):	./$(HTTP_DIR)/Makefile
 .o: .c
 	$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)  
 
-$(EXEC): $(SSH_OBJS_R) $(HTTP_OBJS_R)       $(OBJS) $(LIBS)	
+$(EXEC): $(SSH_OBJS_R) $(HTTP_OBJS_R)                                          $(OBJS) $(LIBS)	
 	$(CC)  -o $@ $(OBJS)  $(SSH_OBJS_R) $(HTTP_OBJS_R)   $(LIBS)  $(LDFLAGS)    -L/usr/local/lib  \
 	    -Wl,--rpath /usr/lib/i386-linux-gnu   -Wl,--rpath $(PWD)/ssh/shared
-
-#-Wl,--rpath-link $(PWD)/ssh/shared
-#  -L./ssh/shared
-# -Wl,--rpath $(PWD)/ssh/shared
-# -Wl,--rpath $(PWD)/ssh/shared
 
 
 clean:

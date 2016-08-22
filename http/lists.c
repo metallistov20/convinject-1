@@ -26,7 +26,7 @@
 
 #include "xmls.h"
 #include "lists.h"
-#include "inject.h"
+#include "http_main.h"
 #include "auxiliary.h"
 #include "verbose.h"
 
@@ -42,11 +42,11 @@ int _AppendXmlAux(const char * caller, pXmlAuxType * ppXmlAux)
 		{
 			HCOMMON("%s: ERROR: can't allocate memory for aux. XML data\n", caller);
 
-			return INJ_MEM_ERROR;
+			return HTTP_MEM_ERROR;
 		}
 	}
 
-	return INJ_SUCCESS;
+	return HTTP_SUCCESS;
 }
 
 void _DeleteVocabularyEx(const char * caller, pCompoundType * ppThisVocabulary)
@@ -113,7 +113,7 @@ pUrlChainType pChild, pTempUrlChain;
 		{
 			HCOMMON("%s: ERROR: can't allocate memory for first chain, URL(%s)\n", caller, pcData);
 
-			return INJ_MEM_ERROR;
+			return HTTP_MEM_ERROR;
 		}
 	}
 	else
@@ -127,7 +127,7 @@ pUrlChainType pChild, pTempUrlChain;
 		{
 			HCOMMON("%s: ERROR: can't allocate memory for next chain, URL(%s)\n", caller, pcData);
 
-			return INJ_MEM_ERROR;
+			return HTTP_MEM_ERROR;
 		}
 
 		/* Skip everything */
@@ -143,7 +143,7 @@ pUrlChainType pChild, pTempUrlChain;
 		pChild->pNextChain = pTempUrlChain;
 
 	}
-	return INJ_SUCCESS;
+	return HTTP_SUCCESS;
 }
 
 int _AppendCompound(const char * caller, pCompoundType * ppThisCompound, char * pcData, void * pThisVoid)
@@ -160,7 +160,7 @@ pCompoundType pChild, pTempCompound;
 		{
 			HCOMMON("%s: ERROR: can't allocate memory for first compound, URL(%s)\n", caller, pcData);
 
-			return INJ_MEM_ERROR;
+			return HTTP_MEM_ERROR;
 		}
 
 		(*ppThisCompound)->pcData = calloc (1, strlen (pcData) +1 );
@@ -184,7 +184,7 @@ pCompoundType pChild, pTempCompound;
 
 			HCOMMON("%s: ERROR: can't allocate memory for next compound, URL(%s)\n", caller, pcData);
 
-			return INJ_MEM_ERROR;
+			return HTTP_MEM_ERROR;
 		}
 
 		/* Skip everything till last one */
@@ -210,7 +210,7 @@ pCompoundType pChild, pTempCompound;
 		/* attach a new chain entry to the end of existing chain */
 		pChild->pNext = pTempCompound;
 	}
-	return INJ_SUCCESS;
+	return HTTP_SUCCESS;
 }
 
 void _DeleteCompoundEx(const char * caller, pCompoundType * ppThisCompound)
@@ -375,7 +375,7 @@ int iCnt=0;
 		pCompound =  pCompound->pNext;
 	}
 
-	return INJ_SUCCESS;
+	return HTTP_SUCCESS;
 }
 
 int _GlueUrl(const char * caller, pUrlChainType pThisUrlChainPar)
@@ -392,7 +392,7 @@ pUrlChainType pThisUrlChain = pThisUrlChainPar;
 	{
 		DXML("\t[%s]: can't allocate %d bytes for URL data\n", caller, MAX_URL_SIZE );
 
-		return INJ_MEM_ERROR;
+		return HTTP_MEM_ERROR;
 	}
 
 	strcpy (pThisUrlChain->pcSumm, "http://");
@@ -413,7 +413,7 @@ pUrlChainType pThisUrlChain = pThisUrlChainPar;
 	pThisUrlChain =  pThisUrlChain->pNextChain;
     };
 
-    return INJ_SUCCESS;
+    return HTTP_SUCCESS;
 }
 
 int _DeployUrl(const char * caller, pUrlChainType pThisUrlChainPar)
@@ -429,7 +429,7 @@ int iRes;
 	{
 		DXML("\t[%s]: can't allocate %d bytes for URL data:\n", caller, MAX_URL_SIZE );
 
-		return INJ_MEM_ERROR;
+		return HTTP_MEM_ERROR;
 	}
 
 	DURL("%s: summURL", caller);
@@ -461,14 +461,14 @@ int iRes;
     if ( CURLE_OK == iRes)
     {
 	/* go out quietly if all correct */
-	return  INJ_SUCCESS;
+	return  HTTP_SUCCESS;
     }
     else	
     {
 	/* verbosing CURLcode returned as <iRes> if error occured */
 	DURL("%s: recent cURL call failed with ERR_CODE(%d)\n", caller, iRes);
 
-	return   INJ_CURL_ERROR;
+	return   HTTP_CURL_ERROR;
     }
 }
 
@@ -488,7 +488,7 @@ int iExtras = 0;
 	{
 		DXML("\t[%s]: can't allocate %d bytes for URL data:\n", caller, MAX_URL_SIZE );
 
-		return INJ_MEM_ERROR;
+		return HTTP_MEM_ERROR;
 	}
 
 	DURL("%s: summURL", caller);
@@ -514,7 +514,7 @@ int iExtras = 0;
 
 					DURL("%s: cURL call setopt(CURLOPT_POSTFIELDS) failed with ERR_CODE(%d)\n", caller, iRes); 
 
-					return   INJ_CURL_ERROR;
+					return   HTTP_CURL_ERROR;
 
 				}
 				case 1:
@@ -529,7 +529,7 @@ int iExtras = 0;
 
 					DURL("%s: cURL call setopt(CURLOPT_POSTFIELDS) failed with ERR_CODE(%d)\n", caller, iRes); 
 
-					return  INJ_CURL_ERROR;
+					return  HTTP_CURL_ERROR;
 
 				default:
 					break;
@@ -561,13 +561,13 @@ int iExtras = 0;
 
     if ( CURLE_OK == iRes)
 	/* go out quietly if all correct */
-	return  INJ_SUCCESS;
+	return  HTTP_SUCCESS;
     else
     {
 	/* verbosing CURLcode returned as <iRes> if error occured */
 	DURL("%s: recent cURL call failed with ERR_CODE(%d)\n", caller, iRes);
 
-	return   INJ_CURL_ERROR;
+	return   HTTP_CURL_ERROR;
     }
 }
 
@@ -595,7 +595,7 @@ char cStr[MAX_URL_SIZE], cGarb[MAX_URL_SIZE];
 
 void * pVoid;
 
-	if (INJ_SUCCESS == AppendXmlAux( &pAuxiliary ) )
+	if (HTTP_SUCCESS == AppendXmlAux( &pAuxiliary ) )
 	{
 	int i;
 		/* Tip: here we presume that element QuineArray[0] exists. TODO; re-work, to avoid relying on this presumption */
@@ -617,8 +617,8 @@ void * pVoid;
 	{
 		HCOMMON("%s: ERROR: auxilary data structure was not created\n", caller);
 
-		return INJ_MEM_ERROR;
+		return HTTP_MEM_ERROR;
 	}
 
-	return INJ_SUCCESS;
+	return HTTP_SUCCESS;
 }

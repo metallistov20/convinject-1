@@ -173,7 +173,7 @@ pUrlChainType pUrlLastChain = pUrlChain;
 
 		DXMLAUX("%s: \t\t%s\n", "", _localToken);
 
-		if (INJ_SUCCESS != AppendCompound(&pUrlLastChain->pCompound, _parseToken ( _localToken ), NULL ) )
+		if (HTTP_SUCCESS != AppendCompound(&pUrlLastChain->pCompound, _parseToken ( _localToken ), NULL ) )
 		{
 			_localToken = NULL;
 
@@ -221,7 +221,7 @@ char *cParcedOut;
 
 			cParcedOut[strlen(cParcedOut) -1] = 0;
 		
-			if (INJ_SUCCESS != AppendUrl(&pUrlChain, "(aux;dta;)") )
+			if (HTTP_SUCCESS != AppendUrl(&pUrlChain, "(aux;dta;)") )
 			{
 				DXMLAUX("%s: FAILURE: memory error on appenging new URL\n", "");
 

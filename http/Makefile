@@ -19,8 +19,7 @@
 
 CC := gcc
 
-#gen_vocabulary.o  gen_voHabulary.o  
-OBJS	= auxiliary.o   funcs.o    inject.o  lists.o  xmls.o  
+OBJS	= auxiliary.o   funcs.o    http_main.o  lists.o  xmls.o  
 
 CFLAGS = -c       -I/usr/include/libxml2                                                         -g 
 
@@ -57,10 +56,6 @@ voc.obj: voc.c
 compute_tabs: compute_tabs.c
 	$(CC) compute_tabs.c -o compute_tabs
 
-inject: inject.o funcs.o lists.o xmls.o auxiliary.o voc.obj 
-	$(CC)  -o inject inject.o funcs.o lists.o xmls.o auxiliary.o voc.obj  ../ssh/cmds.o $(LDFLAGS) $(LIBS)
-#TODO: not sure that <../ssh/cmds.o> should be deployed this way, but for now we need it anyway
-
 
 
 .o: .c
@@ -68,7 +63,7 @@ inject: inject.o funcs.o lists.o xmls.o auxiliary.o voc.obj
 
 
 clean:
-	rm -fv voc.c voc.h inject gen_vocabulary gen_voHabulary compute_tabs config.log config.status configure  *.in~ *.sh~ *.c~ *.h~ *.xml~ *.o *.log *.obj *~
+	rm -fv voc.c voc.h http_main gen_vocabulary gen_voHabulary compute_tabs config.log config.status configure  *.in~ *.sh~ *.c~ *.h~ *.xml~ *.o *.log *.obj *~
 	rm -rfv autom4te.cache
 
 

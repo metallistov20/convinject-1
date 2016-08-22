@@ -22,33 +22,46 @@
 #ifndef _CONSTANTS_H_
 #define _CONSTANTS_H_
 
-
-/* Operation done successfully */
-#define INJ_SUCCESS	0
+/* Successfull operation */
+#define  HTTP_SUCCESS		0
 
 /* Bad paramaters */
-#define INJ_PAR_ERROR	(-1)
-
-/* Bad data */
-#define INJ_XML_ERROR	(-2)
+#define HTTP_PAR_ERROR		(-1)
 
 /* Memory was not allocated, or bad mem. address being referred */
-#define INJ_MEM_ERROR	(-3)
+#define HTTP_MEM_ERROR		(-3)
 
 /* call to fn. of library cURL was failed */
-#define INJ_CURL_ERROR	(-4)
-
-/* file doe not exist, or requested permission is not granted */
-#define INJ_NOFILE_ERROR (-5)
-
-/* Generalized Aux-not-build error */
-#define INJ_NOAUX_ERROR	(-6)
+#define HTTP_CURL_ERROR		(-4)
 
 /* Operation is not yet impelmented */
-#define INJ_NOT_IMPL	(-8)
+#define HTTP_NOT_IMPL		(-8)
 
 /* Empty string instead of XML node name */
-#define INJ_XML_NULL	(-9)
+#define HTTP_XML_NULL		(-9)
+
+
+/* */
+#define  HTTP_WRONG_NAME	(-11)
+
+/* */
+#define  HTTP_BAD_VOC		(-12)
+
+/* */
+#define  HTTP_BAD_CAST		(-13)
+
+/* Bad file name */
+#define  HTTP_BAD_FNAME		(-14)
+
+/* File does not exist, or requested permission is not granted */
+#define  HTTP_BAD_FOPEN		(-15)
+
+#define  HTTP_BAD_DATA		(-17)
+
+#define  HTTP_BAD_LIBINIT	(-18)
+
+
+
 
 
 
@@ -65,15 +78,15 @@
 #define MAX_TID_SIZE 	64
 
 /* Auxiliary strings, those not library- or Barracuda-dependant */
-#define MAX_STR_SIZE 64
+#define MAX_STR_SIZE 	64
 
 /* On linux systems should (but not must) be same as MAX_PATH */
-#define MAX_INJ_PATH 250
+#define HTTP_MAX_PATH 	260
 
 
 
 /* Dont sent URLs physically, only show them */
-#define IDLE_RUN	0
+#define IDLE_RUN	1
 
 
 #endif /* _CONSTANTS_H_ */

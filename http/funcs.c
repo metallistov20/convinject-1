@@ -25,7 +25,7 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
-#include "inject.h"
+#include "http_main.h"
 #include "verbose.h"
 #include "opcodes.h"
 #include "constants.h"
@@ -229,7 +229,7 @@ int iUpgradeFirmware()
 	}
 
 	/* Firmware was being flashed into EEROM now */
-	return INJ_SUCCESS;
+	return HTTP_SUCCESS;
 }
 
 /* 
@@ -375,7 +375,7 @@ int iMeta1(char * pcXmlEltName)
 	{
 		DFUNC("%s: empty XML-node-name\n", "<iMeta1>");
 
-		return INJ_XML_NULL;
+		return HTTP_XML_NULL;
 	}
 
 	/* Parse named element, and put its XML section into structure <pUrlChain> */	
@@ -402,7 +402,7 @@ int iMeta2(char * pcXmlEltName1, char * pcXmlEltName2)
 	{
 		DFUNC("%s: empty XML-node-name(s) \n", "<iMeta2>");
 
-		return INJ_XML_NULL;
+		return HTTP_XML_NULL;
 	}
 
 	/* Put XML section from node <*pcXmlEltName1>  into structure <pUrlChain> */
