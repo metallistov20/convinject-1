@@ -150,8 +150,7 @@ int iOperation;
 	/* Wait between commands */
 	sleep (BETW_CMD_TMO);
 
-	//write(input_pipe[1], pPointChainPar->pcCmd, strlen (pPointChainPar->pcCmd) +  1);
-	iParseCmdArgs(&pPointChainPar->pcCmd, 1);
+	iParseCmdArgs(&pPointChainPar->pcCmd);
 
 }
 

@@ -186,7 +186,7 @@ int iUpgradeFirmware()
 
 	/* Second portion of URLs */
 	sprintf (cUrlUploadFile, "/usr/bin/curl -F filedata=@%s http://%s/ ", cFwName, cIpAddr);
-	DURL("%s: cUrl3 = %s\n", cArg0, cUrlUploadFile);
+	DURL("cUrl3 = %s\n", cUrlUploadFile);
 
 #if (IDLE_RUN)
 		DURL("%s: idle run mode: the HTTP injection was not physically sent\n", "");
@@ -198,7 +198,7 @@ int iUpgradeFirmware()
 
 	/* Third portion of URLs */
 	sprintf (cUrlUpgrade, "/usr/bin/curl --form submit=@%s --form submit=upgrade --form _tid_=%s  http://%s/userRpm/FirmwareAdRpm.htm",  cFwName, _tid_, cIpAddr);
-	DURL("%s: cUrl4 = %s\n", cArg0, cUrlUpgrade);
+	DURL("cUrl4 = %s\n", cUrlUpgrade);
 
 #if (IDLE_RUN)
 		DURL("%s: idle run mode: the HTTP injection was not physically sent\n", "");
