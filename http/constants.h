@@ -40,15 +40,17 @@
 /* Empty string instead of XML node name */
 #define HTTP_XML_NULL		(-9)
 
+#define  HTTP_BAD_VOC		(-10)
+
 
 /* */
 #define  HTTP_WRONG_NAME	(-11)
 
 /* */
-#define  HTTP_BAD_VOC		(-12)
+#define  HTTP_BAD_XML_FORMAT	(-12)
 
 /* */
-#define  HTTP_BAD_CAST		(-13)
+#define  HTTP_BAD_DATAFILE		(-13)
 
 /* Bad file name */
 #define  HTTP_BAD_FNAME		(-14)

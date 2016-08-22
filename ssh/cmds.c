@@ -109,6 +109,7 @@ extern int output_pipe[2];
 /* Process data stored in dynamic structure pointed by 'pPointChainPar' */
 static int ProcessSingleCmd(/* const char * caller, */pCmdType pPointChainPar)
 {
+// TODO: redefine as <SSH pkt max length >
 char cResponceData[0x400];
 
 int iNumRead;

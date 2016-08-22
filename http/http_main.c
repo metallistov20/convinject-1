@@ -220,28 +220,35 @@ int iOption;
 		return HTTP_BAD_VOC;
 	}
 
-	/* Check potential ABI mismatches between the version it was compiled for and the actual shared library used */
-	LIBXML_TEST_VERSION 	// TODO: may we skip it ?
+	/* Skippable, we've checked ABI compatibility in <main.c::main()> */
+	LIBXML_TEST_VERSION
 
 
 	char pcCastFile[HTTP_MAX_PATH];
 
 	/* Get the contents of <cast.XXXXX.txt.xml> into <doc> */
 	strcpy(pcCastFile, "./cast.5428E.xml");//TODO: remove hardcoded stuff
-	doc = xmlReadFile(pcCastFile, NULL, 0);//TODO: put if-else construction here
+
+	doc = xmlReadFile(pcCastFile, NULL, 0);
 
 
 	if (NULL == doc)
 	{
 		HCOMMON("[%s] %s: ERROR: could not parse file %s\n", __FILE__, __func__, pcCastFile);
 
-		return HTTP_BAD_CAST;
+		return HTTP_BAD_DATAFILE;
 	}
 
 	/* Get the root node of the XML data stored in the <doc> */
-	root_element = xmlDocGetRootElement(doc);//TODO: put if-else construction here
+	if ( NULL == ( root_element = xmlDocGetRootElement(doc) ) )
+	{
+		HCOMMON("[%s] %s: badly organized XML doc in file %s\n", __FILE__, __func__, pcCastFile);
 
-//+++++++++++++++++++++
+		return HTTP_BAD_XML_FORMAT;
+	}
+
+
+	// TODO: reowrk, especially this <i5428E>
 	if (i5428E)	
 	{
 		/* Fulfill <_tid_> */
@@ -249,10 +256,7 @@ int iOption;
 
 		HCOMMON("[%s] %s: got such <_tid_=%s>\n", __FILE__, __func__, _tid_);
 	}
-//++++++++++++++++++++++++
 
-
-#if (1)
 
 	/* At this time point we assume all parameters parsed OK, so let's call inj. primitives */
 	switch (iOperation)
@@ -317,13 +321,8 @@ int iOption;
 	}
 
 
-#endif /* (0) */
-
 	/* Delete entire list with URLs along with its compounds */
 	DeleteUrlEx(&pUrlChain);
-
-
-
 
 	/* Delete vocabuilary, et al*/
 	DeleteXmlAuxEx(&pAuxiliary);
@@ -581,14 +580,12 @@ RespStruct RespStr;
 		curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "gzip, deflate");
 
 		curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
-		//-10..curl_easy_setopt(curl, CURLOPT_COOKIEFILE, "");
 
 		/* send all data to this function */
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, RecvClbk);
 		/* we pass our 'RespStr' struct to the callback function */
 
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)&RespStr);
-		//-10..curl_easy_setopt(curl, CURLOPT_USERAGENT, "libcurl-agent/1.0");
 
 		/* Clean the buffer before receiving a responce into it */
 		memset (&RespStr, sizeof (struct _RespStruct) , 0);

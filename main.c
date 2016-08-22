@@ -37,6 +37,12 @@
 /* DGENERAL() */
 #include "main.h"
 
+/* Such constants as <HTTP_WRONG_NAME>, <HTTP_BAD_XML_FORMAT> */
+#include "./http/constants.h"
+
+/* Such macros as <HCOMMON>, etc */
+#include "./http/verbose.h"
+
 /* Ptr to XML data for in memory */
 xmlNode *xmlRootElement = NULL;
 
@@ -53,20 +59,20 @@ pTgtStructType Root;
 int main (int argc, char **argv)
 {
 	if (NULL != argv[1])
+
 		/* Assign datafile name*/
 		strcpy (cXmlName, argv[1]);
 
 	else
 	{
-		printf("Put XML file name on command line, e.g. <%s targets.xml>. \nERROR\n", argv[0]);// TODO: repl.
-		return (-8);// TODO: repl.
+		HCOMMON("Put XML file name on command line, e.g. <%s targets.xml>. \nERROR\n", __FILE__, __func__, argv[0]);
+
+		return HTTP_WRONG_NAME;
 
 	}
-#if (0)
-//TODO: can we skip it?
+
 	/* Check potential ABI mismatches between the version it was compiled for and the actual shared library used */
 	LIBXML_TEST_VERSION
-#endif /* (0) */
 
 	xmlDocument = xmlReadFile(cXmlName, NULL, 0);
 
@@ -74,11 +80,16 @@ int main (int argc, char **argv)
 	{
 		DGENERAL("[%s] %s:   ERROR: could not parse file %s\n", __FILE__, __func__, cXmlName);
 
-		return (-2);
+		return HTTP_BAD_DATAFILE;
 	}
 
 	/* Get the root node of the XML data stored in the <doc> */
-	xmlRootElement = xmlDocGetRootElement(xmlDocument);
+	if ( NULL == ( xmlRootElement = xmlDocGetRootElement(xmlDocument) ) )
+	{
+		HCOMMON("[%s] %s: badly organized XML doc in file %s\n", __FILE__, __func__, cXmlName);
+
+		return HTTP_BAD_XML_FORMAT;
+	}
 
 
 	/* Put all XML sections <Target> into list pointed <Root> */
@@ -100,9 +111,6 @@ int main (int argc, char **argv)
 	xmlCleanupParser();
 
  	exit (0);
-
-
-	return 0;
 
 }
 
