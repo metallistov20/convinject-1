@@ -56,7 +56,7 @@ pCmdType pChild, pTempCmdChain;
 		if (NULL == *ppThisCmdChain)
 		{
 			printf("[%s] %s:%s : ERROR: can't allocate memory for first element. \n",
-			__FILE__, caller, __func__);
+				__FILE__, caller, __func__);
 
 			return ERROR_MEM;
 		}
@@ -99,8 +99,7 @@ pCmdType pChild, pTempCmdChain;
 	}
 
 	return SUCCESS_MEM;
-
-}
+} /* int _EnrollCmd */
 
 
 extern int output_pipe[2];
@@ -134,7 +133,7 @@ int iNumRead;
 			printf(">>>>RSPNC>>>> %s <<<<<\n", cResponceData );
 #endif /* 0 */
 
-}
+} /* static int ProcessSingleCmd */
 
 
 
@@ -152,8 +151,7 @@ int iOperation;
 	sleep (BETW_CMD_TMO);
 
 	iParseCmdArgs(&pPointChainPar->pcCmd);
-
-}
+} /* ProcessSingleHttpCmd */
 
 /* Process data stored in dynamic structure pointed by 'pPointChainPar' */
 int _ProcessCmds(const char * caller, pCmdType pPointChainPar)
@@ -175,8 +173,7 @@ pCmdType pPointChain = pPointChainPar;
 	}
 
 	return SUCCESS_MEM;
-
-}
+} /* int _ProcessCmds */
 
 
 int _ProcessHttpCmds(const char * caller, pCmdType pPointChainPar)
@@ -198,8 +195,7 @@ pCmdType pPointChain = pPointChainPar;
 	}
 
 	return SUCCESS_MEM;
-
-}
+} /* int _ProcessHttpCmds */
 
 /* Free memory occupied by '*ppThisCmdChain' */
 void _DeleteCmds(const char * caller, pCmdType * ppThisCmdChain)
@@ -227,5 +223,4 @@ pCmdType pChild, pThisCmdChain = *ppThisCmdChain;
 
 	/* Dispose first element of chain */
 	*ppThisCmdChain = NULL;
-
-}
+} /* void _DeleteCmds */

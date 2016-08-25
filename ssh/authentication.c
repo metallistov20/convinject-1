@@ -25,7 +25,7 @@
 
 #include <libssh/libssh.h>
 
-#include "examples_common.h"
+#include "ssh_common.h"
 
 #define PASSWORD_INSTANCE "admin"
 
@@ -131,12 +131,14 @@ int err;
 	} /* 	while (err == SSH_AUTH_INFO) */
 
 	return err;
-}
+} /* int authenticate_kbdint */
 
+#if (0)
 static void error(ssh_session session)
 {
 	fprintf(stderr,"Authentication failed: %s\n",ssh_get_error(session));
 }
+#endif /* (0) */
 
 
 int authenticate_ssh_console(ssh_session session, char * pcPasswd)
@@ -248,9 +250,8 @@ char *banner;
 	}
 
 	return rc;
-}
+} /* authenticate_ssh_console */
 
-//TODO: remove this obsolete
 int authenticate_console(ssh_session session)
 {
 int rc;
@@ -360,4 +361,4 @@ char *banner;
 	}
 
 	return rc;
-}
+} /* authenticate_console */

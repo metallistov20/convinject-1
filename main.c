@@ -67,8 +67,7 @@ int main (int argc, char **argv)
 	{
 		HCOMMON("[%s] %s:   Put XML file name on command line, e.g. <%s targets.xml>. \nERROR\n", __FILE__, __func__, argv[0]);
 
-		return HTTP_WRONG_NAME;
-
+		return CMN_WRONG_NAME;
 	}
 
 	/* Check potential ABI mismatches between the version it was compiled for and the actual shared library used */
@@ -80,7 +79,7 @@ int main (int argc, char **argv)
 	{
 		DGENERAL("[%s] %s:   ERROR: could not parse file %s\n", __FILE__, __func__, cXmlName);
 
-		return HTTP_BAD_DATAFILE;
+		return CMN_BAD_DATAFILE;
 	}
 
 	/* Get the root node of the XML data stored in the <doc> */
@@ -88,7 +87,7 @@ int main (int argc, char **argv)
 	{
 		HCOMMON("[%s] %s: badly organized XML doc in file %s\n", __FILE__, __func__, cXmlName);
 
-		return HTTP_BAD_XML_FORMAT;
+		return CMN_BAD_XML_FORMAT;
 	}
 
 
@@ -99,7 +98,7 @@ int main (int argc, char **argv)
 	/* Put XML data on air */
 	_ProcessTargets(Root);
 
-	/* Free dynamic memory occupied S.B.-List <Roor> */
+	/* Free dynamic memory occupied S.B.-List <Root> */
 	_DeleteTarget (Root);
 
 

@@ -27,7 +27,7 @@
 
 #include <libssh/libssh.h>
 
-#include "examples_common.h"
+#include "ssh_common.h"
 
 int verify_knownhost(ssh_session session)
 {
@@ -156,4 +156,4 @@ int rc;
 	ssh_clean_pubkey_hash(&hash);
 
 	return 0;
-}
+} /* int verify_knownhost */

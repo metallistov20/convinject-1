@@ -19,7 +19,7 @@
 
 #include <libssh/libssh.h>
 
-#include "examples_common.h"
+#include "ssh_common.h"
 
 #include <stdio.h>
 
@@ -66,7 +66,7 @@ int auth=0;
 		return NULL;
 	}
 
-	if(verify_knownhost(session)<0)
+	if( 0 > verify_knownhost(session) )
 	{
 		ssh_disconnect(session);
 
@@ -96,4 +96,4 @@ int auth=0;
 		ssh_free(session);
 
 		return NULL;
-}
+} /* ssh_session connect */

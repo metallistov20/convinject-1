@@ -56,7 +56,10 @@
 #include <libssh/sftp.h>
 
 
-#include "examples_common.h"
+#include "ssh_common.h"
+
+/* Macros SSH_SUCCESS, etc */
+#include "../http/constants.h"
 
 #include <unistd.h>
 
@@ -192,7 +195,7 @@ int iRet = FORK_UNDEFINED;
 		/* Successor exits */
 		exit(FORK_EXITCODE);
 	}
-}
+} /* int iInput_Start */
 
 #if defined(OUT_PIPE)
 int iOutput_Start(char *cpMrk, int iTMO) 
@@ -252,7 +255,7 @@ int iRet = FORK_UNDEFINED;
 		/* Successor exits */
 		exit(FORK_EXITCODE);
 	}
-}
+} /* int iOutput_Start */
 #endif /* OUT_PIPE */
 
 static int auth_callback(const char *prompt, char *buf, size_t len, int echo, int verify, void *userdata)
@@ -261,7 +264,7 @@ static int auth_callback(const char *prompt, char *buf, size_t len, int echo, in
 (void) userdata;
 
 	return ssh_getpass(prompt, buf, len, echo, verify);
-}
+} /* static int auth_callback */
 
 struct ssh_callbacks_struct cb =
 {
@@ -281,16 +284,18 @@ int n;
 	}
 
 	cmds[n]=strdup(cmd);
-}
+}/* static void add_cmd */
 
+#if (0)
 static void usage()
 {
-	fprintf(stderr,"Usage : ssh(v.%s)  \n"
-	"access_srv <HOST_IP> -l <USER>\n",
+	fprintf(stderr,"Usage : ssh(v.%s)  \n"  "access_srv <HOST_IP> -l <USER>\n",
+
 	ssh_version(0) );
 
 	exit(0);
-}
+} /* static void usage */
+#endif /* (0) */
 
 
 static int user_host_file(char * pcLogin, char * pcHost, char * pcFilename)
@@ -299,20 +304,23 @@ FILE* fp = NULL;
 
 	if(NULL == pcLogin)
 	{
-		printf("ERROR: assign_host_file - empty username\n");
-		return (-8);//TODO;
+		printf("[%s] %s: empty username \n", __FILE__, __func__ );
+
+		return SSH_WRONG_NAME;
 	}
 
 	if(NULL == pcHost)
 	{
-		printf("ERROR: assign_host_file - empty hostname\n");
-		return (-8);//TODO;
+		printf("[%s] %s: empty hostname \n", __FILE__, __func__ );
+
+		return SSH_WRONG_NAME;
 	}
 
 	if(NULL == pcFilename)
 	{
-		printf("ERROR: assign_host_file - empty filename\n");
-		return (-8);//TODO;
+		printf("[%s] %s: empty name data file name \n", __FILE__, __func__ );
+
+		return SSH_WRONG_NAME;
 	}
 
 	user = malloc (strlen (pcLogin) + 1);
@@ -322,16 +330,14 @@ FILE* fp = NULL;
 	strcpy ( host, pcHost ) ;
 
 
-	if(host==NULL)
 
-		usage();
 
 	/* Try to open file with commands  */
 	if ( NULL == (fp = fopen (pcFilename, "r") ) )
 	{
 		printf("[%s] %s: can't open file <%s> \n", __FILE__, __func__ , pcFilename);
 
-		return FO_ERROR;
+		return SSH_BAD_FOPEN;
 	}
 
 
@@ -356,7 +362,7 @@ FILE* fp = NULL;
 	/* Close file, and dispose pointer to Raw Data file */
 	fclose(fp);
 
-	return 0;
+	return SSH_SUCCESS;
 }
 
 
@@ -424,12 +430,14 @@ ssh_connector connector_in, connector_out, connector_err;
 
 	/* stdout */
 	connector_out = ssh_connector_new(session);
+
 #if defined(OUT_PIPE)
 	/* Attach first endpointg of output pipe to SSH core */
 	ssh_connector_set_out_fd(connector_out,  output_pipe[0] /* 1*/);
 #else
 	ssh_connector_set_out_fd(connector_out,  1);
 #endif /* OUT_PIPE */
+
 	ssh_connector_set_in_channel(connector_out, channel, SSH_CONNECTOR_STDOUT);
 	ssh_event_add_connector(event, connector_out);
 

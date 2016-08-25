@@ -24,14 +24,15 @@
 
 /* Successfull operation */
 #define  HTTP_SUCCESS		0
+#define  SSH_SUCCESS		HTTP_SUCCESS
 
 /* Bad paramaters */
 #define HTTP_PAR_ERROR		(-1)
 
-/* Memory was not allocated, or bad mem. address being referred */
+/* Memory was not allocated, or bad memory address refference occured */
 #define HTTP_MEM_ERROR		(-3)
 
-/* call to fn. of library cURL was failed */
+/* Call to function of cURL library was failed */
 #define HTTP_CURL_ERROR		(-4)
 
 /* Operation is not yet impelmented */
@@ -40,17 +41,17 @@
 /* Empty string instead of XML node name */
 #define HTTP_XML_NULL		(-9)
 
-#define  HTTP_BAD_VOC		(-10)
+/* Can't produce Vocabulary in memory, looking at files <voc.c> and <voc.h> */
+#define HTTP_BAD_VOC		(-10)
 
-
-/* */
+/* Invalid name of XML file with 'cast' of current hardware */
 #define  HTTP_WRONG_NAME	(-11)
 
-/* */
+/* Unexpected format of XML file with 'cast' of current hardware */
 #define  HTTP_BAD_XML_FORMAT	(-12)
 
-/* */
-#define  HTTP_BAD_DATAFILE		(-13)
+/* No data in XML file with 'cast' of current hardware */
+#define  HTTP_BAD_DATAFILE	(-13)
 
 /* Bad file name */
 #define  HTTP_BAD_FNAME		(-14)
@@ -58,10 +59,40 @@
 /* File does not exist, or requested permission is not granted */
 #define  HTTP_BAD_FOPEN		(-15)
 
+/* List of comands to be addressed to current hardware can not be formed */
 #define  HTTP_BAD_DATA		(-17)
 
+/* Can not initialize cURL library*/
 #define  HTTP_BAD_LIBINIT	(-18)
 
+
+/* An attempt to establish SSH session with either empty Username, or empty Password, or empty target Hostname */
+#define  SSH_WRONG_NAME		(-21)
+
+/* */
+//#define  SSH_BAD_XML_FORMAT	(-22)
+
+/* */
+//#define SSH_BAD_DATAFILE	(-23)
+
+/* Bad file name */
+//#define  SSH_BAD_FNAME		(-24)
+
+/* File does not exist, or requested permission is not granted */
+#define  SSH_BAD_FOPEN		(-25)
+
+/* */
+//#define  SSH_BAD_LIBINIT	(-28)
+
+
+/* Invalid name of XML file with session scenario */
+#define  CMN_WRONG_NAME		(-31)
+
+/* No data in XML file with session scenario */
+#define  CMN_BAD_DATAFILE	(-32)
+
+/* Unexpected format of XML file with session scenario */
+#define  CMN_BAD_XML_FORMAT	(-33)
 
 
 
