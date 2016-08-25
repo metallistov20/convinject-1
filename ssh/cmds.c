@@ -43,7 +43,7 @@
 extern int input_pipe[2];
 
 /* Enroll single command into struct. Allocates memory for <*ppThisCmdChain> once not allocated, yet */
-int _EnrollCmd(const char * caller, pCmdType * ppThisCmdChain, char * pcCmd)
+int EnrollCmd(pCmdType * ppThisCmdChain, char * pcCmd)
 {
 pCmdType pChild, pTempCmdChain;
 
@@ -55,8 +55,8 @@ pCmdType pChild, pTempCmdChain;
 		/* check if successful */
 		if (NULL == *ppThisCmdChain)
 		{
-			printf("[%s] %s:%s : ERROR: can't allocate memory for first element. \n",
-				__FILE__, caller, __func__);
+			printf("[%s] %s: ERROR: can't allocate memory for first element. \n",
+				__FILE__, __func__);
 
 			return ERROR_MEM;
 		}
@@ -76,8 +76,8 @@ pCmdType pChild, pTempCmdChain;
 		if (NULL == pTempCmdChain)
 		{
 
-			printf("[%s] %s:%s : ERROR: can't allocate memory for next element. \n", 
-			__FILE__, caller, __func__);
+			printf("[%s] %s: ERROR: can't allocate memory for next element. \n", 
+			__FILE__, __func__);
 
 			return ERROR_MEM;
 		}
@@ -106,7 +106,7 @@ extern int output_pipe[2];
 
 
 /* Process data stored in dynamic structure pointed by 'pPointChainPar' */
-static int ProcessSingleCmd(/* const char * caller, */pCmdType pPointChainPar)
+static int ProcessSingleCmd(pCmdType pPointChainPar)
 {
 // TODO: redefine as <SSH pkt max length >
 char cResponceData[0x400];
@@ -141,7 +141,7 @@ int iNumRead;
 
 
 
-static int ProcessSingleHttpCmd(/* const char * caller, */pCmdType pPointChainPar)
+static int ProcessSingleHttpCmd(pCmdType pPointChainPar)
 {
 
 /* Index of desired operation (can be 'create', 'save', 'ACL', 'firmware' )*/
@@ -154,7 +154,7 @@ int iOperation;
 } /* ProcessSingleHttpCmd */
 
 /* Process data stored in dynamic structure pointed by 'pPointChainPar' */
-int _ProcessCmds(const char * caller, pCmdType pPointChainPar)
+int ProcessCmds(pCmdType pPointChainPar)
 {
 pCmdType pPointChain = pPointChainPar;
 
@@ -176,7 +176,7 @@ pCmdType pPointChain = pPointChainPar;
 } /* int _ProcessCmds */
 
 
-int _ProcessHttpCmds(const char * caller, pCmdType pPointChainPar)
+int ProcessHttpCmds(pCmdType pPointChainPar)
 {
 pCmdType pPointChain = pPointChainPar;
 
@@ -186,8 +186,7 @@ pCmdType pPointChain = pPointChainPar;
 #if defined(_DBG)
 		printf ("PRINT OUT<pPointChainPar=%p>:%s\n", pPointChain, pPointChain->pcCmd);
 #endif /* 0 */
-
-		/* Realtime and relative-time values */
+		
 		ProcessSingleHttpCmd(pPointChain);
 
 		/* Go to next record of chain */
@@ -198,7 +197,7 @@ pCmdType pPointChain = pPointChainPar;
 } /* int _ProcessHttpCmds */
 
 /* Free memory occupied by '*ppThisCmdChain' */
-void _DeleteCmds(const char * caller, pCmdType * ppThisCmdChain)
+void DeleteCmds(pCmdType * ppThisCmdChain)
 {
 pCmdType pChild, pThisCmdChain = *ppThisCmdChain;
 

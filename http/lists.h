@@ -67,37 +67,6 @@ typedef struct _XmlAuxType
 
 } XmlAuxType, *pXmlAuxType;
 
-#define DeleteUrlEx(x) _DeleteUrlEx(__func__, (x))
-
-#define DeleteCompoundEx(x) _DeleteCompoundEx(__func__, (x))
-
-#define DisplayString(x) _DisplayString(__func__, (x))
-
-#define DisplayCompound(x) _DisplayCompound(__func__, (x))
-
-#define DisplayUrl(x) _DisplayUrl(__func__, (x))
-
-#define AppendUrl(x, y) _AppendUrl(__func__, (x), (y))
-
-#define AppendCompound(x, y, z) _AppendCompound(__func__, (x), (y), (z))
-
-#define GlueCompound(x, y) _GlueCompound(__func__, (x), (y))
-
-#define GlueUrl(x) _GlueUrl(__func__, (x))
-
-#define DeployUrl(x) _DeployUrl(__func__, (x))
-
-#define DeployUrlEx(x, y) _DeployUrlEx(__func__, (x), (y))
-
-#define AppendXmlAux(x) _AppendXmlAux(__func__, (x))
-
-#define DeleteVocabularyEx(x) _DeleteVocabularyEx(__func__, (x))
-
-#define DeleteXmlAuxEx(x) _DeleteXmlAuxEx(__func__, (x))
-
-#define XmlAuxCreateEx() _XmlAuxCreateEx(__func__)
-
-#define DisplayXmlAux(x) _DisplayXmlAux(__func__, (x))
 
 
 

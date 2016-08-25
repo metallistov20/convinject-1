@@ -28,7 +28,7 @@
 /* xmlDoc, xmlNode definition */
 #include <libxml/tree.h>
 
-/* _parse_xml(), ... */
+/* parse_xml(), ... */
 #include "xmparser.h"
 
 /* pTgtStructType type definition */
@@ -92,7 +92,7 @@ int main (int argc, char **argv)
 
 
 	/* Put all XML sections <Target> into list pointed <Root> */
-	_parse_xml(xmlRootElement, "Target");
+	parse_xml(xmlRootElement, "Target");
 
 
 	/* Put XML data on air */

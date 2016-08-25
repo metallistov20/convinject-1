@@ -70,6 +70,8 @@ char cCmdDataBuf[HTTP_MAX_PATH];
 
 int i5428E = 1;//TODO: REMOVE! (FOR DEBUG TIME ONLY!) 
 
+static volatile int m_TockenFound;//TODO: REMOVE! (FOR DEBUG TIME ONLY!) 
+
 
 
 typedef struct _tf {
@@ -141,8 +143,11 @@ int iOption;
 	/* Index of the option */
 	int iOptIndex = 0;
 
+	/* Make g_tID string empty */
+	_tid_[0] = 0;
+
 	/* Must have each time we start a new URL */
-	_CleanQuine("CleanQuine");
+	CleanQuine("CleanQuine");
 
 	/* Assuming <tfOpTable [iOptIndex]> is not null. We can assume it. */
 	while ( NULL != tfOpTable [iOptIndex].pcName )
@@ -226,11 +231,10 @@ int iOption;
 
 	char pcCastFile[HTTP_MAX_PATH];
 
-	
-	sprintf(pcCastFile, "./cast.%s.xml", "5428E");
 
-	/* Get the contents of <cast.XXXXX.txt.xml> into <doc> */
-	//strcpy(pcCastFile, "./cast.5428E.xml");//TODO: remove hardcoded stuff
+	/* Get the contents of <cast.XXXXX.txt.xml> into <doc> */	
+	sprintf(pcCastFile, "./cast.%s.xml", "5428E");//TODO: remove hardcoded stuff
+
 
 	doc = xmlReadFile(pcCastFile, NULL, 0);
 
@@ -252,7 +256,8 @@ int iOption;
 
 
 	// TODO: reowrk, especially this <i5428E>
-	if (i5428E)	
+	if ((i5428E) && (0 == m_TockenFound) )
+//	if (0 == _tid_[0] )
 	{
 		/* Fulfill <_tid_> */
 		VERBOSE_STATUS(iOpenSite)
@@ -372,7 +377,8 @@ FILE* fp = NULL;
 		}
 		else
 		{
-			HCOMMON("[%s] %s: scanned:%s\n", __FILE__, __func__, cCmdDataBuf);
+			/* As the scanned strings contains <CR> already we don't put our <\n> into format expresion */
+			HCOMMON("[%s] %s: scanned:%s", __FILE__, __func__, cCmdDataBuf);
 
 			/* Attach just scanned data */
 			EnrollCmd(&pHttpCmdChain, cCmdDataBuf);
@@ -390,8 +396,6 @@ FILE* fp = NULL;
 
 int m_Tocken;
 
-static int m_TockenFound;
-
 static void dump(const char *text, FILE *stream, unsigned char *ptr, size_t size)
 {
 size_t i;
@@ -399,7 +403,7 @@ size_t c;
 unsigned int width=0x10;
 
 //TODO: explain such a choice 
-char cBuf[512];
+char cBuf[8*512*8];
 
 char * cpTockenPtr;
 char * cp1, * cp2;
@@ -415,16 +419,15 @@ char * cp1, * cp2;
 	if ( NULL != ( cpTockenPtr = strstr(ptr, "var g_tid =") ) )
 	{
 		cp1 = strtok(cpTockenPtr, "\'");
-		cp2 = strtok(NULL, "\'");
-		
+		cp2 = strtok(NULL, "\'");		
 
 		m_TockenFound = 1;
 
-		printf("[%s] iTocken = <%s> SUCCESS. TERMINATING. <m_TockenFound=%d>\n", cpTockenPtr, /* _tid_ */cp2, m_TockenFound);
+		printf("[%s] iTocken = <%s> SUCCESS. TERMINATING. <m_TockenFound=%d>\n", cpTockenPtr,  cp2 , m_TockenFound );
 
-/*		strcpy(&_tid_, cp2);
+		strcpy((char*)&_tid_, cp2);
 
-		printf("  _tid_ = <%s> \n", &_tid_);*/
+		printf("  _tid_ = <%s> \n", (char*)&_tid_);
 
 	}
 
@@ -527,11 +530,11 @@ size_t realsize = size * nmemb;
 
 } /* size_t RecvClbk */
 
-
-/* Not implemented by now */
+/* Enter WEB-server with login/passwd <pcLogin/pcPasswd> and execute commands from <pcDataFile> on it */
 int process_http_target(char * pcAddress, char * pcLogin, char * pcPasswd, char * pcDataFile)
 {
 int iRes;
+
 RespStruct RespStr;
 
 
@@ -556,11 +559,10 @@ RespStruct RespStr;
 	/* Fulfill records in <pHttpCmdChain> list */
 	if (HTTP_SUCCESS != process_datafile(pcDataFile) )
 	{
-		HCOMMON("[%s] %s: Can't process datafile <%s> \nERROR\n", pcDataFile, __FILE__, __func__);
+		HCOMMON("[%s] %s: Can't process datafile <%s> \nERROR\n", __FILE__, __func__, pcDataFile);
 
 		return HTTP_BAD_DATA;
 	}
-
 
 	if(NULL == ( curl = curl_easy_init() ) )
 	{
@@ -592,18 +594,14 @@ RespStruct RespStr;
 		/* Clean the buffer before receiving a responce into it */
 		memset (&RespStr, sizeof (struct _RespStruct) , 0);
 		
-
-
 		m_TockenFound = 0;//TODO: what's this?
 
-
-		_ProcessHttpCmds("caller is <process_http_target>", pHttpCmdChain);
+		ProcessHttpCmds(pHttpCmdChain);
 
 		/* Close URL lib */
 		curl_easy_cleanup(curl);
 
 	}
-
 
 
 	free(cPostMethodString);

@@ -21,6 +21,6 @@
 #ifndef _XMPARSER_H_
 #define _XMPARSER_H_
 
-void _parse_xml(/* const char * caller, */xmlNode * a_node, const char * template);
+void parse_xml(xmlNode * a_node, const char * template);
 
 #endif /* _XMPARSER_H_ */

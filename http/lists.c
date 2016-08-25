@@ -30,7 +30,7 @@
 #include "auxiliary.h"
 #include "verbose.h"
 
-int _AppendXmlAux(const char * caller, pXmlAuxType * ppXmlAux)
+int AppendXmlAux(pXmlAuxType * ppXmlAux)
 {
 	if (NULL == *ppXmlAux)
 	{
@@ -40,7 +40,7 @@ int _AppendXmlAux(const char * caller, pXmlAuxType * ppXmlAux)
 		/* check if successful */
 		if (NULL == *ppXmlAux)
 		{
-			HCOMMON("%s: ERROR: can't allocate memory for aux. XML data\n", caller);
+			HCOMMON("[%s] %s:   ERROR: can't allocate memory for aux. XML data\n", __FILE__, __func__);
 
 			return HTTP_MEM_ERROR;
 		}
@@ -49,7 +49,7 @@ int _AppendXmlAux(const char * caller, pXmlAuxType * ppXmlAux)
 	return HTTP_SUCCESS;
 }
 
-void _DeleteVocabularyEx(const char * caller, pCompoundType * ppThisVocabulary)
+void DeleteVocabularyEx(pCompoundType * ppThisVocabulary)
 {
 pCompoundType pChild, pThisVocabulary = *ppThisVocabulary;
 
@@ -76,7 +76,7 @@ pCompoundType pChild, pThisVocabulary = *ppThisVocabulary;
 }
 
 
-void _DeleteXmlAuxEx(const char * caller, pXmlAuxType * ppXmlAux)
+void DeleteXmlAuxEx(pXmlAuxType * ppXmlAux)
 {
 pXmlAuxType pThisXmlAux = *ppXmlAux;
 
@@ -99,7 +99,7 @@ pXmlAuxType pThisXmlAux = *ppXmlAux;
 	return; 
 }
 
-int _AppendUrl(const char * caller, pUrlChainType * ppThisUrlChain, char * pcData)
+int AppendUrl(pUrlChainType * ppThisUrlChain, char * pcData)
 {
 pUrlChainType pChild, pTempUrlChain;
 
@@ -111,7 +111,7 @@ pUrlChainType pChild, pTempUrlChain;
 		/* check if successful */
 		if (NULL == *ppThisUrlChain)
 		{
-			HCOMMON("%s: ERROR: can't allocate memory for first chain, URL(%s)\n", caller, pcData);
+			HCOMMON("[%s] %s:   ERROR: can't allocate memory for first chain, URL(%s)\n", __FILE__, __func__, pcData);
 
 			return HTTP_MEM_ERROR;
 		}
@@ -125,7 +125,7 @@ pUrlChainType pChild, pTempUrlChain;
 
 		if (NULL == pTempUrlChain)
 		{
-			HCOMMON("%s: ERROR: can't allocate memory for next chain, URL(%s)\n", caller, pcData);
+			HCOMMON("[%s] %s:   ERROR: can't allocate memory for next chain, URL(%s)\n", __FILE__, __func__, pcData);
 
 			return HTTP_MEM_ERROR;
 		}
@@ -146,7 +146,7 @@ pUrlChainType pChild, pTempUrlChain;
 	return HTTP_SUCCESS;
 }
 
-int _AppendCompound(const char * caller, pCompoundType * ppThisCompound, char * pcData, void * pThisVoid)
+int AppendCompound(pCompoundType * ppThisCompound, char * pcData, void * pThisVoid)
 {
 pCompoundType pChild, pTempCompound;
 
@@ -158,7 +158,7 @@ pCompoundType pChild, pTempCompound;
 		/* check if successful */
 		if (NULL == *ppThisCompound)
 		{
-			HCOMMON("%s: ERROR: can't allocate memory for first compound, URL(%s)\n", caller, pcData);
+			HCOMMON("[%s] %s:   ERROR: can't allocate memory for first compound, URL(%s)\n", __FILE__, __func__, pcData);
 
 			return HTTP_MEM_ERROR;
 		}
@@ -182,7 +182,7 @@ pCompoundType pChild, pTempCompound;
 		if (NULL == pTempCompound)
 		{
 
-			HCOMMON("%s: ERROR: can't allocate memory for next compound, URL(%s)\n", caller, pcData);
+			HCOMMON("[%s] %s:   ERROR: can't allocate memory for next compound, URL(%s)\n", __FILE__, __func__, pcData);
 
 			return HTTP_MEM_ERROR;
 		}
@@ -213,7 +213,7 @@ pCompoundType pChild, pTempCompound;
 	return HTTP_SUCCESS;
 }
 
-void _DeleteCompoundEx(const char * caller, pCompoundType * ppThisCompound)
+void DeleteCompoundEx(pCompoundType * ppThisCompound)
 {
 pCompoundType pChild, pThisCompound = *ppThisCompound;
 
@@ -239,7 +239,7 @@ pCompoundType pChild, pThisCompound = *ppThisCompound;
 	*ppThisCompound = NULL;
 }
 
-void _DeleteUrlEx(const char * caller, pUrlChainType * ppThisUrlChain)
+void DeleteUrlEx(pUrlChainType * ppThisUrlChain)
 {
 pUrlChainType pChild, pThisUrlChain = *ppThisUrlChain;
 
@@ -275,15 +275,15 @@ pUrlChainType pChild, pThisUrlChain = *ppThisUrlChain;
 	return; 
 }
 
-void _DisplayString(const char * caller, char * pcDataPar)
+void DisplayString(char * pcDataPar)
 {    
 	if (NULL != pcDataPar)
-		DXML("[%s]: STRING(%s)\n", caller, pcDataPar);
+		DXMLAUX("[%s] %s:   STRING(%s)\n", __FILE__, __func__, pcDataPar);
 	else
-		DXML("[%s]: EMPTY_STR_AT(%p)\n", caller, &pcDataPar);
+		DXMLAUX("[%s] %s:   EMPTY_STR_AT(%p)\n", __FILE__, __func__, &pcDataPar);
 }
 
-void _DisplayCompound(const char * caller, pCompoundType pCompoundPar)
+void DisplayCompound(pCompoundType pCompoundPar)
 {    
 pCompoundType pCompound = pCompoundPar;
 
@@ -305,7 +305,7 @@ pCompoundType pCompound = pCompoundPar;
     }
 }
 
-void _DisplayXmlAux(const char * caller, pXmlAuxType pXmlAuxPar)
+void DisplayXmlAux(pXmlAuxType pXmlAuxPar)
 {    
 pXmlAuxType pThisXmlAux = pXmlAuxPar;
 
@@ -314,14 +314,14 @@ pXmlAuxType pThisXmlAux = pXmlAuxPar;
     {
 	if (NULL != pThisXmlAux->pVocabulary)
 	{
-		DXMLAUX("\t[%s]: pCompund is not NULL, its contents are:\n", caller);
+		DXMLAUX("\t[%s] %s:   pCompund is not NULL, its contents are:\n", __FILE__, __func__);
 
 		DisplayCompound(pThisXmlAux->pVocabulary);
 	}	
     }
 }
 
-void _DisplayUrl(const char * caller, pUrlChainType pThisUrlChainPar)
+void DisplayUrl( pUrlChainType pThisUrlChainPar)
 {    
 pUrlChainType pThisUrlChain = pThisUrlChainPar;
 
@@ -331,7 +331,7 @@ pUrlChainType pThisUrlChain = pThisUrlChainPar;
 
 	if (NULL != pThisUrlChain->pCompound)
 	{
-		DXMLAUX("\t[%s]: pCompund is not NULL, its contents are:\n", caller);
+		DXMLAUX("\t[%s] %s:   pCompund is not NULL, its contents are:\n", __FILE__, __func__);
 
 		DisplayCompound(pThisUrlChain->pCompound);
 	}
@@ -339,7 +339,7 @@ pUrlChainType pThisUrlChain = pThisUrlChainPar;
 	if (NULL != pThisUrlChain->pCompound)
 	{
 
-		DXMLAUX("\t[%s]: Cumulative resulting URL is :\n", caller);
+		DXMLAUX("\t[%s] %s:   Cumulative resulting URL is :\n", __FILE__, __func__);
 
 		DisplayString(pThisUrlChain->pcSumm);
 
@@ -350,7 +350,7 @@ pUrlChainType pThisUrlChain = pThisUrlChainPar;
     };	    
 }
 
-static int _GlueCompound(const char * caller, pCompoundType pCompoundPar, pUrlChainType pUrlChain)
+static int GlueCompound(pCompoundType pCompoundPar, pUrlChainType pUrlChain)
 {    
 pCompoundType pCompound = pCompoundPar;
 
@@ -378,7 +378,7 @@ int iCnt=0;
 	return HTTP_SUCCESS;
 }
 
-int _GlueUrl(const char * caller, pUrlChainType pThisUrlChainPar)
+int GlueUrl(pUrlChainType pThisUrlChainPar)
 {    
 pUrlChainType pThisUrlChain = pThisUrlChainPar;
 
@@ -390,7 +390,7 @@ pUrlChainType pThisUrlChain = pThisUrlChainPar;
 
 	if ( NULL == pThisUrlChain->pcSumm ) 
 	{
-		DXML("\t[%s]: can't allocate %d bytes for URL data\n", caller, MAX_URL_SIZE );
+		DXML("\t[%s] %s:   can't allocate %d bytes for URL data\n", __FILE__, __func__, MAX_URL_SIZE );
 
 		return HTTP_MEM_ERROR;
 	}
@@ -404,7 +404,7 @@ pUrlChainType pThisUrlChain = pThisUrlChainPar;
 
 	if (NULL != pThisUrlChain->pCompound)
 	{
-		DXMLAUX("\t[%s]: URL is going to be composed of its particles\n", caller);
+		DXMLAUX("\t[%s] %s:   URL is going to be composed of its particles\n", __FILE__, __func__);
 
 		GlueCompound(pThisUrlChain->pCompound, pThisUrlChain);
 	}
@@ -416,7 +416,7 @@ pUrlChainType pThisUrlChain = pThisUrlChainPar;
     return HTTP_SUCCESS;
 }
 
-int _DeployUrl(const char * caller, pUrlChainType pThisUrlChainPar)
+int DeployUrl(pUrlChainType pThisUrlChainPar)
 {    
 pUrlChainType pThisUrlChain = pThisUrlChainPar;
 
@@ -427,19 +427,19 @@ int iRes;
     {
 	if ( NULL == pThisUrlChain->pcSumm ) 
 	{
-		DXML("\t[%s]: can't allocate %d bytes for URL data:\n", caller, MAX_URL_SIZE );
+		DXML("\t[%s] %s:   can't allocate %d bytes for URL data:\n", __FILE__, __func__, MAX_URL_SIZE );
 
 		return HTTP_MEM_ERROR;
 	}
 
-	DURL("%s: summURL", caller);
+	DURL("[%s] %s:   summURL", __FILE__, __func__);
 	DXMLAUX("(at:<%p>;<%p>;<%p>)", pThisUrlChain, pThisUrlChain->pcSumm, pThisUrlChain->pNextChain);
 	DURL(" = %s\n", pThisUrlChain->pcSumm);
 
 	if ( CURLE_OK == ( iRes = curl_easy_setopt(curl, CURLOPT_URL, pThisUrlChain->pcSumm ) ) )
 	{
 #if (IDLE_RUN)
-		DURL("%s: idle run mode: the HTTP injection was not physically sent\n", caller);
+		DURL("[%s] %s:   idle run mode: the HTTP injection was not physically sent\n", __FILE__, __func__);
 #else
 		/* here we produce 'live' HTTP traffic in wire */
 		iRes = curl_easy_perform(curl);
@@ -447,7 +447,7 @@ int iRes;
 	}
 	else
 	{
-		DURL("%s: cURL call setopt(CURLOPT_URL) failed with ERR_CODE(%d)\n", caller, iRes); 
+		DURL("[%s] %s:   cURL call setopt(CURLOPT_URL) failed with ERR_CODE(%d)\n", __FILE__, __func__, iRes); 
 
 		/* don't process other chaing, return immediately */
 		return iRes;
@@ -466,13 +466,13 @@ int iRes;
     else	
     {
 	/* verbosing CURLcode returned as <iRes> if error occured */
-	DURL("%s: recent cURL call failed with ERR_CODE(%d)\n", caller, iRes);
+	DURL("[%s] %s:   recent cURL call failed with ERR_CODE(%d)\n", __FILE__, __func__, iRes);
 
 	return   HTTP_CURL_ERROR;
     }
 }
 
-int _DeployUrlEx(const char * caller, pUrlChainType pThisUrlChainPar, int iExtra)
+int DeployUrlEx(pUrlChainType pThisUrlChainPar, int iExtra)
 {    
 pUrlChainType pThisUrlChain = pThisUrlChainPar;
 
@@ -486,12 +486,12 @@ int iExtras = 0;
     {
 	if ( NULL == pThisUrlChain->pcSumm ) 
 	{
-		DXML("\t[%s]: can't allocate %d bytes for URL data:\n", caller, MAX_URL_SIZE );
+		DXML("\t[%s] %s:   can't allocate %d bytes for URL data:\n", __FILE__, __func__, MAX_URL_SIZE );
 
 		return HTTP_MEM_ERROR;
 	}
 
-	DURL("%s: summURL", caller);
+	DURL("[%s] %s:   summURL", __FILE__, __func__);
 	DXMLAUX("(at:<%p>;<%p>;<%p>)", pThisUrlChain, pThisUrlChain->pcSumm, pThisUrlChain->pNextChain);
 	DURL(" = %s\n", pThisUrlChain->pcSumm);
 
@@ -512,7 +512,7 @@ int iExtras = 0;
 						}
 					}
 
-					DURL("%s: cURL call setopt(CURLOPT_POSTFIELDS) failed with ERR_CODE(%d)\n", caller, iRes); 
+					DURL("[%s] %s:   cURL call setopt(CURLOPT_POSTFIELDS) failed with ERR_CODE(%d)\n", __FILE__, __func__, iRes); 
 
 					return   HTTP_CURL_ERROR;
 
@@ -527,7 +527,7 @@ int iExtras = 0;
 						}
 					}
 
-					DURL("%s: cURL call setopt(CURLOPT_POSTFIELDS) failed with ERR_CODE(%d)\n", caller, iRes); 
+					DURL("[%s] %s:   cURL call setopt(CURLOPT_POSTFIELDS) failed with ERR_CODE(%d)\n", __FILE__, __func__, iRes); 
 
 					return  HTTP_CURL_ERROR;
 
@@ -539,7 +539,7 @@ int iExtras = 0;
 		}
 
 #if (IDLE_RUN)
-		DURL("%s: idle run mode: the HTTP injection was not physically sent\n", caller);
+		DURL("[%s] %s:   idle run mode: the HTTP injection was not physically sent\n", __FILE__, __func__);
 #else
 		/* here we produce 'live' HTTP traffic in wire */
 		iRes = curl_easy_perform(curl);
@@ -547,7 +547,7 @@ int iExtras = 0;
 	}
 	else
 	{
-		DURL("%s: cURL call setopt(CURLOPT_URL) failed with ERR_CODE(%d)\n", caller, iRes); 
+		DURL("[%s] %s:   cURL call setopt(CURLOPT_URL) failed with ERR_CODE(%d)\n", __FILE__, __func__, iRes); 
 
 		/* don't process other chaing, return immediately */
 		return iRes;
@@ -565,31 +565,31 @@ int iExtras = 0;
     else
     {
 	/* verbosing CURLcode returned as <iRes> if error occured */
-	DURL("%s: recent cURL call failed with ERR_CODE(%d)\n", caller, iRes);
+	DURL("[%s] %s:   recent cURL call failed with ERR_CODE(%d)\n", __FILE__, __func__, iRes);
 
 	return   HTTP_CURL_ERROR;
     }
 }
 
 
-void _CleanQuine(const char * caller)
+void CleanQuine()
 {
 int i;
 
 	for (i = 0; NULL != QuineArray[i].vpQuineVar; i++)
 	{
-		DVOC("%s: before clean: keyword vpQuineVar<%s>   pcQuineVarValue<%s> \n", caller, 
+		DVOC("[%s] %s:   before clean: keyword vpQuineVar<%s>   pcQuineVarValue<%s> \n", __FILE__, __func__, 
 			QuineArray[i].vpQuineVar, QuineArray[i].pcQuineVarValue);
 
 		/* Delete string stored at address <QuineArray[i].vpQuineVar> */
 		* (char**)( QuineArray[i].vpQuineVar) = NULL;
 
-		DVOC("%s: after clean: here's the keyword vpQuineVar<%s>   pcQuineVarValue<%s>\n", caller, 
+		DVOC("[%s] %s:   after clean: here's the keyword vpQuineVar<%s>   pcQuineVarValue<%s>\n", __FILE__, __func__, 
 			QuineArray[i].vpQuineVar, QuineArray[i].pcQuineVarValue);
 	}
 }
 
-int _XmlAuxCreateEx(const char * caller)
+int XmlAuxCreateEx()
 {
 char cStr[MAX_URL_SIZE], cGarb[MAX_URL_SIZE];
 
@@ -603,7 +603,7 @@ void * pVoid;
 			(NULL != QuineArray[i].vpQuineVar); i++ )
 		{
 
-			DVOC("%s: adding keyword (%s=) to vocabulary; at addr<%p> \n", caller, 
+			DVOC("[%s] %s:   adding keyword (%s=) to vocabulary; at addr<%p> \n", __FILE__, __func__, 
 				QuineArray[i].pcQuineVarValue, QuineArray[i].vpQuineVar);
 
 			AppendCompound(&pAuxiliary->pVocabulary, (char*)QuineArray[i].pcQuineVarValue, QuineArray[i].vpQuineVar);
@@ -615,7 +615,7 @@ void * pVoid;
 	}
 	else
 	{
-		HCOMMON("%s: ERROR: auxilary data structure was not created\n", caller);
+		HCOMMON("[%s] %s:   ERROR: auxilary data structure was not created\n", __FILE__, __func__);
 
 		return HTTP_MEM_ERROR;
 	}

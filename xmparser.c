@@ -28,7 +28,9 @@
 #include "structs.h"
 
 /* DXML() definition  */
-#include "main.h"
+#include "./http/verbose.h"
+
+
 
 /* List (SB) of parced XML entries */
 extern pTgtStructType Root;
@@ -121,7 +123,7 @@ struct _DtaStructType cur_data;
 }
 
 /* Parse XML structure */
-void _parse_xml(/* const char * caller, */xmlNode * a_node, const char * template)
+void parse_xml(xmlNode * a_node, const char * template)
 {
 xmlNode *cur_node = NULL;
 
@@ -145,6 +147,6 @@ xmlNode *cur_node = NULL;
 				} /* for() */
 			}		
 		}
-		_parse_xml(cur_node->children, template);
+		parse_xml(cur_node->children, template);
 	}
 }

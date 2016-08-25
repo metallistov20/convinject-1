@@ -24,7 +24,7 @@
 
 #define DGENERAL(format, ...) fprintf (stdout, format, __VA_ARGS__)
 
-#define DXML(format, ...) fprintf (stdout, format, __VA_ARGS__)
+//#define DXML(format, ...) fprintf (stdout, format, __VA_ARGS__)
 
 #define DSTRUCT(format, ...) fprintf (stdout, format, __VA_ARGS__)
 

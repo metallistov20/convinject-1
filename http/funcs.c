@@ -291,7 +291,7 @@ int iAssignIp()
 	/* If sending first portion of URLs failed then entire procedure failed */ 
 	if (res != CURLE_OK)
 	{
-		DURL("%s: direct part of SetStaticIp failed ERR_CODE(%d)\n", "", res);
+		DURL("[%s] %s:  direct part of SetStaticIp failed ERR_CODE(%d)\n", __FILE__, __func__, res);
 
 		return res;
 

@@ -34,19 +34,12 @@ typedef struct _CmdType
 
 
 /* Enroll single command into struct */
-int _EnrollCmd(const char * caller, pCmdType * ppThisPointChain, char * pcCmd);
+int EnrollCmd(pCmdType * ppThisPointChain, char * pcCmd);
 
 /* Process all commands from struct */
-int _ProcessCmds(const char * caller, pCmdType pCmdChainPar);
+int ProcessCmds(pCmdType pCmdChainPar);
 
 /* Free memory occupied by dynamic struct */
-void _DeleteCmd(const char * caller, pCmdType * ppThisCmdChain);
-
-
-#define EnrollCmd(x, y) _EnrollCmd(__func__, (x), (y))
-
-#define ProcessCmds(x) _ProcessCmds(__func__, (x))
-
-#define DeleteCmds(x) _DeleteCmds(__func__, (x))
+void DeleteCmd(pCmdType * ppThisCmdChain);
 
 #endif /* _CMDS_H_ */

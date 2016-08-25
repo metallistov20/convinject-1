@@ -1,5 +1,1 @@
-open
-create community=NEW_SNMP_GROUP
-ipassign ip-addr=192.168.0.77 ip-mask=255.255.0.0
-ACL acl-data=NEW_ACL_GROUP
-close
+create community=NEW_SNMP_GROUP1

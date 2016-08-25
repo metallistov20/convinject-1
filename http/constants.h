@@ -119,7 +119,7 @@
 
 
 /* Dont sent URLs physically, only show them */
-#define IDLE_RUN	1
+#define IDLE_RUN	0
 
 
 #endif /* _CONSTANTS_H_ */
