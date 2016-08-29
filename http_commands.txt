@@ -1,1 +1,2 @@
-create community=NEW_SNMP_GROUP1
+open
+ipassign ip-addr=192.168.0.6 ip-mask=255.255.255.0

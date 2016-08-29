@@ -140,8 +140,8 @@ int iNumRead;
 
 
 
-
-static int ProcessSingleHttpCmd(pCmdType pPointChainPar)
+/* MAde visible to HTTP's part */
+int ProcessSingleHttpCmd(pCmdType pPointChainPar)
 {
 
 /* Index of desired operation (can be 'create', 'save', 'ACL', 'firmware' )*/
@@ -176,6 +176,7 @@ pCmdType pPointChain = pPointChainPar;
 } /* int _ProcessCmds */
 
 
+#if (0)
 int ProcessHttpCmds(pCmdType pPointChainPar)
 {
 pCmdType pPointChain = pPointChainPar;
@@ -195,6 +196,7 @@ pCmdType pPointChain = pPointChainPar;
 
 	return SUCCESS_MEM;
 } /* int _ProcessHttpCmds */
+#endif /* (0) */
 
 /* Free memory occupied by '*ppThisCmdChain' */
 void DeleteCmds(pCmdType * ppThisCmdChain)

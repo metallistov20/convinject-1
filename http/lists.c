@@ -576,7 +576,8 @@ void CleanQuine()
 {
 int i;
 
-	for (i = 0; NULL != QuineArray[i].vpQuineVar; i++)
+	/* Everything bout <_tid_> to be cleaned. TODO: sooner or later do the same with <target> */
+	for (i = 1; NULL != QuineArray[i].vpQuineVar; i++)
 	{
 		DVOC("[%s] %s:   before clean: keyword vpQuineVar<%s>   pcQuineVarValue<%s> \n", __FILE__, __func__, 
 			QuineArray[i].vpQuineVar, QuineArray[i].pcQuineVarValue);
