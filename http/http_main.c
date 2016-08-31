@@ -94,8 +94,8 @@ tf tfOpTable[] =
 	{"open\n",	DO_OPEN_OP,	1, NULL, NULL, NULL, NULL},
 	{"close\n",	DO_CLOSE_OP,	1, NULL, NULL, NULL, NULL},
 
-	{"create",	DO_CREATE_OP,	2, "community", txt_comname, NULL, NULL},
-	{"save", 	DO_SAVE_OP,	1, NULL, NULL, NULL, NULL},
+	{"create\n",	DO_CREATE_OP,	2, "community", txt_comname, NULL, NULL},
+	{"save\n", 	DO_SAVE_OP,	1, NULL, NULL, NULL, NULL},
 
 	{"ACL\n",	DO_ACL_OP,	2, "acl-data", aclId, NULL, NULL},
 	{"upgrade\n",	DO_FIRMWARE_OP,	1, NULL, NULL, NULL, NULL},
@@ -315,7 +315,7 @@ int iOption;
 
 		case DO_NO_OP:
 		default:
-			printf("[%s] %s: there's no operation with OPCODE=%d, exiting\n", __FILE__, __func__, iOperation);
+			printf("[%s] %s: there's no operation(%s) with OPCODE=%d, exiting\n", __FILE__, __func__, ppcArgVect[0], iOperation);
 			break;
 		
 	}
@@ -399,8 +399,6 @@ char cBuf[8*512*8];
 char * cpTockenPtr;
 char * cp1, * cp2;
 
-//printf(ptr);
-//return 0;
 
 	/* We already have <_tid_> */
 	if (m_TockenFound) return;

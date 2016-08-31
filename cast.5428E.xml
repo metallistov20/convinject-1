@@ -64,7 +64,7 @@
 			<System_Reboot>
 				URL="/userRpm/RestoreRpm.htm?s_userlevel=1@_tid_=c812dfebbc936bbd"
 				URL="/userRpm/ReiniRstAdRpm.htm?restore=Reset@_tid_=c812dfebbc936bbd"
-				URL="/userRpm/ReiniRstAdTempRpm.htm?_tid_=c812dfebbc936bbd"
+				URL="/userRpm/ReiniRstAdTempRpm.htm?_dummy_=0@_tid_=c812dfebbc936bbd"
 			</System_Reboot>
 			<System_Reset>
 			</System_Reset>
@@ -460,9 +460,8 @@
 		</Network_Diagnostics>
 	</Maintenance>
 	<Save_Config>
-		URL="/userRpm/ConfigsaveRpm.htm?s_userlevel=1@_tid_=6666888"
-		URL="/userRpm/ConfigsaveImg.htm"
-		URL="/userRpm/ConfigsaveFileRpm.htm?_tid_=6666888"
+		URL="/userRpm/ConfigsaveRpm.htm?s_userlevel=1@_tid_=6666888@_tid_=6666888"
+		URL="/userRpm/ConfigsaveFileRpm.htm?_dummy_=0@_tid_=6666888"
 	</Save_Config>
 	<Logout>
 		URL="/userRpm/SystemInfoRpm.htm?t=both@_tid_=6666888"
