@@ -17,49 +17,6 @@
 # MA 02111-1307 USA
 #
 
-CC := gcc
-
-OBJS	= auxiliary.o   funcs.o    http_main.o  lists.o  xmls.o  
-
-CFLAGS = -c       -I/usr/include/libxml2                                                         -g 
-
-CFLAGS += 
-
-LDFLAGS = -L/usr/local/lib 
-
-LIBS = -lcurl 	-lxml2
-
-
-
-
-all: build
-
-#TODO: not sure that <../ssh/cmds.o> should be deployed this way, but for now we need it anyway
-build:	compute_tabs gen_vocabulary gen_voHabulary voc.c voc.h voc.obj    ../ssh/cmds.o   $(OBJS) 
-
-
-gen_vocabulary: gen_vocabulary.c
-	$(CC) gen_vocabulary.c -o gen_vocabulary
-
-gen_voHabulary: gen_voHabulary.c
-	$(CC) gen_voHabulary.c -o gen_voHabulary    
-
-voc.c:	gen_vocabulary
-	./gen_vocabulary >voc.c
-
-voc.h:	gen_voHabulary
-	./gen_voHabulary >voc.h
-
-voc.obj: voc.c 
-	$(CC) -o voc.obj -c voc.c  $(CFLAGS) $(LDFLAGS)
-
-compute_tabs: compute_tabs.c
-	$(CC) compute_tabs.c -o compute_tabs
-
-
-
-.o: .c
-	$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)  
 
 
 clean:

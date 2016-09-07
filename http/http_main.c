@@ -227,7 +227,7 @@ int iOption;
 	char pcCastFile[HTTP_MAX_PATH];
 
 
-	/* Get the contents of <cast.XXXXX.txt.xml> into <doc> */	/* 5428E */
+	/* Get the contents of <cast.XXXXX.txt.xml> into <doc> */	/* 5428E */ /* 2218 */
 	sprintf(pcCastFile, "./cast.%s.xml", "5428E");//TODO: remove hardcoded stuff
 
 
@@ -248,6 +248,7 @@ int iOption;
 		return HTTP_BAD_XML_FORMAT;
 	}
 
+#if (0)
 	// TODO: reowrk, especially this <i5428E>
 	if ((i5428E) && (0 == m_TockenFound) )
 //	if (0 == _tid_[0] )
@@ -257,6 +258,7 @@ int iOption;
 
 		HCOMMON("[%s] %s: got such <_tid_=%s>\n", __FILE__, __func__, _tid_);
 	}
+#endif /* (0) */
 
 	/* At this time point we assume all parameters parsed OK, so let's call inj. primitives */
 	switch (iOperation)

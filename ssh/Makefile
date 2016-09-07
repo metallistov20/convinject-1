@@ -17,18 +17,5 @@
 # MA 02111-1307 USA
 #
 
-CC := gcc
-
-OBJS	= ./authentication.o ./cmds.o ./connect_ssh.o ./knownhosts.o ./ssh_main.o 
-
-CFLAGS = -c -D_DBG                                                                -g 
-
-CFLAGS += -I/home/mkn/_libssh/libssh/include -L./ssh/shared 
-
-all: $(OBJS)
-
-.o: .c
-	$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)  
-
 clean:
 	$(RM) -fv  *.o *.so* *~ core  *.c~
