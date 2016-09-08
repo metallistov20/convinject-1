@@ -6,15 +6,6 @@
 		<Address>192.168.0.8</Address>
 		<Login>admin</Login>
 		<Passwd>admin</Passwd>
-		<Datafile>./description_change.txt</Datafile>
-		<Proto>ssh</Proto>
-	</Target>
-	<Target>
-		<Type>Network Switch</Type>
-		<Name>TL-SL5428E</Name>
-		<Address>192.168.0.8</Address>
-		<Login>admin</Login>
-		<Passwd>admin</Passwd>
 		<Datafile>./http_commands.txt</Datafile>
 		<Proto>http</Proto>
 	</Target>

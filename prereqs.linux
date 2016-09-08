@@ -57,15 +57,15 @@ make
 #cp --verbose ./lib/.libs/libcurl.so* ../shared
 #BEWARE:TRANSFORM_SOFTLINK_INTO_FILE
 cp --verbose ./lib/.libs/libcurl.so ../shared
-cp --verbose ./include/curl/curl.h ../include/libcurl
-cp --verbose ./include/curl/curlbuild.h ../include/libcurl
-cp --verbose ./include/curl/curlrules.h ../include/libcurl
-cp --verbose ./include/curl/curlver.h ../include/libcurl
-cp --verbose ./include/curl/easy.h ../include/libcurl
-cp --verbose ./include/curl/mprintf.h ../include/libcurl
-cp --verbose ./include/curl/multi.h ../include/libcurl
-cp --verbose ./include/curl/stdcheaders.h ../include/libcurl
-cp --verbose ./include/curl/typecheck-gcc.h ../include/libcurl
+cp --verbose ./include/curl/curl.h ../include/curl
+cp --verbose ./include/curl/curlbuild.h ../include/curl
+cp --verbose ./include/curl/curlrules.h ../include/curl
+cp --verbose ./include/curl/curlver.h ../include/curl
+cp --verbose ./include/curl/easy.h ../include/curl
+cp --verbose ./include/curl/mprintf.h ../include/curl
+cp --verbose ./include/curl/multi.h ../include/curl
+cp --verbose ./include/curl/stdcheaders.h ../include/curl
+cp --verbose ./include/curl/typecheck-gcc.h ../include/curl
 cd ..
 
 
