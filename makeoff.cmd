@@ -10,11 +10,17 @@ mkdir --verbose ./shared
 
 
 
+
+
 rm -frv ./_openssl
 mkdir --verbose ./_openssl
 
 rm -frv ./_libssh
 mkdir -p --verbose ./_libssh
+
+rm -frv ./_libxml2
+mkdir -p --verbose ./_libxml2
+
 
 
 #BEWARE:MAY_BE_UNSTABLE_THUS_MAY_DAMAGE_ENTIRE_PROCESS::git clone https://github.com/curl/curl.git
@@ -28,7 +34,9 @@ rm curl-7.50.2.tar.gz
 cd ./_libcurl 
 ./configure --without-libssh --without-ssl
 make
-cp --verbose ./lib/.libs/libcurl.so* ../shared
+#cp --verbose ./lib/.libs/libcurl.so* ../shared
+#BEWARE:TRANSFORM_SOFTLINK_INTO_FILE
+cp --verbose ./lib/.libs/libcurl.so ../shared
 cp --verbose ./include/curl/curl.h ../include/libcurl
 cp --verbose ./include/curl/curlbuild.h ../include/libcurl
 cp --verbose ./include/curl/curlrules.h ../include/libcurl
@@ -66,15 +74,29 @@ ZS_CURRDIR=$(pwd) && cmake -DCMAKE_INSTALL_DIR=$ZS_CURRDIR -DCMAKE_BUILD_TYPE=De
 	-DOPENSSL_INCLUDE_DIR=$ZS_CURRDIR/../_openssl/_product/include \
 	-DOPENSSL_SSL_LIBRARY=$ZS_CURRDIR/../_openssl/_product/lib/libssl.a
 make
-cp --verbose ./src/libssh.so* ../shared
+#cp --verbose ./src/libssh.so* ../shared
+#BEWARE:TRANSFORM_SOFTLINK_INTO_FILE
+cp --verbose ./src/libssh.so ../shared
 cp  ../_libssh.src/include/libssh/callbacks.h ../include/libssh
 cp  ../_libssh.src/include/libssh/legacy.h ../include/libssh
 cp  ../_libssh.src/include/libssh/libssh.h ../include/libssh
 cp  ../_libssh.src/include/libssh/sftp.h ../include/libssh
-
 cd ..
 
 
+
+git clone https://github.com/GNOME/libxml2.git _libxml2
+
+#BEWARE:YOU_MAY_NEED::apt-get install python-de
+cd _libxml2
+autogen
+make
+
+#cp --verbose ./.libs/libxml2.so* ../shared
+#BEWERE:TRANSFORM_SOFTLINK_INTO_FILE
+cp --verbose ./.libs/libxml2.so ../shared
+cp -r --verbose ./include/libxml  ../include/
+cd ..
 
 
 
@@ -82,4 +104,5 @@ rm -frv ./_openssl
 rm -frv ./_libcurl
 rm -frv ./_libssh
 rm -frv ./_libssh.src
+rm -frv ./_libxml2
 

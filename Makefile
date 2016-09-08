@@ -5,13 +5,11 @@ CFLAGS = -c -g -I/usr/include/libxml2      -I./include
 EXEC := ./convinject
 PWD=$(shell pwd)
 
-
 CFLAGS 	+= -Dname=process_ssh_target -Dname1=process_http_target   -mpreferred-stack-boundary=4 -mstackrealign
 
-VERSION := 4.4.0
-LIBS 	+= ./shared/libssh.so.$(VERSION)
-LIBS 	+= ./shared/libcurl.so.$(VERSION)
-LIBS 	+= ./shared/libxml2.so.2.9.1
+LIBS 	+= ./shared/libssh.so
+LIBS 	+= ./shared/libcurl.so
+LIBS 	+= ./shared/libxml2.so
 
 all: $(EXEC)
 
@@ -45,9 +43,6 @@ http/compute_tabs: http/compute_tabs.c
 $(EXEC): $(SSH_OBJS)  $(HTTP_OBJS)  $(OBJS)        $(LIBS)		
 	$(CC)  -o $@   $(SSH_OBJS) $(HTTP_OBJS) $(OBJS)   $(LIBS)      \
  -Wl,--rpath-link $(PWD)/shared  -Wl,--rpath $(PWD)/shared 
-
-#$(EXEC): $(SSH_OBJS)  $(HTTP_OBJS)  $(OBJS)        		
-#	$(CC)  -o $@   $(SSH_OBJS) $(HTTP_OBJS) $(OBJS)      -lcurl   -lssh  -lxml2  -mpreferred-stack-boundary=4 -mstackrealign \
 
 
 clean:
