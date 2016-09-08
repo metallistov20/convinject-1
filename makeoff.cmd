@@ -1,3 +1,23 @@
+#
+# (C) Copyright 2016, TP-Link Inc, konstantin.mauch@tp-link.com
+# 
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 2 of
+# the License, or (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+# MA 02111-1307 USA
+#
+
+
 rm -frv ./include/libcurl
 mkdir -p --verbose ./include/libcurl
 	
@@ -59,6 +79,7 @@ rm openssl-1.0.0k.tar.gz
 
 cd ./_openssl
 ./config --openssldir=/_product
+make 
 ZT_CURRDIR=$(pwd) && make INSTALL_PREFIX=$ZT_CURRDIR install_sw
 cd ..
 
@@ -88,21 +109,22 @@ cd ..
 git clone https://github.com/GNOME/libxml2.git _libxml2
 
 #BEWARE:YOU_MAY_NEED::apt-get install python-de
+#BEWARE:YOU_MAY_NEED::apt-get install autogen
 cd _libxml2
-autogen
+./autogen.sh
 make
 
 #cp --verbose ./.libs/libxml2.so* ../shared
-#BEWERE:TRANSFORM_SOFTLINK_INTO_FILE
+#BEWARE:TRANSFORM_SOFTLINK_INTO_FILE
 cp --verbose ./.libs/libxml2.so ../shared
 cp -r --verbose ./include/libxml  ../include/
 cd ..
 
 
 
-#rm -frv ./_openssl
-#rm -frv ./_libcurl
-#rm -frv ./_libssh
-#rm -frv ./_libssh.src
-#rm -frv ./_libxml2
+rm -frv ./_openssl
+rm -frv ./_libcurl
+rm -frv ./_libssh
+rm -frv ./_libssh.src
+rm -frv ./_libxml2
 
