@@ -54,9 +54,10 @@ rm curl-7.50.2.tar.gz
 cd ./_libcurl 
 ./configure --without-libssh --without-ssl
 make
-#cp --verbose ./lib/.libs/libcurl.so* ../shared
+#BEWARE:PRESERVE_LINKS
+cp --verbose --no-dereference ./lib/.libs/libcurl.so* ../shared
 #BEWARE:TRANSFORM_SOFTLINK_INTO_FILE
-cp --verbose ./lib/.libs/libcurl.so ../shared
+#cp --verbose ./lib/.libs/libcurl.so ../shared
 cp --verbose ./include/curl/curl.h ../include/curl
 cp --verbose ./include/curl/curlbuild.h ../include/curl
 cp --verbose ./include/curl/curlrules.h ../include/curl
@@ -95,9 +96,10 @@ ZS_CURRDIR=$(pwd) && cmake -DCMAKE_INSTALL_DIR=$ZS_CURRDIR -DCMAKE_BUILD_TYPE=De
 	-DOPENSSL_INCLUDE_DIR=$ZS_CURRDIR/../_openssl/_product/include \
 	-DOPENSSL_SSL_LIBRARY=$ZS_CURRDIR/../_openssl/_product/lib/libssl.a
 make
-#cp --verbose ./src/libssh.so* ../shared
+#BEWARE:PRESERVE_LINKS
+cp --verbose --no-dereference ./src/libssh.so* ../shared
 #BEWARE:TRANSFORM_SOFTLINK_INTO_FILE
-cp --verbose ./src/libssh.so ../shared
+#cp --verbose ./src/libssh.so ../shared
 cp  ../_libssh.src/include/libssh/callbacks.h ../include/libssh
 cp  ../_libssh.src/include/libssh/legacy.h ../include/libssh
 cp  ../_libssh.src/include/libssh/libssh.h ../include/libssh
@@ -114,9 +116,10 @@ cd _libxml2
 ./autogen.sh
 make
 
-#cp --verbose ./.libs/libxml2.so* ../shared
+#BEWARE:PRESERVE_LINKS
+cp --verbose --no-dereference ./.libs/libxml2.so* ../shared
 #BEWARE:TRANSFORM_SOFTLINK_INTO_FILE
-cp --verbose ./.libs/libxml2.so ../shared
+#cp --verbose ./.libs/libxml2.so ../shared
 cp -r --verbose ./include/libxml  ../include/
 cd ..
 
@@ -128,3 +131,4 @@ rm -frv ./_libssh
 rm -frv ./_libssh.src
 rm -frv ./_libxml2
 
+cp ./Makefile.linux ./Makefile
