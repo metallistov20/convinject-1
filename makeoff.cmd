@@ -59,7 +59,7 @@ rm openssl-1.0.0k.tar.gz
 
 cd ./_openssl
 ./config --openssldir=/_product
-ZT_CURRDIR=$(pwd) && make INSTALL_PREFIX=$ZT_CURRDIR install
+ZT_CURRDIR=$(pwd) && make INSTALL_PREFIX=$ZT_CURRDIR install_sw
 cd ..
 
 
@@ -100,9 +100,9 @@ cd ..
 
 
 
-rm -frv ./_openssl
-rm -frv ./_libcurl
-rm -frv ./_libssh
-rm -frv ./_libssh.src
-rm -frv ./_libxml2
+#rm -frv ./_openssl
+#rm -frv ./_libcurl
+#rm -frv ./_libssh
+#rm -frv ./_libssh.src
+#rm -frv ./_libxml2
 
