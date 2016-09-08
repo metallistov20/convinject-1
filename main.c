@@ -22,8 +22,13 @@
 /* strcpy() definition */
 #include <string.h>
 
-/* MAX_PATH definition */
+#if (0)
+/* MAX_PATH definition on Linux */
 #include <linux/limits.h>
+#else
+/* MAX_PATH definition for rest cases */
+#define MAX_PATH (4*260)
+#endif /* (0) */
 
 /* xmlDoc, xmlNode definition */
 #include <libxml/tree.h>
