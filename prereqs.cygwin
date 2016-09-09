@@ -55,7 +55,7 @@ cd ./_libcurl
 make
 
 #BEWARE:cp --verbose ./lib/.libs/cygcurl-4.DLL ../shared
-cp --verbose ./lib/.libs/cygcurl-4.DLL ../
+cp --verbose ./lib/.libs/cygcurl-4.DLL ../cygcurl-4.DLL.hidden
 
 cp --verbose ./include/curl/curl.h ../include/curl
 cp --verbose ./include/curl/curlbuild.h ../include/curl
@@ -123,4 +123,6 @@ rm -frv ./_libssh
 rm -frv ./_libssh.src
 rm -frv ./_libxml2
 
+mv --verbose ./cygcurl-4.DLL.hidden ./cygcurl-4.DLL
 cp ./Makefile.cygwin ./Makefile
+
