@@ -1,6 +1,9 @@
 enable
 configure
-system-descript sysname SMB_TEST0
-system-descript location UKRAINE_KYIV0
-system-descript contact-info "TP-Link UA LTD MET 20 Build 0"
+system-descript sysname SMB_TEST1
+system-descript location UKRAINE_KYIV1
+system-descript contact-info "TP-Link UA LTD MET 20 Build 1"
+end
+exit
+exit
 

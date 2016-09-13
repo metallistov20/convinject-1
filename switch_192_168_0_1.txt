@@ -1,0 +1,15 @@
+enable
+configure
+mac address-table aging-time 300
+logging buffer 7
+logging file flash 2
+system-time ntp UTC+08:00 133.100.9.2 139.78.100.163 12
+snmp-server
+snmp-server community PUBCOM1 read-write viewDefault
+interface fastEthernet 1/0/1
+switchport general allowed vlan 1 untagged
+end
+exit
+exit
+
+

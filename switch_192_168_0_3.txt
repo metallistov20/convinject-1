@@ -1,0 +1,13 @@
+enable
+configure
+mac address-table aging-time 300
+logging buffer 6
+system-time ntp UTC+08:00 133.100.9.2 139.78.100.163 12
+user name admin privilege admin secret 5 $1$B0B2B>B8G9E6J4J6D2H8D9@=D9H/A>L2$'}./
+snmp-server
+snmp-server community "PUBCOM3" read-write "viewDefault"
+end
+exit
+exit
+
+

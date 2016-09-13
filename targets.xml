@@ -2,6 +2,24 @@
 <Devices>
 	<Target>
 		<Type>Network Switch</Type>
+		<Name>TL-sl2210</Name>
+		<Address>192.168.0.1</Address>
+		<Login>admin</Login>
+		<Passwd>admin</Passwd>
+		<Datafile>./switch_192_168_0_1.txt</Datafile>
+		<Proto>ssh</Proto>
+	</Target>
+	<Target>
+		<Type>Network Switch</Type>
+		<Name>TL-sl5428e</Name>
+		<Address>192.168.0.3</Address>
+		<Login>admin</Login>
+		<Passwd>admin</Passwd>
+		<Datafile>./switch_192_168_0_3.txt</Datafile>
+		<Proto>ssh</Proto>
+	</Target>
+	<Target>
+		<Type>Network Switch</Type>
 		<Name>TL-SL5428E</Name>
 		<Address>192.168.0.8</Address>
 		<Login>admin</Login>
