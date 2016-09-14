@@ -1,0 +1,150 @@
+#
+# (C) Copyright 2016, TP-Link Inc, konstantin.mauch@tp-link.com
+# 
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 2 of
+# the License, or (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+# MA 02111-1307 USA
+#
+
+
+rm -frv ./include/curl
+mkdir -p --verbose ./include/curl
+	
+rm -frv ./include/libssh
+mkdir -p --verbose ./include/libssh
+
+# Due workflow of dynamic linkage on Cygwin we put the shared objects not into </shared> dir, but into same dir with executable 
+#rm -fr ./shared
+#mkdir --verbose ./shared
+
+
+
+rm -frv ./_openssl
+mkdir --verbose ./_openssl
+
+rm -frv ./_libssh
+mkdir -p --verbose ./_libssh
+
+rm -frv ./_libxml2
+mkdir -p --verbose ./_libxml2
+
+
+
+
+#BEWARE:MAY_BE_UNSTABLE_THUS_MAY_DAMAGE_ENTIRE_PROCESS::git clone https://github.com/curl/curl.git
+wget    --no-check-certificate    https://curl.haxx.se/download/curl-7.50.2.tar.gz
+tar xzvf curl-7.50.2.tar.gz
+rm -fr ./_libcurl
+mv ./curl-7.50.2 ./_libcurl
+rm -fr ./curl-7.50.2
+rm curl-7.50.2.tar.gz
+
+cd ./_libcurl 
+./configure --without-libssh --without-ssl
+make
+
+#BEWARE:cp --verbose ./lib/.libs/cygcurl-4.DLL ../shared
+cp --verbose ./lib/.libs/cygcurl-4.DLL ../cygcurl-4.DLL.hidden
+
+cp --verbose ./include/curl/curl.h ../include/curl
+cp --verbose ./include/curl/curlbuild.h ../include/curl
+cp --verbose ./include/curl/curlrules.h ../include/curl
+cp --verbose ./include/curl/curlver.h ../include/curl
+cp --verbose ./include/curl/easy.h ../include/curl
+cp --verbose ./include/curl/mprintf.h ../include/curl
+cp --verbose ./include/curl/multi.h ../include/curl
+cp --verbose ./include/curl/stdcheaders.h ../include/curl
+cp --verbose ./include/curl/typecheck-gcc.h ../include/curl
+cd ..
+
+#BEWARE:DONT_DEL_OPENSSL_PRODUCT_UNTILL_DEPLOYED_LATER
+#-wget  https://www.openssl.org/source/old/1.0.0/openssl-1.0.0k.tar.gz
+wget  https://www.openssl.org/source/openssl-1.0.2h.tar.gz
+#-tar xzvf openssl-1.0.0k.tar.gz
+tar xzvf openssl-1.0.2h.tar.gz
+rm -fr ./_openssl
+#-mv ./openssl-1.0.0k ./_openssl
+mv ./openssl-1.0.2h ./_openssl
+#-rm -fr ./openssl-1.0.0k
+rm -fr ./openssl-1.0.2h
+rm openssl-1.0.0k.tar.gz
+
+cd ./_openssl
+./config --openssldir=/_product
+make depend
+make 
+ZT_CURRDIR=$(pwd) && make INSTALL_PREFIX=$ZT_CURRDIR install_sw
+cd ..
+
+# Don't del _openssl/_product untill deployed !
+
+
+git clone git://git.libssh.org/projects/libssh.git _libssh.src
+cd _libssh
+#OBSOLETE: ZS_CURRDIR=$(pwd) && cmake -DCMAKE_INSTALL_DIR=$ZS_CURRDIR -DCMAKE_BUILD_TYPE=Debug ../_libssh.src \
+#	-DOPENSSL_CRYPTO_LIBRARY=$ZS_CURRDIR/../_openssl/_product/lib/libcrypto.a \
+#	-DOPENSSL_INCLUDE_DIR=$ZS_CURRDIR/../_openssl/_product/include \
+#	-DOPENSSL_SSL_LIBRARY=$ZS_CURRDIR/../_openssl/_product/lib/libssl.a
+#
+
+#BEWARE: install ZLIB, ZLIB-DEVEL
+ZS_CURRDIR=$(pwd) && cmake  -DCMAKE_LEGACY_CYGWIN_WIN32=0 -DCMAKE_INSTALL_DIR=$ZS_CURRDIR -DCMAKE_BUILD_TYPE=Debug ../_libssh.src -DOPENSSL_CRYPTO_LIBRARY=$ZS_CURRDIR/../_openssl/_product/lib/libcrypto.a  -DOPENSSL_INCLUDE_DIR=$ZS_CURRDIR/../_openssl/_product/include  -DOPENSSL_SSL_LIBRARY=$ZS_CURRDIR/../_openssl/_product/lib/libssl.a 
+
+make
+#BEWARE:cp --verbose ./src/cygssh-4.dll ../shared
+cp --verbose ./src/cygssh-4.dll ../
+
+cp  ../_libssh.src/include/libssh/callbacks.h ../include/libssh
+cp  ../_libssh.src/include/libssh/legacy.h ../include/libssh
+cp  ../_libssh.src/include/libssh/libssh.h ../include/libssh
+cp  ../_libssh.src/include/libssh/sftp.h ../include/libssh
+cd ..
+
+
+
+#git clone https://github.com/GNOME/libxml2.git _libxml2
+#BEWARE: the above can be unstable version 
+#wget http://xmlsoft.org/sources/libxml2-2.7.7.tar.gz
+BEWARE: the above can be unstable version 
+wget http://xmlsoft.org/sources/libxml2-2.9.4.tar.gz
+#tar xzvf libxml2-2.7.7.tar.gz
+tar xzvf libxml2-2.9.4.tar.gz
+#mv ./libxml2-2.7.7 ./_libxml2
+mv ./libxml2-2.9.4 ./_libxml2
+#rm -fr ./libxml2-2.7.7
+rm -fr ./libxml2-2.9.4
+#rm libxml2-2.7.7.tar.gz
+rm libxml2-2.9.4.tar.gz
+
+cd _libxml2
+#OBSOLETE:./autogen.sh
+./configure
+make
+
+#BEWARE:cp --verbose  ./.libs/cygxml2-2.dll ../shared
+cp --verbose  ./.libs/cygxml2-2.dll ../
+
+cp -r --verbose ./include/libxml  ../include/
+cd ..
+
+
+rm -frv ./_openssl
+rm -frv ./_libcurl
+rm -frv ./_libssh
+rm -frv ./_libssh.src
+rm -frv ./_libxml2
+
+mv --verbose ./cygcurl-4.DLL.hidden ./cygcurl-4.DLL
+cp ./Makefile.cygwin ./Makefile
+
