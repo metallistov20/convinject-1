@@ -248,17 +248,6 @@ int iOption;
 		return HTTP_BAD_XML_FORMAT;
 	}
 
-#if (0)
-	// TODO: reowrk, especially this <i5428E>
-	if ((i5428E) && (0 == m_TockenFound) )
-//	if (0 == _tid_[0] )
-	{
-		/* Fulfill <_tid_> */
-//		VERBOSE_STATUS(iOpenSite)
-
-		HCOMMON("[%s] %s: got such <_tid_=%s>\n", __FILE__, __func__, _tid_);
-	}
-#endif /* (0) */
 
 	/* At this time point we assume all parameters parsed OK, so let's call inj. primitives */
 	switch (iOperation)
@@ -416,13 +405,16 @@ char * cp1, * cp2;
 
 		printf("[%s] iTocken = <%s> SUCCESS. TERMINATING. <m_TockenFound=%d>\n", cpTockenPtr,  cp2 , m_TockenFound );
 
-/*		strcpy((char*)&_tid_, cp2);
+#if (0)
+		strcpy((char*)&_tid_, cp2);
 
-		printf("  _tid_ = <%s> \n", (char*)&_tid_);*/
+		printf("  _tid_ = <%s> \n", (char*)&_tid_);
+#else
 
 		memcpy(&_tid_[0], cp2, strlen (cp2) + 1 );
 
 		printf("  _tid_ = <%s> \n", &_tid_[0]);
+#endif /* (0) */
 
 	}
 
@@ -533,7 +525,6 @@ pCmdType pPointChain = pPointChainPar;
 	/* Process each entry of chain */
 	while (NULL != pPointChain)
 	{	
-//-------------------1
 		if(NULL == ( curl = curl_easy_init() ) )
 		{
 			HCOMMON("[%s] %s: Can't initialize lib c-url \nERROR\n", __FILE__, __func__);
@@ -566,7 +557,6 @@ pCmdType pPointChain = pPointChainPar;
 
 			/* Clean the buffer before receiving a responce into it */
 			memset (&RespStr, sizeof (struct _RespStruct) , 0);
-//-------------------1
 	
 #if defined(_DBG)
 			printf ("PRINT OUT<pPointChainPar=%p>:%s\n", pPointChain, pPointChain->pcCmd);
@@ -574,10 +564,8 @@ pCmdType pPointChain = pPointChainPar;
 		
 			ProcessSingleHttpCmd(pPointChain);
 
-//-------------------2
 			/* Close URL lib */
 			curl_easy_cleanup(curl);
-//-------------------2
 		}
 
 		/* Go to next record of chain */
@@ -622,51 +610,10 @@ int process_http_target(char * pcAddress, char * pcLogin, char * pcPasswd, char 
 		return HTTP_BAD_DATA;
 	}
 
-#if (0)
-//TODO: Should initialize every time we do a HTTP command
+	//TODO: check if it's really neded, and leave only in case it does  (otherwise remove)
+	m_TockenFound = 0;
 
-	if(NULL == ( curl = curl_easy_init() ) )
-	{
-		HCOMMON("[%s] %s: Can't initialize lib c-url \nERROR\n", __FILE__, __func__);
-
-		return HTTP_BAD_LIBINIT;
-	}
-
-	if(curl)
-	{
-		/* See comment below */
-		iRes = curl_easy_setopt(curl, CURLOPT_DEBUGFUNCTION, m_trace);
-
-		/* The DEBUGFUNCTION has no effect until we enable VERBOSE */
-		iRes = curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
-
-		/* We tell libcurl to follow redirection */
-		iRes = curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-
-		curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "gzip, deflate");
-
-		/* Send all data to this function */
-		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, RecvClbk);
-
-		/* We pass our 'RespStr' struct to the callback function */
-		curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)&RespStr);
-
-		/* Clean the buffer before receiving a responce into it */
-		memset (&RespStr, sizeof (struct _RespStruct) , 0);
-#endif /* (0) */
-		
-		m_TockenFound = 0;//TODO: what's this?
-
-		ProcessHttpCmds(pHttpCmdChain);
-
-#if (0)
-//TODO: Should uninitialize every time we do a HTTP command
-		/* Close URL lib */
-		curl_easy_cleanup(curl);
-
-
-	}
-#endif /* (0) */
+	ProcessHttpCmds(pHttpCmdChain);
 
 
 	free(cPostMethodString);

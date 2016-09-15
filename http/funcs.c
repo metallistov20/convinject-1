@@ -420,12 +420,9 @@ int iMeta2(char * pcXmlEltName1, char * pcXmlEltName2)
 	/* Otherwise, clean structures for second portion */
 	DeleteUrlEx(&pUrlChain);
 
-	memset((void*)idle,0,MAX_STR_SIZE);
-#if (0)
-	memcpy(idle, ?, MAX_STR_SIZE);
-#endif /* (0) */
+	memset((void*)idle, 0, MAX_STR_SIZE);
 
-		/* Put XML section from node <*pcXmlEltName2>  into structure <pUrlChain> */
+	/* Put XML section from node <*pcXmlEltName2>  into structure <pUrlChain> */
 	parse_xml_cast(root_element, pcXmlEltName2);
 
 	/* Glue particles of <pUrlChain> into full-blown URLs */
