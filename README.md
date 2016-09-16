@@ -58,7 +58,7 @@
 
 **http/http_main.c**   main routine of http module
 
-**http/http_main.h**   
+**http/http_main.h**   .. its headers, definitions, macros
 
 **http/lists.c**   injections of  **http** traffic as reconrd of corresponding structures
 
@@ -76,7 +76,7 @@
 
 **http/auxiliary.h**   .. their declarations
 
-**http/compute_tabs.c**   a small routine to compute tabs in XML-formatted text, needed for generation of CAST files (such as **cast.5428E.xml**)
+**http/compute_tabs.c**   a small routine to compute tabs in XML-formatted text, needed for generation of CAST files (such as **cast.5428E.xml**, see below)
 
 **http/constants.h**   few basic definitions of **ssh** module 
 
