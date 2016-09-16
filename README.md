@@ -1,13 +1,12 @@
-# PROJECT NAME:		convinject v.1.0
+## PROJECT NAME:		convinject v.1.0
 
-### PROJECT PURPOSE:	SSH and HTTPS traffic injections to automate remote setting of L2/L3 network hardware.
-
+*PROJECT PURPOSE:*	SSH and HTTPS traffic injections to automate remote setting of L2/L3 network hardware.
 
 ## Contents of this folder:
 
-prereqs.linux - prerequisites download & build for Linux
-prereqs.cygwin - prerequisites download & build for Cygwin x86_x32
-prereqs.cygwin.x86_64 - prerequisites download & build for Cygwin x86_x64
+*prereqs.linux* - prerequisites download & build for Linux
+*prereqs.cygwin* - prerequisites download & build for Cygwin x86_x32
+*prereqs.cygwin.x86_64* - prerequisites download & build for Cygwin x86_x64
 
 Makefile.linux - makefile for Linux
 Makefile.cygwin - makefile for CygWIN
