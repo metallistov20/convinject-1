@@ -30,8 +30,6 @@ mkdir --verbose ./shared
 
 
 
-
-
 rm -frv ./_openssl
 mkdir --verbose ./_openssl
 
@@ -40,6 +38,7 @@ mkdir -p --verbose ./_libssh
 
 rm -frv ./_libxml2
 mkdir -p --verbose ./_libxml2
+
 
 
 
@@ -54,6 +53,7 @@ rm curl-7.50.2.tar.gz
 cd ./_libcurl 
 ./configure --without-libssh --without-ssl
 make
+
 #BEWARE:PRESERVE_LINKS
 cp --verbose --no-dereference ./lib/.libs/libcurl.so* ../shared
 #BEWARE:TRANSFORM_SOFTLINK_INTO_FILE
@@ -80,22 +80,24 @@ rm openssl-1.0.0k.tar.gz
 
 cd ./_openssl
 ./config --openssldir=/_product
+make depend
 make 
 ZT_CURRDIR=$(pwd) && make INSTALL_PREFIX=$ZT_CURRDIR install_sw
 cd ..
-
-
 
 # Don't del _openssl/_product untill deployed !
 
 
 git clone git://git.libssh.org/projects/libssh.git _libssh.src
 cd _libssh
+
+#BEWARE: install ZLIB, ZLIB-DEVEL
 ZS_CURRDIR=$(pwd) && cmake -DCMAKE_INSTALL_DIR=$ZS_CURRDIR -DCMAKE_BUILD_TYPE=Debug ../_libssh.src \
 	-DOPENSSL_CRYPTO_LIBRARY=$ZS_CURRDIR/../_openssl/_product/lib/libcrypto.a \
 	-DOPENSSL_INCLUDE_DIR=$ZS_CURRDIR/../_openssl/_product/include \
 	-DOPENSSL_SSL_LIBRARY=$ZS_CURRDIR/../_openssl/_product/lib/libssl.a
-make
+make ssh_shared
+   
 #BEWARE:PRESERVE_LINKS
 cp --verbose --no-dereference ./src/libssh.so* ../shared
 #BEWARE:TRANSFORM_SOFTLINK_INTO_FILE
@@ -108,12 +110,23 @@ cd ..
 
 
 
-git clone https://github.com/GNOME/libxml2.git _libxml2
+#git clone https://github.com/GNOME/libxml2.git _libxml2
+#BEWARE: the above can be unstable version 
+#wget http://xmlsoft.org/sources/libxml2-2.7.7.tar.gz
+#BEWARE: the above can be unstable version 
+wget http://xmlsoft.org/sources/libxml2-2.9.4.tar.gz
+#tar xzvf libxml2-2.7.7.tar.gz
+tar xzvf libxml2-2.9.4.tar.gz
+#mv ./libxml2-2.7.7 ./_libxml2
+mv ./libxml2-2.9.4 ./_libxml2
+#rm -fr ./libxml2-2.7.7
+rm -fr ./libxml2-2.9.4
+#rm libxml2-2.7.7.tar.gz
+rm libxml2-2.9.4.tar.gz
 
-#BEWARE:YOU_MAY_NEED::apt-get install python-de
-#BEWARE:YOU_MAY_NEED::apt-get install autogen
 cd _libxml2
-./autogen.sh
+#OBSOLETE:./autogen.sh
+./configure
 make
 
 #BEWARE:PRESERVE_LINKS
@@ -132,3 +145,4 @@ rm -frv ./_libssh.src
 rm -frv ./_libxml2
 
 cp ./Makefile.linux ./Makefile
+
