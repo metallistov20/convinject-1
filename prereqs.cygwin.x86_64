@@ -121,6 +121,7 @@ wget http://xmlsoft.org/sources/libxml2-2.9.4.tar.gz
 #tar xzvf libxml2-2.7.7.tar.gz
 tar xzvf libxml2-2.9.4.tar.gz
 #mv ./libxml2-2.7.7 ./_libxml2
+rm -fr ./_libxml2
 mv ./libxml2-2.9.4 ./_libxml2
 #rm -fr ./libxml2-2.7.7
 rm -fr ./libxml2-2.9.4

@@ -102,7 +102,7 @@ cp  ../_libssh.src/include/libssh/sftp.h ../include/libssh
 cd ..
 
 
-
+rm -fr ./_libxml2
 git clone https://github.com/GNOME/libxml2.git _libxml2
 
 #BEWARE:

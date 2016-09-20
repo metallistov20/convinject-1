@@ -18,8 +18,6 @@
 #
 
 
-rm -frv ./include/libcurl
-mkdir -p --verbose ./include/libcurl
 	
 rm -frv ./include/libssh
 mkdir -p --verbose ./include/libssh
@@ -114,22 +112,14 @@ cd ..
 
 
 
-#git clone https://github.com/GNOME/libxml2.git _libxml2
-#BEWARE: the above can be unstable version 
-#wget http://xmlsoft.org/sources/libxml2-2.7.7.tar.gz
-#BEWARE: the above can be unstable version 
 wget http://xmlsoft.org/sources/libxml2-2.9.4.tar.gz
-#tar xzvf libxml2-2.7.7.tar.gz
 tar xzvf libxml2-2.9.4.tar.gz
-#mv ./libxml2-2.7.7 ./_libxml2
+rm -fr ./_libxml2
 mv ./libxml2-2.9.4 ./_libxml2
-#rm -fr ./libxml2-2.7.7
 rm -fr ./libxml2-2.9.4
-#rm libxml2-2.7.7.tar.gz
 rm libxml2-2.9.4.tar.gz
 
 cd _libxml2
-#OBSOLETE:./autogen.sh
 ./configure
 make
 
